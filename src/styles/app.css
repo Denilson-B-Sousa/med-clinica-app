@@ -1,1 +1,12 @@
 @import "tailwindcss";
+
+@theme {
+  /* Cores personalizadas */
+  --color-primary: #2563eb;
+  --color-secondary: #9333ea;
+  --color-background: #0f172a;
+  --color-text: #e2e8f0;
+
+  /* Fontes */
+  --font-inter: "Inter", sans-serif;
+}
