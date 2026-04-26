@@ -6,7 +6,7 @@ function App() {
 
   return (
     <>
-      <Button secondary size="primary"> Teste</Button>
+      <Button primary size="md"> Agende sua consulta</Button>
     </>
   )
 }

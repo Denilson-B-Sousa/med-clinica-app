@@ -3,22 +3,21 @@ import type { ComponentProps } from "react";
 import { tv, type VariantProps } from "tailwind-variants";
 
 const button = tv({
-  base: "flex justify-center items-center uppercase font-inter font-bold tracking-widest cursor-pointer box-border transition-all duration-150",
+  base: "flex justify-center items-center uppercase font-inter font-bold cursor-pointer box-border transition-all duration-150",
 
   variants: {
     size: {
       default: "w-12 h-12 p-3 font-bold",
-      sm: "w-10 h-10 p-3",
-      md: "px-6 py-3.5 rounded-sm my-6",
-      primary: "flex justify-center items-center p-2 md:px-4 rounded",
+      sm: "px-6 py-4 rounded-sm",
+      md: "px-8 py-4 rounded-md",
     },
 
     primary: {
-      true: "",
+      true: "bg-[#0094CB] text-white rounded-full",
     },
 
     secondary: {
-      true: "",
+      true: "text-[#0094CB] border-2 border-[#0094CB] rounded-full hover:bg-[#0094CB] hover:text-white transition-all",
     },
   },
 });
