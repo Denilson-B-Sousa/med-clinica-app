@@ -2,6 +2,7 @@ import googleIcon from "@/assets/google.svg";
 import { Calendar, ShieldCheck, User } from "phosphor-react";
 import { Button } from "../../components/Button/Button";
 import { Input } from "../../components/Input/Input";
+import { Link } from "react-router-dom";
 
 export function Login() {
   return (
@@ -54,16 +55,14 @@ export function Login() {
             <span>Continue com Google</span>
           </Button>
           <div className="flex justify-end pt-2">
-            <a href="#" className="text-sm text-[#0094CB] hover:underline">
+            <Link to="/cadastro" className="text-sm text-[#0094CB] hover:underline">
               Não tem uma conta?
-            </a>
+            </Link>
           </div>
         </div>
         <aside className="relative flex items-center justify-center bg-[url('/bg-login.png')] bg-cover bg-center bg-no-repeat">
-          {/* overlay */}
           <div className="absolute inset-0 bg-[#0094CB]/60" />
 
-          {/* conteúdo */}
           <div className="relative z-10 flex flex-col gap-8 text-white max-w-md px-10">
             <div className="flex items-start gap-4">
               <Calendar className="w-8 h-8 shrink-0" />

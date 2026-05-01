@@ -1,0 +1,28 @@
+// src/app/router.tsx
+import { createBrowserRouter, Navigate } from "react-router-dom";
+
+import { Login }  from "../app/pages/Login/Login";
+import { Register } from "../app/pages/Register/Register";
+import { AuthLayout } from "../app/layouts/AuthLayout";
+export const router = createBrowserRouter([
+  {
+    element: <AuthLayout />,
+    children: [
+      {
+        path: "/login",
+        element: <Login />,
+      },
+      {
+        path: "/cadastro",
+        element: <Register/>,
+      }
+    ],
+  },
+
+ 
+
+  {
+    path: "*",
+    element: <Navigate to="/login" />,
+  },
+]);
