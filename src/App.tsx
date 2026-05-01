@@ -1,14 +1,12 @@
-
-import { Button } from "./components/Button/Button";
+import { Login } from "./app/pages/Login/Login";
 import "./styles/app.css";
 
 function App() {
-
   return (
     <>
-      <Button primary size="md"> Agende sua consulta</Button>
+      <Login />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
