@@ -14,6 +14,7 @@ import {
   registerSchema,
   type RegisterSchema,
 } from "@/schemas/RegisterSchema";
+import { useRegisterPatient } from "../../hooks/useRegisterPatient";
 
 const STATES = [
   { value: "AC", label: "Acre" },
@@ -45,7 +46,15 @@ const STATES = [
   { value: "TO", label: "Tocantins" },
 ];
 
+
+function onlyNumbers(value: string) {
+  return value.replace(/\D/g, "");
+}
+
 export function Register() {
+
+  const { mutateAsync, isPending } = useRegisterPatient();
+
   const {
     control,
     register,
@@ -73,12 +82,12 @@ export function Register() {
     },
   });
 
-  function handleRegister(data: RegisterSchema) {
+  async function handleRegister(data: RegisterSchema) {
     const payload = {
-      nome: data.name,
+      name: data.name,
       email: data.email,
       password: data.password,
-      phone: data.phone,
+      phone: onlyNumbers(data.phone),
       cpf: data.cpf,
       address: {
         street: data.address.street,
@@ -86,13 +95,14 @@ export function Register() {
         district: data.address.district,
         city: data.address.city,
         state: data.address.state,
-        zipcode: data.address.zipcode,
+        zipcode: onlyNumbers(data.address.zipcode),
       },
       birthDate: data.birthDate,
       gender: data.gender
       }
 
-    console.log(payload);
+      console.log(payload)
+    await mutateAsync(payload);
   }
 
   return (
@@ -103,7 +113,7 @@ export function Register() {
         color="#0094CB"
         nextButtonText="Próximo"
         backButtonText="Voltar"
-        finishButtonText="Finalizar"
+        finishButtonText={isPending ? 'Cadastrando...' : 'Finalizar Cadastro'}
         onComplete={handleSubmit(handleRegister)}
       >
         <FormWizard.TabContent title="Dados pessoais" icon={<User size={24} />}>
