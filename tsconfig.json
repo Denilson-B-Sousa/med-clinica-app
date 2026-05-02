@@ -5,7 +5,9 @@
     "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/app/*"],
+      "@components/*": ["./src/app/components/*"],
+      "@schemas/*": ["./src/app/schemas/*"]
     }
   }
 }

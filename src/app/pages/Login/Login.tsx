@@ -1,10 +1,27 @@
 import googleIcon from "@/assets/google.svg";
 import { Calendar, ShieldCheck, User } from "phosphor-react";
-import { Button } from "../../components/Button/Button";
-import { Input } from "../../components/Input/Input";
+import { Button } from "@/components/Button/Button";
+import { Input } from "@/components/Input/Input";
 import { Link } from "react-router-dom";
+import { loginSchema, type LoginSchema } from "@/schemas/loginSchema";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod/src/index.js";
+
 
 export function Login() {
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginSchema>({
+    resolver: zodResolver(loginSchema),
+  });
+
+  function handleLogin(data: LoginSchema) {
+    console.log("Login data:", data);
+  }
+
   return (
     <>
       <h1 className="absolute top-4 left-12 text-2xl font-bold">
@@ -17,7 +34,7 @@ export function Login() {
           <h1 className="text-3xl py-4 font-bold">Bem-vindo de volta!</h1>
           <span className="pb-4">Por favor entre em sua conta.</span>
 
-          <form className="flex flex-col justify-center gap-4">
+          <form onSubmit={handleSubmit(handleLogin)} className="flex flex-col justify-center gap-4">
             <div>
               <label>Email</label>
               <Input
@@ -25,7 +42,14 @@ export function Login() {
                 size="md"
                 placeholder="Digite seu email"
                 type="email"
+                {...register("email")}
               />
+
+              {errors.email && (
+                <p className="text-sm text-red-500 mt-1">
+                  {errors.email.message}
+                </p>
+              )}
             </div>
             <div>
               <label>Senha</label>
@@ -34,7 +58,14 @@ export function Login() {
                 size="md"
                 placeholder="Digite sua senha"
                 type="password"
+                {...register("password")}
               />
+
+              {errors.password && (
+                <p className="text-sm text-red-500 mt-1">
+                  {errors.password.message}
+                </p>
+              )}
             </div>
 
             <div>
@@ -43,8 +74,8 @@ export function Login() {
               </a>
             </div>
 
-            <Button primary size="md">
-              Entrar
+            <Button primary size="md" type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "Entrando ..." : "Entrar"}
             </Button>
           </form>
 
