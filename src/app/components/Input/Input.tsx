@@ -2,7 +2,7 @@ import { tv, type VariantProps } from "tailwind-variants";
 import type { ComponentProps } from "react";
 
 const input = tv({
-  base: "w-full font-inter outline-none transition-all duration-200 border box-border",
+  base: "w-full cursor-pointer font-inter outline-none transition-all duration-200 border box-border",
 
   variants: {
     variant: {

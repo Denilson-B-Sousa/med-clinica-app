@@ -10,10 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-input/mask": "^2.0.4",
     "@tailwindcss/vite": "^4.2.2",
     "phosphor-icons": "^1.4.2",
     "phosphor-react": "^1.4.1",
     "react": "^19.2.4",
+    "react-datepicker": "^9.1.0",
     "react-dom": "^19.2.4",
     "react-form-wizard-component": "^1.1.1",
     "react-router-dom": "^7.14.2",

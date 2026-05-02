@@ -10,3 +10,12 @@
   /* Fontes */
   --font-inter: "Inter", sans-serif;
 }
+
+.wizard-title {
+  font-size: 2rem !important;   /* aumenta aqui */
+  font-weight: 700 !important;
+}
+
+.wizard-subtitle {
+  font-size: 1rem !important;
+}
