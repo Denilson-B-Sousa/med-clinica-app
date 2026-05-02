@@ -6,9 +6,12 @@ import { Link } from "react-router-dom";
 import { loginSchema, type LoginSchema } from "@/schemas/loginSchema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod/src/index.js";
+import { useLoginUser } from "@/hooks/userLogin";
 
 
 export function Login() {
+
+  const { mutateAsync } = useLoginUser();
 
   const {
     register,
@@ -18,8 +21,12 @@ export function Login() {
     resolver: zodResolver(loginSchema),
   });
 
-  function handleLogin(data: LoginSchema) {
-    console.log("Login data:", data);
+   async function handleLogin(data: LoginSchema) {
+    try {
+      await mutateAsync(data);
+    } catch (error) {
+      console.error("Login error:", error);
+    }
   }
 
   return (
