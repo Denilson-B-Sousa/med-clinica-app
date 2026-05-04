@@ -6,10 +6,12 @@ import { Link } from "react-router-dom";
 import { loginSchema, type LoginSchema } from "@/schemas/loginSchema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod/src/index.js";
-import { useLoginUser } from "@/hooks/userLogin";
+import { useLoginUser } from "@/hooks/useLoginUser";
+import { useNavigate } from "react-router-dom";
 
 
 export function Login() {
+  const navigate = useNavigate();
 
   const { mutateAsync } = useLoginUser();
 
@@ -24,6 +26,7 @@ export function Login() {
    async function handleLogin(data: LoginSchema) {
     try {
       await mutateAsync(data);
+      navigate("/cadastro");
     } catch (error) {
       console.error("Login error:", error);
     }

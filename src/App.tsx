@@ -1,10 +1,11 @@
-import { Login } from "./app/pages/Login/Login";
-import "./styles/app.css";
+import { router } from "@/Router";
+import "@/styles/app.css";
+import { RouterProvider } from "react-router-dom";
 
 function App() {
   return (
     <>
-      <Login />
+      <RouterProvider router={router} />
     </>
   );
 }

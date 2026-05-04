@@ -1,4 +1,3 @@
-
 export type UserLoginPayload = {
   email: string;
   password: string;
@@ -6,4 +5,4 @@ export type UserLoginPayload = {
 
 export type LoginResponse = {
   token: string;
-}
+};
