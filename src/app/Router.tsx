@@ -4,6 +4,8 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import { Login }  from "../app/pages/Login/Login";
 import { Register } from "../app/pages/Register/Register";
 import { AuthLayout } from "../app/layouts/AuthLayout";
+import { AppLayout } from "./layouts/AppLayout";
+import { PatientArea } from "./pages/Home/PatientArea";
 export const router = createBrowserRouter([
   {
     element: <AuthLayout />,
@@ -14,12 +16,19 @@ export const router = createBrowserRouter([
       },
       {
         path: "/cadastro",
-        element: <Register/>,
-      }
+        element: <Register />,
+      },
     ],
   },
-
- 
+  {
+    element: <AppLayout />,
+    children: [
+      {
+        path: "/home",
+        element: <PatientArea />,
+      },
+    ],
+  },
 
   {
     path: "*",

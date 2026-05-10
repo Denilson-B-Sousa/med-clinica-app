@@ -26,7 +26,7 @@ export function Login() {
    async function handleLogin(data: LoginSchema) {
     try {
       await mutateAsync(data);
-      navigate("/cadastro");
+      navigate("/home");
     } catch (error) {
       console.error("Login error:", error);
     }
