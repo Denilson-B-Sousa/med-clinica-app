@@ -6,6 +6,7 @@ import { Register } from "@/pages/Register/Register";
 import { AuthLayout } from "@/layouts/AuthLayout";
 import { AppLayout } from "@/layouts/AppLayout";
 import { PatientArea } from "@/pages/Home/PatientArea";
+import { AppointmentHistory } from "./pages/AppointmentHistory/AppointmentHistory";
 
 export const router = createBrowserRouter([
   {
@@ -29,6 +30,10 @@ export const router = createBrowserRouter([
         path: "/home",
         element: <PatientArea />,
       },
+      {
+        path: "/historico-consultas",
+        element: <AppointmentHistory/>
+      }
     ],
   },
 

@@ -12,7 +12,7 @@ export function PatientArea() {
 
   return (
     <>
-      <section className="flex flex-col px-14 py-4">
+      <section className="flex flex-col px-14">
         <span className="text-2xl">
           Olá, <strong>Denilson!</strong>
         </span>
