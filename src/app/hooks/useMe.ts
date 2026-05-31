@@ -3,15 +3,16 @@ import { api } from "@/lib/api";
 
 
 export function useMe() {
-  const token = sessionStorage.getItem("token");
 
   return useQuery({
-    queryKey: ["me", token],
+    queryKey: ["me"],
+
     queryFn: async () => {
       const { data } = await api.get("/auth/me");
       return data;
     },
-    enabled: !!token, // só roda com token
+    
+    retry: false,
     staleTime: 1000 * 60 * 5 // cache 5 min
   })
 }

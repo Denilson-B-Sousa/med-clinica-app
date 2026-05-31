@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { InputMask } from "@react-input/mask";
 import { AddressBook, Lock, User } from "phosphor-react";
 import { Controller, useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 
 import { Input } from "@/components/Input/Input";
@@ -54,6 +54,7 @@ function onlyNumbers(value: string) {
 export function Register() {
 
   const { mutateAsync, isPending } = useRegisterPatient();
+  const navigate = useNavigate();
 
   const {
     control,
@@ -101,8 +102,9 @@ export function Register() {
       gender: data.gender
       }
 
-      console.log(payload)
     await mutateAsync(payload);
+
+    navigate("/login");
   }
 
   return (

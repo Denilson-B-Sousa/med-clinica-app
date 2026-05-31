@@ -1,17 +1,17 @@
 import { loginUser } from "@/services/authService";
-import { setToken } from "@/store/authSlice";
-import { useAppDispatch } from "@/store/hooks";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export function useLoginUser() {
 
-  const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: loginUser,
 
-    onSuccess: (data) => {
-      dispatch(setToken(data.token));
+    onSuccess: async () => {
+      await queryClient.invalidateQueries(
+        { queryKey: ["me"] }
+      );
     },
   });
 }
