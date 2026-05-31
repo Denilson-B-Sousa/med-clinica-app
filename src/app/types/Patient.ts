@@ -1,3 +1,4 @@
+import type { Address } from "./Address";
 
 export type CreatePatientPayload = {
   name: string;
@@ -16,3 +17,17 @@ export type CreatePatientPayload = {
     zipcode: string;
   };
 };
+
+
+export type Gender = "MASCULINO" | "FEMININO" | "OUTRO";
+
+export type Patient = {
+  id: string;
+  name: string;
+  email: string;
+  cpf: string;
+  phone: string;
+  address: Address;
+  birthDate: string;
+  gender: Gender;
+}

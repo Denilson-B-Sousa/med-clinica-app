@@ -14,7 +14,7 @@ import {
   registerSchema,
   type RegisterSchema,
 } from "@/schemas/RegisterSchema";
-import { useRegisterPatient } from "../../hooks/useRegisterPatient";
+import { useRegisterPatient } from "../../hooks/patient/useRegisterPatient";
 
 const STATES = [
   { value: "AC", label: "Acre" },

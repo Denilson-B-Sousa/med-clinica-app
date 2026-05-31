@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { loginSchema, type LoginSchema } from "@/schemas/loginSchema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod/src/index.js";
-import { useLoginUser } from "@/hooks/useLoginUser";
+import { useLoginUser } from "@/hooks/user/useLoginUser";
 import { useNavigate } from "react-router-dom";
 
 

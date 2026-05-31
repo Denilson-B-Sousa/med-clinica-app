@@ -7,7 +7,9 @@
     "paths": {
       "@/*": ["./src/app/*"],
       "@components/*": ["./src/app/components/*"],
-      "@schemas/*": ["./src/app/schemas/*"]
+      "@schemas/*": ["./src/app/schemas/*"],
+      "@services/*": ["./src/app/services/*"],
+      "@assets/*": ["./src/app/assets/*"],
     }
   }
 }
