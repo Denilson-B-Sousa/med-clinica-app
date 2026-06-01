@@ -11,9 +11,7 @@ export function ProfileMenu({ name, avatarUrl }: ProfileMenuProps) {
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
         <button
-          className="flex items-center gap-3 pr-12 py-2 cursor-pointer outline-none
-      focus:outline-none
-      focus-visible:outline-none"
+          className="flex items-center gap-3 pr-12 py-2 cursor-pointer outline-none focus:outline-none focus-visible:outline-none"
         >
           <Avatar src={avatarUrl} fallback={name[0]} radius="full" size="3" />
 
@@ -23,7 +21,7 @@ export function ProfileMenu({ name, avatarUrl }: ProfileMenuProps) {
         </button>
       </DropdownMenu.Trigger>
 
-      <DropdownMenu.Content className="min-w-[200px] bg-white rounded-md p-2 shadow-lg!">
+      <DropdownMenu.Content className="min-w-50 bg-white rounded-md p-2 shadow-lg!">
         <DropdownMenu.Label>Minha Conta</DropdownMenu.Label>
 
         <DropdownMenu.Separator />

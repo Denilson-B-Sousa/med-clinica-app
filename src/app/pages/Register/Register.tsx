@@ -16,6 +16,9 @@ import {
 } from "@/schemas/RegisterSchema";
 import { useRegisterPatient } from "../../hooks/patient/useRegisterPatient";
 
+import { Eye, EyeSlash } from "phosphor-react";
+import { useState } from "react";
+
 const STATES = [
   { value: "AC", label: "Acre" },
   { value: "AL", label: "Alagoas" },
@@ -55,6 +58,9 @@ export function Register() {
 
   const { mutateAsync, isPending } = useRegisterPatient();
   const navigate = useNavigate();
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const {
     control,
@@ -115,7 +121,7 @@ export function Register() {
         color="#0094CB"
         nextButtonText="Próximo"
         backButtonText="Voltar"
-        finishButtonText={isPending ? 'Cadastrando...' : 'Finalizar Cadastro'}
+        finishButtonText={isPending ? "Cadastrando..." : "Finalizar Cadastro"}
         onComplete={handleSubmit(handleRegister)}
       >
         <FormWizard.TabContent title="Dados pessoais" icon={<User size={24} />}>
@@ -346,13 +352,22 @@ export function Register() {
 
         <FormWizard.TabContent title="Segurança" icon={<Lock size={24} />}>
           <div className="grid gap-4 mt-6">
-            <div className="flex flex-col gap-1">
-              <Input
-                size="md"
-                type="password"
-                placeholder="Senha"
-                {...register("password")}
-              />
+            <div className="flex w-md flex-col gap-1">
+              <div className="relative">
+                <Input
+                  size="md"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Senha"
+                  {...register("password")}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 cursor-pointer"
+                >
+                  {showPassword ? <EyeSlash size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
 
               {errors.password && (
                 <span className="min-h-5 text-sm text-red-500 text-left">
@@ -361,13 +376,26 @@ export function Register() {
               )}
             </div>
 
-            <div className="flex flex-col gap-1">
-              <Input
-                size="md"
-                type="password"
-                placeholder="Confirmar senha"
-                {...register("confirmPassword")}
-              />
+            <div className="flex relative w-md flex-col gap-1">
+              <div className="relative">
+                <Input
+                  size="md"
+                  type={showConfirmPassword ? "text" : "password"}
+                  placeholder="Confirmar senha"
+                  {...register("confirmPassword")}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword((prev) => !prev)}
+                  className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 cursor-pointer"
+                >
+                  {showConfirmPassword ? (
+                    <EyeSlash size={20} />
+                  ) : (
+                    <Eye size={20} />
+                  )}
+                </button>
+              </div>
 
               {errors.confirmPassword && (
                 <span className="min-h-5 text-sm text-red-500 text-left">

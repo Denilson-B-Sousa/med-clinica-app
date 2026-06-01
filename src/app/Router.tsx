@@ -33,7 +33,8 @@ export const router = createBrowserRouter([
       {
         path: "/historico-consultas",
         element: <AppointmentHistory/>
-      }
+      },
+     
     ],
   },
 
