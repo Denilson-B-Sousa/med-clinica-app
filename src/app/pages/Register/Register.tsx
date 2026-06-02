@@ -8,14 +8,11 @@ import { AddressBook, Lock, User } from "phosphor-react";
 import { Controller, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 
-
 import { Input } from "@/components/Input/Input";
-import {
-  registerSchema,
-  type RegisterSchema,
-} from "@/schemas/RegisterSchema";
+import { registerSchema, type RegisterSchema } from "@/schemas/RegisterSchema";
 import { useRegisterPatient } from "../../hooks/patient/useRegisterPatient";
 
+import { useCep } from "@/hooks/patient/useCep";
 import { Eye, EyeSlash } from "phosphor-react";
 import { useState } from "react";
 
@@ -49,15 +46,14 @@ const STATES = [
   { value: "TO", label: "Tocantins" },
 ];
 
-
 function onlyNumbers(value: string) {
   return value.replace(/\D/g, "");
 }
 
 export function Register() {
-
   const { mutateAsync, isPending } = useRegisterPatient();
   const navigate = useNavigate();
+  const { mutateAsync: fetchAddressByCep } = useCep();
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -66,6 +62,7 @@ export function Register() {
     control,
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<RegisterSchema>({
     resolver: zodResolver(registerSchema),
@@ -105,12 +102,25 @@ export function Register() {
         zipcode: onlyNumbers(data.address.zipcode),
       },
       birthDate: data.birthDate,
-      gender: data.gender
-      }
+      gender: data.gender,
+    };
 
     await mutateAsync(payload);
 
     navigate("/login");
+  }
+
+  async function handleCepChange(cep: string) {
+    try {
+      const address = await fetchAddressByCep(cep);
+
+      setValue("address.street", address.logradouro);
+      setValue("address.district", address.bairro);
+      setValue("address.city", address.localidade);
+      setValue("address.state", address.uf);
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   return (
@@ -256,6 +266,15 @@ export function Register() {
                     size="md"
                     placeholder="CEP"
                     {...field}
+                    onChange={(e) => {
+                      field.onChange(e);
+
+                      const cep = e.target.value.replace(/\D/g, "");
+
+                      if (cep.length === 8) {
+                        handleCepChange(cep);
+                      }
+                    }}
                   />
                 )}
               />
