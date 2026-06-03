@@ -34,13 +34,13 @@ export function QuickActions() {
                 <Calendar />
               </div>
 
-              <div className="text-left">
+              <Link to="/reagendar-consulta" className="text-left">
                 <h4 className="font-semibold text-slate-900">
                   Reagendar consulta
                 </h4>
 
                 <p className="text-sm text-slate-500">Escolha uma nova data</p>
-              </div>
+              </Link>
             </div>
 
             <CaretRight />

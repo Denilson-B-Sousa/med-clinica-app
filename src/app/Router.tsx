@@ -8,6 +8,7 @@ import { AppLayout } from "@/layouts/AppLayout";
 import { PatientArea } from "@/pages/Home/PatientArea";
 import { AppointmentHistory } from "./pages/AppointmentHistory/AppointmentHistory";
 import { ScheduleAppointment } from "./pages/ScheduleAppointment/ScheduleAppointment";
+import { RescheduleAppointment } from "./pages/RescheduleAppointment/RescheduleAppointment";
 
 export const router = createBrowserRouter([
   {
@@ -33,13 +34,16 @@ export const router = createBrowserRouter([
       },
       {
         path: "/historico-consultas",
-        element: <AppointmentHistory/>
+        element: <AppointmentHistory />,
       },
       {
         path: "/agendar-consulta",
-        element: <ScheduleAppointment/>
-      }
-     
+        element: <ScheduleAppointment />,
+      },
+      {
+        path: "/reagendar-consulta",
+        element: <RescheduleAppointment />,
+      },
     ],
   },
 
