@@ -1,4 +1,5 @@
 import { CalendarPlus, CaretRight, Clock, Calendar } from "phosphor-react";
+import { Link } from "react-router-dom";
 
 export function QuickActions() {
   return (
@@ -13,7 +14,7 @@ export function QuickActions() {
                 <CalendarPlus />
               </div>
 
-              <div className="text-left">
+              <Link to="/agendar-consulta" className="text-left">
                 <h4 className="font-semibold text-slate-900">
                   Agendar consulta
                 </h4>
@@ -21,7 +22,7 @@ export function QuickActions() {
                 <p className="text-sm text-slate-500">
                   Encontre o melhor horário
                 </p>
-              </div>
+              </Link>
             </div>
 
             <CaretRight />
