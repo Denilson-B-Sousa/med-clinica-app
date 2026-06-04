@@ -11,4 +11,7 @@ export interface Appointment {
   scheduleAt: string;
   status: AppointmentStatus;
   durationInMinutes: number;
+  notes?: string;
 }
+
+export type CreateAppointmentPayload = Omit<Appointment, "id">;

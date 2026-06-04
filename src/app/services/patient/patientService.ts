@@ -8,8 +8,13 @@ export async function createPatient(payload: CreatePatientPayload) {
 }
 
 export const patientService = {
+  async findAll(): Promise<Patient[]> {
+    const { data } = await api.get("/pacientes");
+    return data;
+  },
+
   async findById(id: string): Promise<Patient> {
-    const { data } = await api.get(`/patients/${id}`);
+    const { data } = await api.get(`/pacientes/${id}`);
     return data;
   },
 };
