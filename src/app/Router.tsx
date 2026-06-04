@@ -1,14 +1,13 @@
-// src/app/router.tsx
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
-import { Login }  from "@/pages/Login/Login";
-import { Register } from "@/pages/Register/Register";
-import { AuthLayout } from "@/layouts/AuthLayout";
 import { AppLayout } from "@/layouts/AppLayout";
-import { PatientArea } from "@/pages/Home/PatientArea";
-import { AppointmentHistory } from "./pages/AppointmentHistory/AppointmentHistory";
-import { ScheduleAppointment } from "./pages/ScheduleAppointment/ScheduleAppointment";
-import { RescheduleAppointment } from "./pages/RescheduleAppointment/RescheduleAppointment";
+import { AuthLayout } from "@/layouts/AuthLayout";
+import { AppointmentHistory } from "@/pages/AppointmentHistory";
+import { PatientArea } from "@/pages/Home";
+import { Login } from "@/pages/Login";
+import { Register } from "@/pages/Register";
+import { RescheduleAppointment } from "@/pages/RescheduleAppointment";
+import { ScheduleAppointment } from "@/pages/ScheduleAppointment";
 
 export const router = createBrowserRouter([
   {
@@ -43,6 +42,10 @@ export const router = createBrowserRouter([
       {
         path: "/reagendar-consulta",
         element: <RescheduleAppointment />,
+      },
+      {
+        path: "historico-consulta",
+        element: <AppointmentHistory />,
       },
     ],
   },

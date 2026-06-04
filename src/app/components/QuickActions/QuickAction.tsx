@@ -52,7 +52,7 @@ export function QuickActions() {
                 <Clock />
               </div>
 
-              <div className="text-left">
+              <Link to="/historico-consultas" className="text-left">
                 <h4 className="font-semibold text-slate-900">
                   Histórico de consultas
                 </h4>
@@ -60,7 +60,7 @@ export function QuickActions() {
                 <p className="text-sm text-slate-500">
                   Veja todas as consultas
                 </p>
-              </div>
+              </Link>
             </div>
 
             <CaretRight />

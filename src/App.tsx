@@ -2,12 +2,10 @@ import { router } from "@/Router";
 import "@/styles/app.css";
 import { RouterProvider } from "react-router-dom";
 
-function App() {
+export function App() {
   return (
     <>
       <RouterProvider router={router} />
     </>
   );
 }
-
-export default App;

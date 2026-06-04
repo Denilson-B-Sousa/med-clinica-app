@@ -1,0 +1,1 @@
+export { PatientArea } from "./PatientArea";
