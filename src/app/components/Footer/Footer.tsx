@@ -1,7 +1,7 @@
 
 export function Footer() {
   return (
-    <footer className="bg-[#0094CB] text-white py-4 text-center bottom-0 w-full">
+    <footer className="bg-[#0094CB] text-white py-4 text-center bottom-0 w-full fixed">
       <p>&copy; 2026 med-clínica. Todos os direitos reservados.</p>
     </footer>
   );

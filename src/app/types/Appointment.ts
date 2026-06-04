@@ -2,6 +2,7 @@ export type AppointmentStatus =
   | "SCHEDULED"
   | "CONFIRMED"
   | "COMPLETED"
+  | "CANCELED"
   | "CANCELLED";
 
 export interface Appointment {
@@ -15,3 +16,10 @@ export interface Appointment {
 }
 
 export type CreateAppointmentPayload = Omit<Appointment, "id">;
+
+export type UpdateAppointmentPayload = Partial<
+  Pick<
+    Appointment,
+    "doctorId" | "scheduleAt" | "status" | "durationInMinutes" | "notes"
+  >
+>;

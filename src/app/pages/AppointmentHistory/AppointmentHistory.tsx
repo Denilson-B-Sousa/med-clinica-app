@@ -1,6 +1,11 @@
+import { useState } from "react";
 import { BackLink } from "@/components/BackLink";
+import { EmptyState } from "@/components/EmptyState/EmptyState";
 import { PageHeader } from "@/components/PageHeader";
-import { APPOINTMENT_HISTORY } from "./constants/appointments";
+import { useAppointments } from "@/hooks/appointment/useAppoinments";
+import { useCancelAppointment } from "@/hooks/appointment/useCancelAppointment";
+import { useDoctors } from "@/hooks/doctor/useDoctors";
+import { toast } from "sonner";
 import {
   AppointmentFilters,
   AppointmentPagination,
@@ -8,6 +13,24 @@ import {
 } from "./components";
 
 export function AppointmentHistory() {
+  const [cancellingAppointmentId, setCancellingAppointmentId] = useState("");
+  const { data: appointments = [], isLoading } = useAppointments();
+  const { data: doctors = [] } = useDoctors();
+  const cancelAppointment = useCancelAppointment();
+
+  async function handleCancel(appointmentId: string) {
+    setCancellingAppointmentId(appointmentId);
+
+    try {
+      await cancelAppointment.mutateAsync(appointmentId);
+      toast.success("Consulta cancelada com sucesso.");
+    } catch {
+      toast.error("Não foi possível cancelar a consulta.");
+    } finally {
+      setCancellingAppointmentId("");
+    }
+  }
+
   return (
     <section className="mx-auto max-w-7xl px-8">
       <BackLink to="/home" />
@@ -19,8 +42,27 @@ export function AppointmentHistory() {
 
       <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
         <AppointmentFilters />
-        <AppointmentsTable appointments={APPOINTMENT_HISTORY} />
-        <AppointmentPagination />
+
+        {isLoading && <p className="py-8 text-slate-500">Carregando...</p>}
+
+        {!isLoading && appointments.length === 0 && (
+          <EmptyState
+            title="Nenhuma consulta encontrada"
+            description="Assim que você agendar uma consulta, ela aparecerá aqui."
+          />
+        )}
+
+        {!isLoading && appointments.length > 0 && (
+          <>
+            <AppointmentsTable
+              appointments={appointments}
+              doctors={doctors}
+              cancellingAppointmentId={cancellingAppointmentId}
+              onCancel={handleCancel}
+            />
+            <AppointmentPagination total={appointments.length} />
+          </>
+        )}
       </div>
     </section>
   );

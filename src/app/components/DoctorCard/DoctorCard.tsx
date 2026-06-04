@@ -1,7 +1,9 @@
+import { useCancelAppointment } from "@/hooks/appointment/useCancelAppointment";
+import { useDoctor } from "@/hooks/doctor/useDoctor";
 import type { Appointment } from "@/types/Appointment";
 import { CheckCircle, MapPin, Trash } from "phosphor-react";
+import { toast } from "sonner";
 import { Button } from "../Button/Button";
-import { useDoctor } from "@/hooks/doctor/useDoctor";
 
 type DoctorCardProps = {
   appointment: Appointment;
@@ -9,6 +11,16 @@ type DoctorCardProps = {
 
 export function DoctorCard({ appointment }: DoctorCardProps) {
   const { data: doctor, isPending } = useDoctor(appointment.doctorId);
+  const cancelAppointment = useCancelAppointment();
+
+  async function handleCancel() {
+    try {
+      await cancelAppointment.mutateAsync(appointment.id);
+      toast.success("Consulta cancelada com sucesso.");
+    } catch {
+      toast.error("Não foi possível cancelar a consulta.");
+    }
+  }
 
   if (isPending) {
     return <div>Carregando médico...</div>;
@@ -19,12 +31,12 @@ export function DoctorCard({ appointment }: DoctorCardProps) {
   }
 
   return (
-    <div className="rounded-xl flex flex-col justify-between bg-white space-y-6 p-8">
+    <div className="flex flex-col justify-between space-y-6 rounded-xl bg-white p-8">
       <div className="flex items-start gap-5">
         <img
           src="https://miro.medium.com/1*XpwkAEH2JiVWqDB_0MhWwQ.png"
           alt={doctor.name}
-          className="w-24 h-24 rounded-full"
+          className="h-24 w-24 rounded-full"
         />
 
         <div className="flex flex-col">
@@ -62,9 +74,15 @@ export function DoctorCard({ appointment }: DoctorCardProps) {
           Confirmar presença
         </Button>
 
-        <Button error size="lg">
+        <Button
+          type="button"
+          error
+          size="lg"
+          disabled={cancelAppointment.isPending}
+          onClick={handleCancel}
+        >
           <Trash size={24} />
-          Cancelar
+          {cancelAppointment.isPending ? "Cancelando..." : "Cancelar"}
         </Button>
       </div>
     </div>

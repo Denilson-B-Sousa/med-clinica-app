@@ -1,13 +1,23 @@
-import type { AppointmentHistoryItem } from "../constants/appointments";
+import type { AppointmentStatus } from "@/types/Appointment";
 
-const STATUS_STYLES: Record<AppointmentHistoryItem["status"], string> = {
-  Agendada: "bg-green-100 text-green-700",
-  Realizada: "bg-blue-100 text-blue-700",
-  Cancelada: "bg-slate-200 text-slate-600",
+const STATUS_STYLES: Record<AppointmentStatus, string> = {
+  SCHEDULED: "bg-green-100 text-green-700",
+  CONFIRMED: "bg-green-100 text-green-700",
+  COMPLETED: "bg-blue-100 text-blue-700",
+  CANCELED: "bg-slate-200 text-slate-600",
+  CANCELLED: "bg-slate-200 text-slate-600",
+};
+
+const STATUS_LABELS: Record<AppointmentStatus, string> = {
+  SCHEDULED: "Agendada",
+  CONFIRMED: "Confirmada",
+  COMPLETED: "Realizada",
+  CANCELED: "Cancelada",
+  CANCELLED: "Cancelada",
 };
 
 type StatusBadgeProps = {
-  status: AppointmentHistoryItem["status"];
+  status: AppointmentStatus;
 };
 
 export function StatusBadge({ status }: StatusBadgeProps) {
@@ -15,7 +25,7 @@ export function StatusBadge({ status }: StatusBadgeProps) {
     <span
       className={`rounded-md px-3 py-1 font-semibold ${STATUS_STYLES[status]}`}
     >
-      {status}
+      {STATUS_LABELS[status]}
     </span>
   );
 }

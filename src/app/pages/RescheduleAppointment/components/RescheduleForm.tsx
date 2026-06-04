@@ -1,8 +1,37 @@
+import type { FormEvent } from "react";
 import { Info } from "phosphor-react";
 
-export function RescheduleForm() {
+const AVAILABLE_TIMES = ["08:00", "09:30", "14:00", "16:30"];
+
+type RescheduleFormProps = {
+  date: string;
+  time: string;
+  isSubmitting: boolean;
+  onDateChange: (date: string) => void;
+  onTimeChange: (time: string) => void;
+  onSubmit: () => void;
+};
+
+export function RescheduleForm({
+  date,
+  time,
+  isSubmitting,
+  onDateChange,
+  onTimeChange,
+  onSubmit,
+}: RescheduleFormProps) {
+  const today = new Date().toISOString().split("T")[0];
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    onSubmit();
+  }
+
   return (
-    <form className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+    <form
+      onSubmit={handleSubmit}
+      className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm"
+    >
       <h2 className="mb-8 text-lg font-bold">2. Nova data e horário</h2>
 
       <div className="space-y-6">
@@ -11,6 +40,10 @@ export function RescheduleForm() {
 
           <input
             type="date"
+            min={today}
+            value={date}
+            onChange={(event) => onDateChange(event.target.value)}
+            required
             className="h-14 w-full rounded-lg border border-slate-300 px-4 text-slate-500 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
           />
         </div>
@@ -20,12 +53,18 @@ export function RescheduleForm() {
             Horário disponível
           </label>
 
-          <select className="h-14 w-full rounded-lg border border-slate-300 px-4 text-slate-500 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100">
-            <option>Selecione o novo horário</option>
-            <option>08:00</option>
-            <option>09:30</option>
-            <option>14:00</option>
-            <option>16:30</option>
+          <select
+            value={time}
+            onChange={(event) => onTimeChange(event.target.value)}
+            required
+            className="h-14 w-full rounded-lg border border-slate-300 px-4 text-slate-500 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+          >
+            <option value="">Selecione o novo horário</option>
+            {AVAILABLE_TIMES.map((availableTime) => (
+              <option key={availableTime} value={availableTime}>
+                {availableTime}
+              </option>
+            ))}
           </select>
         </div>
 
@@ -37,9 +76,10 @@ export function RescheduleForm() {
 
         <button
           type="submit"
-          className="flex h-14 w-full cursor-pointer items-center justify-center rounded-lg bg-blue-600 font-bold text-white transition hover:bg-blue-700"
+          disabled={isSubmitting}
+          className="flex h-14 w-full cursor-pointer items-center justify-center rounded-lg bg-blue-600 font-bold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-400"
         >
-          Confirmar reagendamento
+          {isSubmitting ? "Reagendando..." : "Confirmar reagendamento"}
         </button>
       </div>
     </form>
