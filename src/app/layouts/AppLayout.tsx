@@ -4,12 +4,12 @@ import { Outlet } from "react-router-dom";
 
 export function AppLayout() {
   return (
-    <div className="min-h-screen">
-      <Header/>
-      <main className="py-4">
+    <div className="flex min-h-screen flex-col">
+      <Header />
+      <main className="flex-1 py-4 pb-12">
         <Outlet />
       </main>
-      <Footer/>
+      <Footer />
     </div>
   );
 }
