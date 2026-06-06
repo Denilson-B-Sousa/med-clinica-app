@@ -1,30 +1,41 @@
-import type { Appointment } from "@/types/Appointment";
-import type { Doctor } from "@/types/Doctor";
+import type { AppointmentHistoryItem } from "@/types/Appointment";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Trash } from "phosphor-react";
 import { StatusBadge } from "./StatusBadge";
 
 type AppointmentsTableProps = {
-  appointments: Appointment[];
-  doctors: Doctor[];
+  appointments: AppointmentHistoryItem[];
   cancellingAppointmentId?: string;
   onCancel: (appointmentId: string) => void;
 };
 
-function canCancel(appointment: Appointment) {
+function canCancel(appointment: AppointmentHistoryItem) {
   return appointment.status === "SCHEDULED" || appointment.status === "CONFIRMED";
+}
+
+function getDoctorInfo(appointment: AppointmentHistoryItem) {
+  const doctor = appointment.doctor;
+  const address = doctor?.address;
+
+  return {
+    name: doctor?.name,
+    crm: doctor?.crm,
+    speciality: doctor?.speciality,
+    city: address?.city,
+    street: address?.street,
+    number: address?.number,
+  };
 }
 
 export function AppointmentsTable({
   appointments,
-  doctors,
   cancellingAppointmentId,
   onCancel,
 }: AppointmentsTableProps) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-slate-200">
-      <table className="w-full border-collapse text-left">
+    <div className="overflow-x-auto rounded-2xl border border-slate-200">
+      <table className="w-full min-w-[960px] border-collapse text-left">
         <thead className="bg-slate-50 text-sm text-slate-600">
           <tr>
             <th className="px-6 py-4">Data</th>
@@ -39,10 +50,11 @@ export function AppointmentsTable({
 
         <tbody className="divide-y divide-slate-200 text-sm">
           {appointments.map((appointment) => {
-            const doctor = doctors.find(
-              (currentDoctor) => currentDoctor.id === appointment.doctorId,
-            );
+            const doctor = getDoctorInfo(appointment);
             const appointmentDate = new Date(appointment.scheduleAt);
+            const address = [doctor.street, doctor.number]
+              .filter(Boolean)
+              .join(", ");
 
             return (
               <tr key={appointment.id}>
@@ -61,14 +73,14 @@ export function AppointmentsTable({
                   <div className="flex items-center gap-3">
                     <img
                       src="https://i.pravatar.cc/40?img=12"
-                      alt={doctor?.name ?? "Médico"}
+                      alt={doctor.name ?? "Médico"}
                       className="h-10 w-10 rounded-full object-cover"
                     />
                     <div>
                       <p className="font-semibold">
-                        {doctor?.name ?? "Médico não encontrado"}
+                        {doctor.name ?? "Médico não encontrado"}
                       </p>
-                      {doctor?.crm && (
+                      {doctor.crm && (
                         <span className="rounded bg-blue-100 px-2 py-1 text-xs font-bold text-blue-600">
                           CRM {doctor.crm}
                         </span>
@@ -77,15 +89,11 @@ export function AppointmentsTable({
                   </div>
                 </td>
 
-                <td className="px-6 py-5">{doctor?.speciality ?? "—"}</td>
+                <td className="px-6 py-5">{doctor.speciality ?? "—"}</td>
 
                 <td className="px-6 py-5">
-                  <strong>{doctor?.address.city ?? "—"}</strong>
-                  <p className="text-slate-500">
-                    {doctor
-                      ? `${doctor.address.street}, ${doctor.address.number}`
-                      : "—"}
-                  </p>
+                  <strong>{doctor.city ?? "—"}</strong>
+                  <p className="text-slate-500">{address || "—"}</p>
                 </td>
 
                 <td className="px-6 py-5">
@@ -98,7 +106,7 @@ export function AppointmentsTable({
                       type="button"
                       onClick={() => onCancel(appointment.id)}
                       disabled={cancellingAppointmentId === appointment.id}
-                      className="inline-flex items-center gap-2 rounded-lg border border-red-200 px-4 py-2 font-semibold text-red-600 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400"
+                      className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-red-200 px-4 py-2 font-semibold text-red-600 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400"
                     >
                       <Trash size={16} />
                       {cancellingAppointmentId === appointment.id

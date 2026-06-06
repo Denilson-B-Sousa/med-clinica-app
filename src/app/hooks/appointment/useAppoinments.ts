@@ -1,9 +1,11 @@
-import { findAppointmentsByStatus } from "@/services/appointment/findAppointmentByStatus";
-import { useQuery } from "@tanstack/react-query";
+import { appointmentService } from "@/services/appointment/appointmentService";
+import type { AppointmentHistoryParams } from "@/types/Appointment";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
-export function useAppointments(status?: string) {
+export function useAppointments(params: AppointmentHistoryParams = {}) {
   return useQuery({
-    queryKey: ["appointments", status],
-    queryFn: () => findAppointmentsByStatus(status),
+    queryKey: ["appointments", "history", params],
+    queryFn: () => appointmentService.findHistory(params),
+    placeholderData: keepPreviousData,
   });
 }

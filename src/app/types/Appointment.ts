@@ -2,9 +2,7 @@ export type AppointmentStatus =
   | "SCHEDULED"
   | "CONFIRMED"
   | "COMPLETED"
-  | "CANCELED"
-  | "CANCELLED";
-
+  | "CANCELED";
 export interface Appointment {
   id: string;
   patientId: string;
@@ -14,6 +12,42 @@ export interface Appointment {
   durationInMinutes: number;
   notes?: string;
 }
+
+export type AppointmentDoctorAddress = {
+  city: string;
+  street: string;
+  number: string;
+};
+
+export type AppointmentDoctor = {
+  id: string;
+  name: string;
+  crm: string;
+  speciality: string;
+  address: AppointmentDoctorAddress;
+};
+
+export type AppointmentHistoryItem = Pick<
+  Appointment,
+  "id" | "scheduleAt" | "status" | "durationInMinutes"
+> & {
+  doctor: AppointmentDoctor;
+};
+
+export type AppointmentHistoryParams = {
+  page?: number;
+  size?: number;
+  status?: Extract<AppointmentStatus, "SCHEDULED" | "COMPLETED" | "CANCELED">;
+  search?: string;
+};
+
+export type AppointmentHistoryPage = {
+  content: AppointmentHistoryItem[];
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
+};
 
 export type CreateAppointmentPayload = Omit<Appointment, "id">;
 

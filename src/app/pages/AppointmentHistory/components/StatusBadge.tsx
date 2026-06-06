@@ -5,7 +5,6 @@ const STATUS_STYLES: Record<AppointmentStatus, string> = {
   CONFIRMED: "bg-green-100 text-green-700",
   COMPLETED: "bg-blue-100 text-blue-700",
   CANCELED: "bg-slate-200 text-slate-600",
-  CANCELLED: "bg-slate-200 text-slate-600",
 };
 
 const STATUS_LABELS: Record<AppointmentStatus, string> = {
@@ -13,7 +12,6 @@ const STATUS_LABELS: Record<AppointmentStatus, string> = {
   CONFIRMED: "Confirmada",
   COMPLETED: "Realizada",
   CANCELED: "Cancelada",
-  CANCELLED: "Cancelada",
 };
 
 type StatusBadgeProps = {
