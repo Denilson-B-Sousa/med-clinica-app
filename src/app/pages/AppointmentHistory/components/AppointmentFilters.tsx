@@ -1,3 +1,4 @@
+import { Button } from "@/components/Button/Button";
 import type { AppointmentStatus } from "@/types/Appointment";
 
 export type AppointmentHistoryStatusFilter = Extract<
@@ -35,18 +36,15 @@ export function AppointmentFilters({
     <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
       <div className="flex gap-8 overflow-x-auto border-b border-slate-200">
         {FILTERS.map((filter) => (
-          <button
+          <Button
             key={filter.value}
             type="button"
             onClick={() => onFilterChange(filter.value)}
-            className={
-              filter.value === activeFilter
-                ? "cursor-pointer border-b-2 border-blue-600 px-3 pb-4 font-semibold text-blue-600"
-                : "cursor-pointer px-3 pb-4 text-slate-500 transition hover:text-blue-600"
-            }
+            size="tab"
+            variant={filter.value === activeFilter ? "tabActive" : "tab"}
           >
             {filter.label}
-          </button>
+          </Button>
         ))}
       </div>
 
@@ -59,13 +57,14 @@ export function AppointmentFilters({
           className="h-12 rounded-lg border border-slate-300 px-4 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
         />
 
-        <button
+        <Button
           type="button"
           onClick={onClear}
-          className="h-12 cursor-pointer rounded-lg border border-slate-300 px-5 font-semibold text-slate-600 transition hover:bg-slate-50"
+          size="inputAction"
+          variant="neutralOutline"
         >
           Limpar
-        </button>
+        </Button>
       </div>
     </div>
   );

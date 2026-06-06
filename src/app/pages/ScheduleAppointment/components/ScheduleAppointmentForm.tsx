@@ -1,4 +1,5 @@
 import type { FormEvent } from "react";
+import { Button } from "@/components/Button/Button";
 import type { Doctor, MedicalSpeciality } from "@/types/Doctor";
 
 const AVAILABLE_TIMES = ["08:00", "09:00", "10:30", "14:00", "15:30", "16:30"];
@@ -161,13 +162,14 @@ export function ScheduleAppointmentForm({
           />
         </div>
 
-        <button
+        <Button
           type="submit"
           disabled={isSubmitting}
-          className="flex h-14 w-full items-center justify-center gap-3 rounded-lg bg-[#0094CB] font-bold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-400"
+          size="full"
+          variant="primary"
         >
           {isSubmitting ? "Agendando..." : "Confirmar agendamento"}
-        </button>
+        </Button>
       </div>
     </form>
   );

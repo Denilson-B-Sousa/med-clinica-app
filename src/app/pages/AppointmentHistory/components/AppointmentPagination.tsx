@@ -1,3 +1,4 @@
+import { Button } from "@/components/Button/Button";
 import { ArrowLeft, ArrowRight } from "phosphor-react";
 
 type AppointmentPaginationProps = {
@@ -25,40 +26,39 @@ export function AppointmentPagination({
       </p>
 
       <div className="flex items-center gap-2">
-        <button
+        <Button
           type="button"
           disabled={currentPage === 1}
           onClick={() => onPageChange(currentPage - 1)}
-          className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
+          size="icon"
+          variant="page"
         >
-          <ArrowLeft/>
-        </button>
+          <ArrowLeft />
+        </Button>
 
         {Array.from({ length: totalPages }, (_, index) => index + 1).map(
           (page) => (
-            <button
+            <Button
               key={page}
               type="button"
               onClick={() => onPageChange(page)}
-              className={
-                page === currentPage
-                  ? "flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg bg-blue-600 font-bold text-white"
-                  : "flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg border border-slate-200 font-semibold text-slate-600 transition hover:bg-slate-50"
-              }
+              size="icon"
+              variant={page === currentPage ? "pageActive" : "page"}
             >
               {page}
-            </button>
+            </Button>
           ),
         )}
 
-        <button
+        <Button
           type="button"
           disabled={currentPage === totalPages}
           onClick={() => onPageChange(currentPage + 1)}
-          className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-lg border border-slate-200 text-slate-500 transition hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
+          size="icon"
+          variant="page"
         >
-          <ArrowRight/>
-        </button>
+          <ArrowRight />
+        </Button>
       </div>
     </div>
   );

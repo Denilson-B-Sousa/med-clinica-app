@@ -1,3 +1,4 @@
+import { Button } from "@/components/Button/Button";
 import type { AppointmentHistoryItem } from "@/types/Appointment";
 import { getAppointmentTime } from "@/utils/date/DateTimeFormatter";
 import { format } from "date-fns";
@@ -54,14 +55,16 @@ export function CurrentAppointmentCard({
         </div>
       </div>
 
-      <button
+      <Button
         type="button"
         onClick={onCancel}
         disabled={isCancelling}
-        className="mt-8 flex h-14 w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-red-500 font-bold text-red-500 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:border-slate-300 disabled:text-slate-400"
+        size="full"
+        variant="dangerOutline"
+        className="mt-8 border-red-500 font-bold text-red-500"
       >
         <Trash /> {isCancelling ? "Cancelando..." : "Cancelar consulta"}
-      </button>
+      </Button>
     </aside>
   );
 }

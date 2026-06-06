@@ -1,3 +1,4 @@
+import { Button } from "@/components/Button/Button";
 import type { FormEvent } from "react";
 import { Info } from "phosphor-react";
 
@@ -76,13 +77,14 @@ export function RescheduleForm({
           selecionados.
         </div>
 
-        <button
+        <Button
           type="submit"
           disabled={isSubmitDisabled}
-          className="flex h-14 w-full cursor-pointer items-center justify-center rounded-lg bg-blue-600 font-bold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-400"
+          size="full"
+          variant="primary"
         >
           {isSubmitting ? "Reagendando..." : "Confirmar reagendamento"}
-        </button>
+        </Button>
       </div>
     </form>
   );

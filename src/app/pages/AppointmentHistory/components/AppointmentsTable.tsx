@@ -1,8 +1,8 @@
+import { Button } from "@/components/Button/Button";
 import type { AppointmentHistoryItem } from "@/types/Appointment";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Calendar, Trash } from "phosphor-react";
-import { Link } from "react-router-dom";
 import { StatusBadge } from "./StatusBadge";
 
 type AppointmentsTableProps = {
@@ -40,16 +40,16 @@ export function AppointmentsTable({
 }: AppointmentsTableProps) {
   return (
     <div className="overflow-x-auto rounded-2xl border border-slate-200">
-      <table className="w-full min-w-[960px] border-collapse text-left">
+      <table className="w-full min-w-[1040px] border-collapse text-left">
         <thead className="bg-slate-50 text-sm text-slate-600">
           <tr>
-            <th className="px-6 py-4">Data</th>
-            <th className="px-6 py-4">Horario</th>
-            <th className="px-6 py-4">Medico</th>
-            <th className="px-6 py-4">Especialidade</th>
-            <th className="px-6 py-4">Local</th>
-            <th className="px-6 py-4">Situacao</th>
-            <th className="px-6 py-4">Acoes</th>
+            <th className="px-5 py-4">Data</th>
+            <th className="px-5 py-4">Horario</th>
+            <th className="px-5 py-4">Medico</th>
+            <th className="px-5 py-4">Especialidade</th>
+            <th className="px-5 py-4">Local</th>
+            <th className="px-5 py-4">Situacao</th>
+            <th className="w-72 px-5 py-4">Acoes</th>
           </tr>
         </thead>
 
@@ -63,18 +63,18 @@ export function AppointmentsTable({
 
             return (
               <tr key={appointment.id}>
-                <td className="px-6 py-5">
+                <td className="px-5 py-4 align-middle">
                   <strong>{format(appointmentDate, "dd/MM/yyyy")}</strong>
                   <p className="text-slate-500">
                     {format(appointmentDate, "EEEE", { locale: ptBR })}
                   </p>
                 </td>
 
-                <td className="px-6 py-5">
+                <td className="px-5 py-4 align-middle">
                   {format(appointmentDate, "HH:mm")}
                 </td>
 
-                <td className="px-6 py-5">
+                <td className="px-5 py-4 align-middle">
                   <div className="flex items-center gap-3">
                     <img
                       src="https://i.pravatar.cc/40?img=12"
@@ -94,42 +94,46 @@ export function AppointmentsTable({
                   </div>
                 </td>
 
-                <td className="px-6 py-5">{doctor.speciality ?? "-"}</td>
+                <td className="px-5 py-4 align-middle">
+                  {doctor.speciality ?? "-"}
+                </td>
 
-                <td className="px-6 py-5">
+                <td className="px-5 py-4 align-middle">
                   <strong>{doctor.city ?? "-"}</strong>
                   <p className="text-slate-500">{address || "-"}</p>
                 </td>
 
-                <td className="px-6 py-5">
+                <td className="px-5 py-4 align-middle">
                   <StatusBadge status={appointment.status} />
                 </td>
 
-                <td className="px-6 py-5">
+                <td className="px-5 py-4 align-middle">
                   {canReschedule(appointment) || canCancel(appointment) ? (
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
                       {canReschedule(appointment) && (
-                        <Link
+                        <Button
                           to={`/reagendar-consulta/${appointment.id}`}
-                          className="inline-flex items-center gap-2 rounded-lg border border-blue-200 px-4 py-2 font-semibold text-blue-600 transition hover:bg-blue-50"
+                          size="action"
+                          variant="blueOutline"
                         >
                           <Calendar size={16} />
                           Reagendar
-                        </Link>
+                        </Button>
                       )}
 
                       {canCancel(appointment) && (
-                        <button
+                        <Button
                           type="button"
                           onClick={() => onCancel(appointment.id)}
                           disabled={cancellingAppointmentId === appointment.id}
-                          className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-red-200 px-4 py-2 font-semibold text-red-600 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400"
+                          size="action"
+                          variant="dangerOutline"
                         >
                           <Trash size={16} />
                           {cancellingAppointmentId === appointment.id
                             ? "Cancelando..."
                             : "Cancelar"}
-                        </button>
+                        </Button>
                       )}
                     </div>
                   ) : (

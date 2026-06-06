@@ -1,5 +1,5 @@
+import { Button } from "@/components/Button/Button";
 import { Calendar, CalendarPlus, CaretRight, Clock } from "phosphor-react";
-import { Link } from "react-router-dom";
 
 type QuickActionsProps = {
   nextAppointmentId?: string;
@@ -15,9 +15,10 @@ export function QuickActions({ nextAppointmentId }: QuickActionsProps) {
       <h3 className="text-2xl font-semibold text-slate-900">Acoes rapidas</h3>
 
       <div className="mt-6 flex flex-col gap-4">
-        <Link
+        <Button
           to="/agendar-consulta"
-          className="flex items-center justify-between rounded-2xl border border-slate-100 p-4 transition hover:bg-slate-50"
+          size="quickAction"
+          variant="quickAction"
         >
           <div className="flex items-center gap-4">
             <div className="rounded-full bg-blue-50 p-3 text-blue-600">
@@ -36,11 +37,12 @@ export function QuickActions({ nextAppointmentId }: QuickActionsProps) {
           </div>
 
           <CaretRight />
-        </Link>
+        </Button>
 
-        <Link
+        <Button
           to={reschedulePath}
-          className="flex items-center justify-between rounded-2xl border border-slate-100 p-4 transition hover:bg-slate-50"
+          size="quickAction"
+          variant="quickAction"
         >
           <div className="flex items-center gap-4">
             <div className="rounded-full bg-blue-50 p-3 text-blue-600">
@@ -57,11 +59,12 @@ export function QuickActions({ nextAppointmentId }: QuickActionsProps) {
           </div>
 
           <CaretRight />
-        </Link>
+        </Button>
 
-        <Link
+        <Button
           to="/historico-consultas"
-          className="flex items-center justify-between rounded-2xl border border-slate-100 p-4 transition hover:bg-slate-50"
+          size="quickAction"
+          variant="quickAction"
         >
           <div className="flex items-center gap-4">
             <div className="rounded-full bg-blue-50 p-3 text-blue-600">
@@ -78,7 +81,7 @@ export function QuickActions({ nextAppointmentId }: QuickActionsProps) {
           </div>
 
           <CaretRight />
-        </Link>
+        </Button>
       </div>
     </div>
   );

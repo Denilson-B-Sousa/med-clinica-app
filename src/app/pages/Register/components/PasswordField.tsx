@@ -1,3 +1,4 @@
+import { Button } from "@/components/Button/Button";
 import { Input } from "@/components/Input/Input";
 import { Eye, EyeSlash } from "phosphor-react";
 import type { ComponentPropsWithoutRef } from "react";
@@ -15,13 +16,15 @@ export function PasswordField({
   return (
     <div className="relative">
       <Input size="md" type={isVisible ? "text" : "password"} {...inputProps} />
-      <button
+      <Button
         type="button"
         onClick={onToggleVisibility}
-        className="absolute right-6 top-1/2 -translate-y-1/2 cursor-pointer text-gray-500 hover:text-gray-700"
+        size="default"
+        variant="ghost"
+        className="absolute right-4 top-1/2 h-8 w-8 -translate-y-1/2 p-0"
       >
         {isVisible ? <EyeSlash size={20} /> : <Eye size={20} />}
-      </button>
+      </Button>
     </div>
   );
 }
