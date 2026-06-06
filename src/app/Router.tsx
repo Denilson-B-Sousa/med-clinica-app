@@ -44,6 +44,10 @@ export const router = createBrowserRouter([
         element: <RescheduleAppointment />,
       },
       {
+        path: "/reagendar-consulta/:id",
+        element: <RescheduleAppointment />,
+      },
+      {
         path: "historico-consulta",
         element: <AppointmentHistory />,
       },

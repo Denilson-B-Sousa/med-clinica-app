@@ -1,16 +1,15 @@
 import { useCancelAppointment } from "@/hooks/appointment/useCancelAppointment";
-import { useDoctor } from "@/hooks/doctor/useDoctor";
-import type { Appointment } from "@/types/Appointment";
+import type { AppointmentHistoryItem } from "@/types/Appointment";
 import { CheckCircle, MapPin, Trash } from "phosphor-react";
 import { toast } from "sonner";
 import { Button } from "../Button/Button";
 
 type DoctorCardProps = {
-  appointment: Appointment;
+  appointment: AppointmentHistoryItem;
 };
 
 export function DoctorCard({ appointment }: DoctorCardProps) {
-  const { data: doctor, isPending } = useDoctor(appointment.doctorId);
+  const { doctor } = appointment;
   const cancelAppointment = useCancelAppointment();
 
   async function handleCancel() {
@@ -20,14 +19,6 @@ export function DoctorCard({ appointment }: DoctorCardProps) {
     } catch {
       toast.error("Não foi possível cancelar a consulta.");
     }
-  }
-
-  if (isPending) {
-    return <div>Carregando médico...</div>;
-  }
-
-  if (!doctor) {
-    return null;
   }
 
   return (

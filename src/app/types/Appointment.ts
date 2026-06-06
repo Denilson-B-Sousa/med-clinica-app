@@ -51,9 +51,10 @@ export type AppointmentHistoryPage = {
 
 export type CreateAppointmentPayload = Omit<Appointment, "id">;
 
+export type RescheduleAppointmentPayload = {
+  scheduleAt: string;
+};
+
 export type UpdateAppointmentPayload = Partial<
-  Pick<
-    Appointment,
-    "doctorId" | "scheduleAt" | "status" | "durationInMinutes" | "notes"
-  >
+  Pick<Appointment, "scheduleAt" | "status">
 >;

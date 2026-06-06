@@ -5,6 +5,7 @@ import type {
   AppointmentHistoryPage,
   AppointmentHistoryParams,
   CreateAppointmentPayload,
+  RescheduleAppointmentPayload,
   UpdateAppointmentPayload,
 } from "@/types/Appointment";
 
@@ -87,12 +88,20 @@ export const appointmentService = {
     id: string,
     payload: UpdateAppointmentPayload,
   ): Promise<Appointment> {
-    const { data } = await api.patch(`/consultas/${id}`, payload);
+    const { data } = await api.put(`/consultas/${id}`, payload);
+    return data;
+  },
+
+  async reschedule(
+    id: string,
+    payload: RescheduleAppointmentPayload,
+  ): Promise<Appointment> {
+    const { data } = await api.put(`/consultas/${id}`, payload);
     return data;
   },
 
   async cancel(id: string): Promise<Appointment> {
-    const { data } = await api.patch(`/consultas/${id}`, {
+    const { data } = await api.put(`/consultas/${id}`, {
       status: "CANCELED",
     });
 

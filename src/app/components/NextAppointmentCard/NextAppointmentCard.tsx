@@ -7,10 +7,10 @@ import {
   getAppointmentTime,
   getAppointmentLabel
 } from "@/utils/date/DateTimeFormatter";
-import type { Appointment } from "@/types/Appointment";
+import type { AppointmentHistoryItem } from "@/types/Appointment";
 
 type NextAppointmentCardProps = {
-  appointment: Appointment;
+  appointment: AppointmentHistoryItem;
 };
 
 export function NextAppointmentCard({ appointment }: NextAppointmentCardProps) {

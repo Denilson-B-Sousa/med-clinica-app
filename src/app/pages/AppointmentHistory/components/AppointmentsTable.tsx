@@ -1,7 +1,8 @@
 import type { AppointmentHistoryItem } from "@/types/Appointment";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { Trash } from "phosphor-react";
+import { Calendar, Trash } from "phosphor-react";
+import { Link } from "react-router-dom";
 import { StatusBadge } from "./StatusBadge";
 
 type AppointmentsTableProps = {
@@ -11,6 +12,10 @@ type AppointmentsTableProps = {
 };
 
 function canCancel(appointment: AppointmentHistoryItem) {
+  return appointment.status === "SCHEDULED" || appointment.status === "CONFIRMED";
+}
+
+function canReschedule(appointment: AppointmentHistoryItem) {
   return appointment.status === "SCHEDULED" || appointment.status === "CONFIRMED";
 }
 
@@ -39,12 +44,12 @@ export function AppointmentsTable({
         <thead className="bg-slate-50 text-sm text-slate-600">
           <tr>
             <th className="px-6 py-4">Data</th>
-            <th className="px-6 py-4">Horário</th>
-            <th className="px-6 py-4">Médico</th>
+            <th className="px-6 py-4">Horario</th>
+            <th className="px-6 py-4">Medico</th>
             <th className="px-6 py-4">Especialidade</th>
             <th className="px-6 py-4">Local</th>
-            <th className="px-6 py-4">Situação</th>
-            <th className="px-6 py-4">Ações</th>
+            <th className="px-6 py-4">Situacao</th>
+            <th className="px-6 py-4">Acoes</th>
           </tr>
         </thead>
 
@@ -73,12 +78,12 @@ export function AppointmentsTable({
                   <div className="flex items-center gap-3">
                     <img
                       src="https://i.pravatar.cc/40?img=12"
-                      alt={doctor.name ?? "Médico"}
+                      alt={doctor.name ?? "Medico"}
                       className="h-10 w-10 rounded-full object-cover"
                     />
                     <div>
                       <p className="font-semibold">
-                        {doctor.name ?? "Médico não encontrado"}
+                        {doctor.name ?? "Medico nao encontrado"}
                       </p>
                       {doctor.crm && (
                         <span className="rounded bg-blue-100 px-2 py-1 text-xs font-bold text-blue-600">
@@ -89,11 +94,11 @@ export function AppointmentsTable({
                   </div>
                 </td>
 
-                <td className="px-6 py-5">{doctor.speciality ?? "—"}</td>
+                <td className="px-6 py-5">{doctor.speciality ?? "-"}</td>
 
                 <td className="px-6 py-5">
-                  <strong>{doctor.city ?? "—"}</strong>
-                  <p className="text-slate-500">{address || "—"}</p>
+                  <strong>{doctor.city ?? "-"}</strong>
+                  <p className="text-slate-500">{address || "-"}</p>
                 </td>
 
                 <td className="px-6 py-5">
@@ -101,20 +106,34 @@ export function AppointmentsTable({
                 </td>
 
                 <td className="px-6 py-5">
-                  {canCancel(appointment) ? (
-                    <button
-                      type="button"
-                      onClick={() => onCancel(appointment.id)}
-                      disabled={cancellingAppointmentId === appointment.id}
-                      className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-red-200 px-4 py-2 font-semibold text-red-600 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400"
-                    >
-                      <Trash size={16} />
-                      {cancellingAppointmentId === appointment.id
-                        ? "Cancelando..."
-                        : "Cancelar"}
-                    </button>
+                  {canReschedule(appointment) || canCancel(appointment) ? (
+                    <div className="flex flex-wrap gap-2">
+                      {canReschedule(appointment) && (
+                        <Link
+                          to={`/reagendar-consulta/${appointment.id}`}
+                          className="inline-flex items-center gap-2 rounded-lg border border-blue-200 px-4 py-2 font-semibold text-blue-600 transition hover:bg-blue-50"
+                        >
+                          <Calendar size={16} />
+                          Reagendar
+                        </Link>
+                      )}
+
+                      {canCancel(appointment) && (
+                        <button
+                          type="button"
+                          onClick={() => onCancel(appointment.id)}
+                          disabled={cancellingAppointmentId === appointment.id}
+                          className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-red-200 px-4 py-2 font-semibold text-red-600 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400"
+                        >
+                          <Trash size={16} />
+                          {cancellingAppointmentId === appointment.id
+                            ? "Cancelando..."
+                            : "Cancelar"}
+                        </button>
+                      )}
+                    </div>
                   ) : (
-                    <span className="text-slate-400">—</span>
+                    <span className="text-slate-400">-</span>
                   )}
                 </td>
               </tr>

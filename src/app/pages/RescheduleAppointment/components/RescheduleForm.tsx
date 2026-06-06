@@ -27,6 +27,8 @@ export function RescheduleForm({
     onSubmit();
   }
 
+  const isSubmitDisabled = isSubmitting || !date || !time;
+
   return (
     <form
       onSubmit={handleSubmit}
@@ -76,7 +78,7 @@ export function RescheduleForm({
 
         <button
           type="submit"
-          disabled={isSubmitting}
+          disabled={isSubmitDisabled}
           className="flex h-14 w-full cursor-pointer items-center justify-center rounded-lg bg-blue-600 font-bold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:bg-slate-400"
         >
           {isSubmitting ? "Reagendando..." : "Confirmar reagendamento"}

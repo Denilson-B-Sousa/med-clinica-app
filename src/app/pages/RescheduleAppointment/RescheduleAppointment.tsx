@@ -5,21 +5,52 @@ import { PageHeader } from "@/components/PageHeader";
 import { useCancelAppointment } from "@/hooks/appointment/useCancelAppointment";
 import { useNextAppointment } from "@/hooks/appointment/useNextAppointment";
 import { useUpdateAppointment } from "@/hooks/appointment/useUpdateAppointment";
-import { useDoctor } from "@/hooks/doctor/useDoctor";
+import { appointmentService } from "@/services/appointment/appointmentService";
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { CurrentAppointmentCard, RescheduleForm } from "./components";
 
 export function RescheduleAppointment() {
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
+  const { id: appointmentId } = useParams();
 
-  const { data: appointment, isLoading } = useNextAppointment();
-  const { data: doctor } = useDoctor(appointment?.doctorId ?? "");
+  const { data: nextAppointment, isLoading: isNextAppointmentLoading } =
+    useNextAppointment();
+  const {
+    data: selectedAppointment,
+    isLoading: isSelectedAppointmentLoading,
+  } = useQuery({
+    queryKey: ["appointment-to-reschedule", appointmentId],
+    enabled: Boolean(appointmentId),
+    queryFn: async () => {
+      const appointments = await appointmentService.findHistory({
+        page: 0,
+        size: 100,
+      });
+
+      return (
+        appointments.content.find(
+          (appointment) => appointment.id === appointmentId,
+        ) ?? null
+      );
+    },
+  });
   const updateAppointment = useUpdateAppointment();
   const cancelAppointment = useCancelAppointment();
+  const isLoading = appointmentId
+    ? isSelectedAppointmentLoading
+    : isNextAppointmentLoading;
+  const appointment = appointmentId ? selectedAppointment : nextAppointment;
 
   async function handleReschedule() {
     if (!appointment) {
+      return;
+    }
+
+    if (!date || !time) {
+      toast.error("Informe a nova data e horario da consulta.");
       return;
     }
 
@@ -80,7 +111,6 @@ export function RescheduleAppointment() {
         <div className="grid gap-6 lg:grid-cols-2">
           <CurrentAppointmentCard
             appointment={appointment}
-            doctor={doctor}
             isCancelling={cancelAppointment.isPending}
             onCancel={handleCancel}
           />

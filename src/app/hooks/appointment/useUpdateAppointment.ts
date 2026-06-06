@@ -1,10 +1,10 @@
 import { appointmentService } from "@/services/appointment/appointmentService";
-import type { UpdateAppointmentPayload } from "@/types/Appointment";
+import type { RescheduleAppointmentPayload } from "@/types/Appointment";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 type UpdateAppointmentData = {
   id: string;
-  data: UpdateAppointmentPayload;
+  data: RescheduleAppointmentPayload;
 };
 
 export function useUpdateAppointment() {
@@ -12,11 +12,12 @@ export function useUpdateAppointment() {
 
   return useMutation({
     mutationFn: ({ id, data }: UpdateAppointmentData) =>
-      appointmentService.update(id, data),
+      appointmentService.reschedule(id, data),
     onSuccess: async () => {
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ["appointments"] }),
         queryClient.invalidateQueries({ queryKey: ["next-appointment"] }),
+        queryClient.invalidateQueries({ queryKey: ["appointment-to-reschedule"] }),
       ]);
     },
   });

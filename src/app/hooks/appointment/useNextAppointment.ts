@@ -1,12 +1,17 @@
-import { findAppointmentsByStatus } from "@/services/appointment/findAppointmentByStatus";
+import { appointmentService } from "@/services/appointment/appointmentService";
 import { useQuery } from "@tanstack/react-query";
 
 export function useNextAppointment() {
   return useQuery({
     queryKey: ["next-appointment"],
     queryFn: async () => {
-      const appointment = await findAppointmentsByStatus("SCHEDULED");
-      return appointment[0] ?? null;
+      const appointments = await appointmentService.findHistory({
+        page: 0,
+        size: 1,
+        status: "SCHEDULED",
+      });
+
+      return appointments.content[0] ?? null;
     },
   });
 }

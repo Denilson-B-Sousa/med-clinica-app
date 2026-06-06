@@ -1,23 +1,21 @@
-import type { Appointment } from "@/types/Appointment";
-import type { Doctor } from "@/types/Doctor";
+import type { AppointmentHistoryItem } from "@/types/Appointment";
 import { getAppointmentTime } from "@/utils/date/DateTimeFormatter";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Trash } from "phosphor-react";
 
 type CurrentAppointmentCardProps = {
-  appointment: Appointment;
-  doctor?: Doctor;
+  appointment: AppointmentHistoryItem;
   isCancelling: boolean;
   onCancel: () => void;
 };
 
 export function CurrentAppointmentCard({
   appointment,
-  doctor,
   isCancelling,
   onCancel,
 }: CurrentAppointmentCardProps) {
+  const { doctor } = appointment;
   const date = format(new Date(appointment.scheduleAt), "dd 'de' MMMM 'de' yyyy", {
     locale: ptBR,
   });
@@ -41,19 +39,17 @@ export function CurrentAppointmentCard({
 
         <div>
           <p className="text-sm font-bold">Médico</p>
-          <p className="font-semibold">{doctor?.name ?? "Carregando..."}</p>
+          <p className="font-semibold">{doctor.name}</p>
           <p className="text-sm uppercase text-slate-600">
-            {doctor?.speciality ?? "—"}
+            {doctor.speciality}
           </p>
         </div>
 
         <div>
           <p className="text-sm font-bold">Local</p>
-          <p className="font-semibold">{doctor?.address.city ?? "—"}</p>
+          <p className="font-semibold">{doctor.address.city}</p>
           <p className="text-sm text-slate-600">
-            {doctor
-              ? `${doctor.address.street}, ${doctor.address.number}`
-              : "Carregando..."}
+            {doctor.address.street}, {doctor.address.number}
           </p>
         </div>
       </div>

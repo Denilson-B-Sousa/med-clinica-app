@@ -1,10 +1,10 @@
 import { DoctorCard } from "@/components/DoctorCard/DoctorCard";
 import { NextAppointmentCard } from "@/components/NextAppointmentCard/NextAppointmentCard";
 import { QuickActions } from "@/components/QuickActions/QuickAction";
-import type { Appointment } from "@/types/Appointment";
+import type { AppointmentHistoryItem } from "@/types/Appointment";
 
 type AppointmentOverviewProps = {
-  appointment: Appointment;
+  appointment: AppointmentHistoryItem;
 };
 
 export function AppointmentOverview({ appointment }: AppointmentOverviewProps) {
@@ -16,7 +16,7 @@ export function AppointmentOverview({ appointment }: AppointmentOverviewProps) {
       </div>
 
       <aside className="rounded-3xl border border-zinc-100 bg-white p-6 shadow-md">
-        <QuickActions />
+        <QuickActions nextAppointmentId={appointment.id} />
       </aside>
     </section>
   );
