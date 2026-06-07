@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import { AppLayout } from "@/layouts/AppLayout";
+import { AdminArea, AdminFullSchedule } from "@/pages/Admin";
 import { AuthLayout } from "@/layouts/AuthLayout";
 import { AppointmentHistory } from "@/pages/AppointmentHistory";
 import { PatientArea } from "@/pages/Home";
@@ -10,6 +11,14 @@ import { RescheduleAppointment } from "@/pages/RescheduleAppointment";
 import { ScheduleAppointment } from "@/pages/ScheduleAppointment";
 
 export const router = createBrowserRouter([
+  {
+    path: "/admin",
+    element: <AdminArea />,
+  },
+  {
+    path: "/admin/agenda",
+    element: <AdminFullSchedule />,
+  },
   {
     element: <AuthLayout />,
     children: [
