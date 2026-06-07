@@ -24,20 +24,34 @@ export function SecurityStep({
   return (
     <div className="mt-6 grid gap-4">
       <div className="flex w-md flex-col gap-1">
+        <label
+          htmlFor="password"
+          className="text-left font-inter text-sm font-medium text-gray-700"
+        >
+          Senha
+        </label>
         <PasswordField
+          id="password"
           isVisible={isPasswordVisible}
           onToggleVisibility={onTogglePassword}
-          placeholder="Senha"
+          placeholder="Digite sua senha"
           {...register("password")}
         />
         <FormError error={errors.password} />
       </div>
 
       <div className="relative flex w-md flex-col gap-1">
+        <label
+          htmlFor="confirmPassword"
+          className="text-left font-inter text-sm font-medium text-gray-700"
+        >
+          Confirmar senha
+        </label>
         <PasswordField
+          id="confirmPassword"
           isVisible={isConfirmPasswordVisible}
           onToggleVisibility={onToggleConfirmPassword}
-          placeholder="Confirmar senha"
+          placeholder="Digite sua senha novamente"
           {...register("confirmPassword")}
         />
         <FormError error={errors.confirmPassword} />

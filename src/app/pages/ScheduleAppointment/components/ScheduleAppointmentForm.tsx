@@ -1,8 +1,33 @@
-import type { FormEvent } from "react";
 import { Button } from "@/components/Button/Button";
-import type { Doctor, MedicalSpeciality } from "@/types/Doctor";
+import {
+  MEDICAL_SPECIALITIES,
+  type Doctor,
+  type MedicalSpeciality,
+} from "@/types/Doctor";
+import type { FormEvent } from "react";
 
 const AVAILABLE_TIMES = ["08:00", "09:00", "10:30", "14:00", "15:30", "16:30"];
+
+const SPECIALITY_LABELS: Record<MedicalSpeciality, string> = {
+  ORTOPEDIA: "Ortopedia",
+  CARDIOLOGIA: "Cardiologia",
+  DERMATOLOGIA: "Dermatologia",
+  ENDOCRINOLOGIA: "Endocrinologia",
+  GASTROENTEROLOGIA: "Gastroenterologia",
+  GERIATRIA: "Geriatria",
+  HEMATOLOGIA: "Hematologia",
+  INFECTOLOGIA: "Infectologia",
+  NEUROLOGIA: "Neurologia",
+  OFTALMOLOGIA: "Oftalmologia",
+  ONCOLOGIA: "Oncologia",
+  PEDIATRIA: "Pediatria",
+  PNEUMOLOGIA: "Pneumologia",
+  GINECOLOGIA: "Ginecologia",
+  REUMATOLOGIA: "Reumatologia",
+  UROLOGIA: "Urologia",
+  PSICOLOGIA: "Psicologia",
+  PSIQUIATRIA: "Psiquiatria",
+};
 
 type ScheduleAppointmentFormProps = {
   doctors: Doctor[];
@@ -12,18 +37,15 @@ type ScheduleAppointmentFormProps = {
     doctorId: string;
     date: string;
     time: string;
-    notes: string;
   }) => void;
   selectedSpeciality: string;
   selectedDoctorId: string;
   selectedDate: string;
   selectedTime: string;
-  notes: string;
   onSpecialityChange: (speciality: string) => void;
   onDoctorChange: (doctorId: string) => void;
   onDateChange: (date: string) => void;
   onTimeChange: (time: string) => void;
-  onNotesChange: (notes: string) => void;
 };
 
 export function ScheduleAppointmentForm({
@@ -35,17 +57,11 @@ export function ScheduleAppointmentForm({
   selectedDoctorId,
   selectedDate,
   selectedTime,
-  notes,
   onSpecialityChange,
   onDoctorChange,
   onDateChange,
   onTimeChange,
-  onNotesChange,
 }: ScheduleAppointmentFormProps) {
-  const specialities = Array.from(
-    new Set(doctors.map((doctor) => doctor.speciality)),
-  );
-
   const filteredDoctors = selectedSpeciality
     ? doctors.filter((doctor) => doctor.speciality === selectedSpeciality)
     : doctors;
@@ -59,7 +75,6 @@ export function ScheduleAppointmentForm({
       doctorId: selectedDoctorId,
       date: selectedDate,
       time: selectedTime,
-      notes,
     });
   }
 
@@ -86,16 +101,16 @@ export function ScheduleAppointmentForm({
             className="h-14 w-full rounded-lg border border-slate-300 px-4 text-slate-500 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100 disabled:cursor-not-allowed disabled:bg-slate-100"
           >
             <option value="">Selecione a especialidade</option>
-            {specialities.map((speciality) => (
+            {MEDICAL_SPECIALITIES.map((speciality) => (
               <option key={speciality} value={speciality}>
-                {speciality}
+                {SPECIALITY_LABELS[speciality]}
               </option>
             ))}
           </select>
         </div>
 
         <div>
-          <label className="mb-2 block text-sm font-semibold">Médico</label>
+          <label className="mb-2 block text-sm font-semibold">Medico</label>
 
           <select
             value={selectedDoctorId}
@@ -104,7 +119,9 @@ export function ScheduleAppointmentForm({
             required
             className="h-14 w-full rounded-lg border border-slate-300 px-4 text-slate-500 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100 disabled:cursor-not-allowed disabled:bg-slate-100"
           >
-            <option value="">Selecione o médico</option>
+            <option value="">
+              {isLoadingDoctors ? "Carregando medicos" : "Selecione o medico"}
+            </option>
             {filteredDoctors.map((doctor) => (
               <option key={doctor.id} value={doctor.id}>
                 {doctor.name}
@@ -129,7 +146,7 @@ export function ScheduleAppointmentForm({
 
           <div>
             <label className="mb-2 block text-sm font-semibold">
-              Horário disponível
+              Horario disponivel
             </label>
 
             <select
@@ -138,7 +155,7 @@ export function ScheduleAppointmentForm({
               required
               className="h-14 w-full rounded-lg border border-slate-300 px-4 text-slate-500 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
             >
-              <option value="">Selecione o horário</option>
+              <option value="">Selecione o horario</option>
               {AVAILABLE_TIMES.map((time) => (
                 <option key={time} value={time}>
                   {time}
@@ -146,20 +163,6 @@ export function ScheduleAppointmentForm({
               ))}
             </select>
           </div>
-        </div>
-
-        <div>
-          <label className="mb-2 block text-sm font-semibold">
-            Observações
-          </label>
-
-          <textarea
-            rows={5}
-            value={notes}
-            onChange={(event) => onNotesChange(event.target.value)}
-            className="w-full resize-none rounded-lg border border-slate-300 p-4 text-slate-600 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
-            placeholder="Conte-nos o motivo da consulta ou outras informações importantes."
-          />
         </div>
 
         <Button

@@ -1,25 +1,29 @@
 import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { BackLink } from "@/components/BackLink";
 import { PageHeader } from "@/components/PageHeader";
 import { useScheduleAppointment } from "@/hooks/appointment/useScheduleAppointment";
 import { useDoctors } from "@/hooks/doctor/useDoctors";
 import { usePatients } from "@/hooks/patient/usePatients";
-import { toast } from "sonner";
+import { useMe } from "@/hooks/useMe";
 import { AppointmentSummary, ScheduleAppointmentForm } from "./components";
-import { useNavigate } from "react-router-dom";
 
+type AuthenticatedPatient = {
+  id?: string;
+  patientId?: string;
+};
 
 export function ScheduleAppointment() {
   const [selectedSpeciality, setSelectedSpeciality] = useState("");
   const [selectedDoctorId, setSelectedDoctorId] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
-  const [notes, setNotes] = useState("");
   const navigate = useNavigate();
-
 
   const { data: doctors = [], isLoading: isLoadingDoctors } = useDoctors();
   const { data: patients = [] } = usePatients();
+  const { data: me } = useMe();
   const scheduleAppointment = useScheduleAppointment();
 
   const selectedDoctor = useMemo(
@@ -37,39 +41,37 @@ export function ScheduleAppointment() {
     setSelectedDoctorId("");
     setSelectedDate("");
     setSelectedTime("");
-    setNotes("");
   }
 
   async function handleSubmit(data: {
     doctorId: string;
     date: string;
     time: string;
-    notes: string;
   }) {
-    const patient = patients[0];
+    const authenticatedPatient = me as AuthenticatedPatient | undefined;
+    const patientId =
+      authenticatedPatient?.patientId ?? authenticatedPatient?.id ?? patients[0]?.id;
 
-    if (!patient) {
-      toast.error("Nenhum paciente foi encontrado no json-server.");
+    if (!patientId) {
+      toast.error("Nao foi possivel identificar o paciente da consulta.");
       return;
     }
 
     try {
       await scheduleAppointment.mutateAsync({
-        patientId: patient.id,
+        patientId,
         doctorId: data.doctorId,
         scheduleAt: `${data.date}T${data.time}:00`,
         status: "SCHEDULED",
         durationInMinutes: 30,
-        notes: data.notes.trim() || undefined,
       });
 
       resetForm();
       toast.success("Consulta agendada com sucesso.");
       navigate("/home");
-
     } catch {
       toast.error(
-        "Não foi possível agendar a consulta. Verifique se o json-server está rodando na porta 3001.",
+        "Nao foi possivel agendar a consulta. Verifique os dados e tente novamente.",
       );
     }
   }
@@ -87,8 +89,8 @@ export function ScheduleAppointment() {
 
       {scheduleAppointment.isError && (
         <div className="mb-6 rounded-lg border border-red-100 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">
-          Não foi possível agendar a consulta. Verifique se o json-server está
-          rodando na porta 3001.
+          Nao foi possivel agendar a consulta. Verifique os dados e tente
+          novamente.
         </div>
       )}
 
@@ -102,13 +104,12 @@ export function ScheduleAppointment() {
           selectedDoctorId={selectedDoctorId}
           selectedDate={selectedDate}
           selectedTime={selectedTime}
-          notes={notes}
           onSpecialityChange={handleSpecialityChange}
           onDoctorChange={setSelectedDoctorId}
           onDateChange={setSelectedDate}
           onTimeChange={setSelectedTime}
-          onNotesChange={setNotes}
         />
+
         <AppointmentSummary
           doctor={selectedDoctor}
           date={selectedDate}

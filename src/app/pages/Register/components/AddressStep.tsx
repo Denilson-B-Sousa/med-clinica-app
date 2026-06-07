@@ -27,16 +27,23 @@ export function AddressStep({
   return (
     <div className="mt-6 grid gap-4">
       <div className="flex flex-col gap-1">
+        <label
+          htmlFor="zipcode"
+          className="text-left font-inter text-sm font-medium text-gray-700"
+        >
+          CEP
+        </label>
         <Controller
           control={control}
           name="address.zipcode"
           render={({ field }) => (
             <InputMask
+              id="zipcode"
               component={Input}
               mask="_____-___"
               replacement={{ _: /\d/ }}
               size="md"
-              placeholder="CEP"
+              placeholder="00000-000"
               {...field}
               onChange={(event) => {
                 field.onChange(event);
@@ -54,29 +61,65 @@ export function AddressStep({
       </div>
 
       <div className="flex flex-col gap-1">
-        <Input size="md" placeholder="Rua" {...register("address.street")} />
+        <label
+          htmlFor="street"
+          className="text-left font-inter text-sm font-medium text-gray-700"
+        >
+          Rua
+        </label>
+        <Input
+          id="street"
+          size="md"
+          placeholder="Digite sua rua"
+          {...register("address.street")}
+        />
         <FormError error={errors.address?.street} />
       </div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div className="flex flex-col gap-1">
+          <label
+            htmlFor="district"
+            className="text-left font-inter text-sm font-medium text-gray-700"
+          >
+            Bairro
+          </label>
           <Input
+            id="district"
             size="md"
-            placeholder="Bairro"
+            placeholder="Digite seu bairro"
             {...register("address.district")}
           />
           <FormError error={errors.address?.district} />
         </div>
 
         <div className="flex flex-col gap-1">
-          <Input size="md" placeholder="Cidade" {...register("address.city")} />
+          <label
+            htmlFor="city"
+            className="text-left font-inter text-sm font-medium text-gray-700"
+          >
+            Cidade
+          </label>
+          <Input
+            id="city"
+            size="md"
+            placeholder="Digite sua cidade"
+            {...register("address.city")}
+          />
           <FormError error={errors.address?.city} />
         </div>
       </div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <div className="flex flex-col gap-1">
+          <label
+            htmlFor="state"
+            className="text-left font-inter text-sm font-medium text-gray-700"
+          >
+            Estado
+          </label>
           <select
+            id="state"
             {...register("address.state")}
             className="w-full rounded-md border border-gray-300 px-4 py-3 font-inter text-base outline-none focus:border-[#0094CB]"
           >
@@ -92,9 +135,16 @@ export function AddressStep({
         </div>
 
         <div className="flex flex-col gap-1">
+          <label
+            htmlFor="number"
+            className="text-left font-inter text-sm font-medium text-gray-700"
+          >
+            Número
+          </label>
           <Input
+            id="number"
             size="md"
-            placeholder="Número"
+            placeholder="Digite o número"
             {...register("address.number")}
           />
           <FormError error={errors.address?.number} />

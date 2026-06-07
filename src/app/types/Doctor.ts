@@ -26,10 +26,10 @@ export type MedicalSpeciality = (typeof MEDICAL_SPECIALITIES)[number];
 export type Doctor = {
   id: string;
   name: string;
-  cpf: string;
-  email: string;
-  phone: string;
+  cpf?: string;
+  email?: string;
+  phone?: string;
   crm: string;
   speciality: MedicalSpeciality;
-  address: Address;
+  address?: Address;
 }

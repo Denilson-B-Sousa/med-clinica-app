@@ -80,10 +80,12 @@ export function Register() {
     try {
       const address = await fetchAddressByCep(cep);
 
-      setValue("address.street", address.logradouro);
-      setValue("address.district", address.bairro);
-      setValue("address.city", address.localidade);
-      setValue("address.state", address.uf);
+      /* altere o valor de address.street e depois valide esse campo de novo”. */
+      setValue("address.street", address.logradouro, { shouldValidate: true });
+
+      setValue("address.district", address.bairro, { shouldValidate: true });
+      setValue("address.city", address.localidade, { shouldValidate: true });
+      setValue("address.state", address.uf, { shouldValidate: true });
     } catch (error) {
       console.error(error);
     }

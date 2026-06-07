@@ -49,7 +49,10 @@ export type AppointmentHistoryPage = {
   totalPages: number;
 };
 
-export type CreateAppointmentPayload = Omit<Appointment, "id">;
+export type CreateAppointmentPayload = Pick<
+  Appointment,
+  "patientId" | "doctorId" | "scheduleAt" | "status" | "durationInMinutes"
+>;
 
 export type RescheduleAppointmentPayload = {
   scheduleAt: string;

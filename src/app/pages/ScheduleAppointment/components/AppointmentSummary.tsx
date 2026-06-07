@@ -10,7 +10,7 @@ type AppointmentSummaryProps = {
 
 function formatDate(date?: string) {
   if (!date) {
-    return "—";
+    return "-";
   }
 
   return new Intl.DateTimeFormat("pt-BR", {
@@ -26,6 +26,8 @@ export function AppointmentSummary({
   time,
   speciality,
 }: AppointmentSummaryProps) {
+  const address = doctor?.address;
+
   return (
     <aside className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
       <h2 className="mb-8 text-lg font-bold">2. Resumo da consulta</h2>
@@ -33,13 +35,13 @@ export function AppointmentSummary({
       <div className="mb-8 flex items-center gap-4">
         <img
           src="https://i.pravatar.cc/72?img=12"
-          alt="Médica"
+          alt="Medico"
           className="h-16 w-16 rounded-full object-cover"
         />
 
         <div>
           <h3 className="text-xl font-bold">
-            {doctor?.name ?? "Selecione um médico"}
+            {doctor?.name ?? "Selecione um medico"}
           </h3>
           <p className="text-sm uppercase text-slate-600">
             {doctor?.speciality ?? speciality ?? "Especialidade"}
@@ -54,7 +56,7 @@ export function AppointmentSummary({
         <div>
           <p className="text-sm font-bold">Especialidade</p>
           <p className="text-slate-500">
-            {doctor?.speciality ?? speciality ?? "—"}
+            {doctor?.speciality ?? speciality ?? "-"}
           </p>
         </div>
 
@@ -64,17 +66,17 @@ export function AppointmentSummary({
         </div>
 
         <div>
-          <p className="text-sm font-bold">Horário</p>
-          <p className="text-slate-500">{time || "—"}</p>
+          <p className="text-sm font-bold">Horario</p>
+          <p className="text-slate-500">{time || "-"}</p>
         </div>
 
         <div>
           <p className="text-sm font-bold">Local de atendimento</p>
-          <p className="font-semibold">{doctor?.address.city ?? "—"}</p>
+          <p className="font-semibold">{address?.city ?? "-"}</p>
           <p className="text-sm text-slate-600">
-            {doctor
-              ? `${doctor.address.street}, ${doctor.address.number}`
-              : "Selecione um médico"}
+            {address
+              ? `${address.street}, ${address.number}`
+              : "Selecione um medico"}
           </p>
         </div>
       </div>
@@ -82,8 +84,7 @@ export function AppointmentSummary({
       <div className="mt-8 rounded-xl bg-slate-50 p-5">
         <p className="inline-flex items-center gap-2 text-sm text-slate-600">
           <Info size={32} />
-          Chegue com 15 minutos de antecedência. Não se esqueça de levar seus
-          documentos e exames.
+          Chegue com 15 minutos de antecedencia. Leve seus documentos e exames.
         </p>
       </div>
     </aside>
