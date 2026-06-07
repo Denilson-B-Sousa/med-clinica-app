@@ -2,11 +2,11 @@ import { tv, type VariantProps } from "tailwind-variants";
 import type { ComponentProps } from "react";
 
 const input = tv({
-  base: "w-full cursor-pointer font-inter outline-none transition-all duration-200 border box-border",
+  base: "form-field-focus w-full cursor-pointer border box-border font-inter outline-none transition-all duration-200",
 
   variants: {
     variant: {
-      default: "border-gray-300 focus:border-[#0094CB]",
+      default: "border-gray-300",
       outlined: "border-2 border-[#0094CB] bg-transparent",
       filled: "bg-gray-100 border-transparent focus:bg-white",
     },
@@ -19,8 +19,8 @@ const input = tv({
 
     state: {
       default: "",
-      error: "border-red-500 focus:border-red-500",
-      success: "border-green-500 focus:border-green-500",
+      error: "border-red-500",
+      success: "border-green-500",
     },
 
     disabled: {

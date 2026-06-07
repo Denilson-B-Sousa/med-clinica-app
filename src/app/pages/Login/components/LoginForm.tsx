@@ -6,6 +6,7 @@ import { useLoginUser } from "@/hooks/user/useLoginUser";
 import { loginSchema, type LoginSchema } from "@/schemas/loginSchema";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 export function LoginForm() {
   const navigate = useNavigate();
@@ -22,8 +23,13 @@ export function LoginForm() {
   async function handleLogin(data: LoginSchema) {
     try {
       await mutateAsync(data);
-      navigate("/cadastro");
+      toast.success("Login realizado com sucesso.");
+
+      setTimeout(() => {
+        navigate("/home");
+      }, 1500);
     } catch (error) {
+      toast.error("Erro ao realizar login. Verifique suas credenciais e tente novamente.");
       console.error("Login error:", error);
     }
   }

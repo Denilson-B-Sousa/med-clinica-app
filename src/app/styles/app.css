@@ -16,6 +16,27 @@ body {
   overflow-y: scroll;
 }
 
+.form-field-focus:focus {
+  border-color: #0094cb;
+  box-shadow: 0 0 0 2px rgb(0 148 203 / 40%);
+}
+
+body.keyboard-navigation .form-field-focus:focus {
+  border-color: #1e3a8a;
+  box-shadow: 0 0 0 5px rgb(191 219 254);
+}
+
+.keyboard-focus:focus {
+  box-shadow: none;
+  outline: none;
+}
+
+body.keyboard-navigation .keyboard-focus:focus {
+  box-shadow: 0 0 0 5px rgb(#0094cb);
+  outline: 3px solid #1e3a8a;
+  outline-offset: 3px;
+}
+
 .wizard-title {
   font-size: 2rem !important;   /* aumenta aqui */
   font-weight: 700 !important;

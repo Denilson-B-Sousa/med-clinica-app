@@ -12,6 +12,7 @@ import { useCep } from "@/hooks/patient/useCep";
 import { useRegisterPatient } from "@/hooks/patient/useRegisterPatient";
 import { registerSchema, type RegisterSchema } from "@/schemas/RegisterSchema";
 import { AddressStep, PersonalDataStep, SecurityStep } from "./components";
+import { toast } from "sonner";
 
 function onlyNumbers(value: string) {
   return value.replace(/\D/g, "");
@@ -73,7 +74,12 @@ export function Register() {
     };
 
     await mutateAsync(payload);
-    navigate("/login");
+     
+    toast.success("Cadastro realizado com sucesso.");
+
+    setTimeout(() => {
+      navigate("/login");
+    }, 2000);
   }
 
   async function handleCepChange(cep: string) {

@@ -136,7 +136,7 @@ export function PersonalDataStep({
           <select
             id="gender"
             {...register("gender")}
-            className="w-full rounded-md border border-gray-300 px-4 py-3 font-inter text-base outline-none focus:border-[#0094CB]"
+            className="form-field-focus w-full rounded-md border border-gray-300 px-4 py-3 font-inter text-base outline-none transition-all duration-200"
           >
             <option value="">Selecione o Sexo Biológico</option>
             <option value="MASCULINO">Masculino</option>
