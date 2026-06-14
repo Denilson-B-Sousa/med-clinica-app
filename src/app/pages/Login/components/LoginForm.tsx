@@ -5,11 +5,14 @@ import { Input } from "@/components/Input/Input";
 import { useLoginUser } from "@/hooks/user/useLoginUser";
 import { loginSchema, type LoginSchema } from "@/schemas/loginSchema";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 
 export function LoginForm() {
+  const API_URL = "http://localhost:8080";
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const error = searchParams.get("error");
   const { mutateAsync } = useLoginUser();
 
   const {
@@ -19,6 +22,11 @@ export function LoginForm() {
   } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
   });
+
+  async function handleGoogleLogin() {
+    window.location.href = `${API_URL}/auth/google`;
+  }
+
 
   async function handleLogin(data: LoginSchema) {
     try {
@@ -38,6 +46,9 @@ export function LoginForm() {
     <div className="m-auto flex w-lg flex-col px-8 py-4">
       <h1 className="py-4 text-3xl font-bold">Bem-vindo de volta!</h1>
       <span className="pb-4">Por favor entre em sua conta.</span>
+      {error === "google_user_not_registered" && (
+        <p>Este e-mail do Google ainda não está cadastrado no sistema.</p>
+      )}
 
       <form
         onSubmit={handleSubmit(handleLogin)}
@@ -88,7 +99,7 @@ export function LoginForm() {
 
       <span className="flex justify-center py-2">——— OU ———</span>
 
-      <Button google size="md">
+      <Button google size="md" onClick={handleGoogleLogin}>
         <img src={googleIcon} alt="Google" />
         <span>Continue com Google</span>
       </Button>

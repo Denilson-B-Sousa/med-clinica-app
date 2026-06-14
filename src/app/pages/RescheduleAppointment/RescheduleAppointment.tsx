@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { BackLink } from "@/components/BackLink";
+import { Button } from "@/components/Button/Button";
 import { EmptyState } from "@/components/EmptyState/EmptyState";
 import { PageHeader } from "@/components/PageHeader";
 import { useCancelAppointment } from "@/hooks/appointment/useCancelAppointment";
@@ -104,6 +105,11 @@ export function RescheduleAppointment() {
         <EmptyState
           title="Nenhuma consulta agendada"
           description="Você ainda não tem uma consulta disponível para reagendar."
+          primaryAction={
+            <Button to="/agendar-consulta" size="md" primary>
+              Agendar consulta
+            </Button>
+          }
         />
       )}
 

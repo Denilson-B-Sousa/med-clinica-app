@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { BackLink } from "@/components/BackLink";
+import { Button } from "@/components/Button/Button";
 import { EmptyState } from "@/components/EmptyState/EmptyState";
 import { PageHeader } from "@/components/PageHeader";
 import { useAppointments } from "@/hooks/appointment/useAppoinments";
@@ -88,6 +89,11 @@ export function AppointmentHistory() {
             <EmptyState
               title="Nenhuma consulta encontrada"
               description="Assim que você agendar uma consulta, ela aparecerá aqui."
+              primaryAction={
+                <Button to="/agendar-consulta" size="md" primary>
+                  Agendar consulta
+                </Button>
+              }
             />
           )}
 

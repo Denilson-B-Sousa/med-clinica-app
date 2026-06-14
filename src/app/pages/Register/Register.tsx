@@ -2,17 +2,20 @@ import "react-datepicker/dist/react-datepicker.css";
 import "react-form-wizard-component/dist/style.css";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import { AddressBook, Lock, User } from "phosphor-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FormWizard from "react-form-wizard-component";
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 import { useCep } from "@/hooks/patient/useCep";
 import { useRegisterPatient } from "@/hooks/patient/useRegisterPatient";
+import { useGooglePendingSignup } from "@/hooks/user/useGooglePendingSignup";
 import { registerSchema, type RegisterSchema } from "@/schemas/RegisterSchema";
+import { completeGooglePatientSignup } from "@/services/user/completeGooglePatientSignup";
 import { AddressStep, PersonalDataStep, SecurityStep } from "./components";
-import { toast } from "sonner";
 
 function onlyNumbers(value: string) {
   return value.replace(/\D/g, "");
@@ -21,7 +24,17 @@ function onlyNumbers(value: string) {
 export function Register() {
   const { mutateAsync, isPending } = useRegisterPatient();
   const navigate = useNavigate();
+  const location = useLocation();
   const { mutateAsync: fetchAddressByCep } = useCep();
+  const isGoogleSignup = location.pathname === "/cadastro/google";
+  const {
+    data: googleSignup,
+    isError: isGoogleSignupError,
+    isLoading: isGoogleSignupLoading,
+  } = useGooglePendingSignup(isGoogleSignup);
+  const completeGoogleSignup = useMutation({
+    mutationFn: completeGooglePatientSignup,
+  });
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -54,7 +67,46 @@ export function Register() {
     },
   });
 
+  useEffect(() => {
+    if (!isGoogleSignup || !googleSignup) {
+      return;
+    }
+
+    setValue("name", googleSignup.name, { shouldValidate: true });
+    setValue("email", googleSignup.email, { shouldValidate: true });
+    setValue("password", "Google@1234", { shouldValidate: true });
+    setValue("confirmPassword", "Google@1234", { shouldValidate: true });
+  }, [googleSignup, isGoogleSignup, setValue]);
+
+  useEffect(() => {
+    if (isGoogleSignupError) {
+      toast.error("Não foi possível recuperar os dados do Google. Tente novamente.");
+      navigate("/login");
+    }
+  }, [isGoogleSignupError, navigate]);
+
   async function handleRegister(data: RegisterSchema) {
+    if (isGoogleSignup) {
+      await completeGoogleSignup.mutateAsync({
+        phone: onlyNumbers(data.phone),
+        cpf: data.cpf,
+        address: {
+          street: data.address.street,
+          number: data.address.number,
+          district: data.address.district,
+          city: data.address.city,
+          state: data.address.state,
+          zipcode: onlyNumbers(data.address.zipcode),
+        },
+        birthDate: data.birthDate,
+        gender: data.gender,
+      });
+
+      toast.success("Cadastro realizado com sucesso.");
+      navigate("/home");
+      return;
+    }
+
     const payload = {
       name: data.name,
       email: data.email,
@@ -74,7 +126,7 @@ export function Register() {
     };
 
     await mutateAsync(payload);
-     
+
     toast.success("Cadastro realizado com sucesso.");
 
     setTimeout(() => {
@@ -86,9 +138,7 @@ export function Register() {
     try {
       const address = await fetchAddressByCep(cep);
 
-      /* altere o valor de address.street e depois valide esse campo de novo”. */
       setValue("address.street", address.logradouro, { shouldValidate: true });
-
       setValue("address.district", address.bairro, { shouldValidate: true });
       setValue("address.city", address.localidade, { shouldValidate: true });
       setValue("address.state", address.uf, { shouldValidate: true });
@@ -97,29 +147,37 @@ export function Register() {
     }
   }
 
+  const isSubmitting = isPending || completeGoogleSignup.isPending;
+
+  if (isGoogleSignup && isGoogleSignupLoading) {
+    return (
+      <section className="mx-auto w-full max-w-3xl p-6 text-left">
+        <p>Carregando dados do Google...</p>
+      </section>
+    );
+  }
+
   return (
     <section className="mx-auto w-full max-w-3xl p-6 text-left">
       <FormWizard
-        title="Realize seu Cadastro"
+        title={isGoogleSignup ? "Complete seu cadastro" : "Realize seu Cadastro"}
         subtitle="Preencha seus dados em etapas"
         color="#0094CB"
         nextButtonText="Próximo"
         backButtonText="Voltar"
-        finishButtonText={isPending ? "Cadastrando..." : "Finalizar Cadastro"}
+        finishButtonText={isSubmitting ? "Cadastrando..." : "Finalizar Cadastro"}
         onComplete={handleSubmit(handleRegister)}
       >
         <FormWizard.TabContent title="Dados pessoais" icon={<User size={24} />}>
           <PersonalDataStep
             control={control}
             errors={errors}
+            isGoogleSignup={isGoogleSignup}
             register={register}
           />
         </FormWizard.TabContent>
 
-        <FormWizard.TabContent
-          title="Endereço"
-          icon={<AddressBook size={24} />}
-        >
+        <FormWizard.TabContent title="Endereço" icon={<AddressBook size={24} />}>
           <AddressStep
             control={control}
             errors={errors}
@@ -128,18 +186,20 @@ export function Register() {
           />
         </FormWizard.TabContent>
 
-        <FormWizard.TabContent title="Segurança" icon={<Lock size={24} />}>
-          <SecurityStep
-            errors={errors}
-            isConfirmPasswordVisible={showConfirmPassword}
-            isPasswordVisible={showPassword}
-            onToggleConfirmPassword={() =>
-              setShowConfirmPassword((prev) => !prev)
-            }
-            onTogglePassword={() => setShowPassword((prev) => !prev)}
-            register={register}
-          />
-        </FormWizard.TabContent>
+        {!isGoogleSignup && (
+          <FormWizard.TabContent title="Segurança" icon={<Lock size={24} />}>
+            <SecurityStep
+              errors={errors}
+              isConfirmPasswordVisible={showConfirmPassword}
+              isPasswordVisible={showPassword}
+              onToggleConfirmPassword={() =>
+                setShowConfirmPassword((prev) => !prev)
+              }
+              onTogglePassword={() => setShowPassword((prev) => !prev)}
+              register={register}
+            />
+          </FormWizard.TabContent>
+        )}
       </FormWizard>
 
       <div className="flex pl-4">

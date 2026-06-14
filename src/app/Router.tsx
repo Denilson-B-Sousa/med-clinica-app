@@ -9,6 +9,7 @@ import { Login } from "@/pages/Login";
 import { Register } from "@/pages/Register";
 import { RescheduleAppointment } from "@/pages/RescheduleAppointment";
 import { ScheduleAppointment } from "@/pages/ScheduleAppointment";
+import { OAuthSuccess } from "./pages/OauthSuccess/OauthSuccess";
 
 export const router = createBrowserRouter([
   {
@@ -29,6 +30,14 @@ export const router = createBrowserRouter([
       {
         path: "/cadastro",
         element: <Register />,
+      },
+      {
+        path: "/cadastro/google",
+        element: <Register />,
+      },
+      {
+        path: "/oauth-success",
+        element: <OAuthSuccess />,
       },
     ],
   },

@@ -24,7 +24,8 @@ const button = tv({
     },
 
     variant: {
-      primary: "bg-[#0094CB] text-white hover:bg-blue-700 disabled:bg-slate-400",
+      primary:
+        "bg-[#0094CB] text-white hover:bg-blue-700 disabled:bg-slate-400",
 
       blueOutline:
         "border border-blue-200 text-blue-600 hover:bg-blue-50 disabled:border-slate-200 disabled:text-slate-400",
@@ -35,8 +36,7 @@ const button = tv({
       neutralOutline:
         "border border-slate-300 text-slate-600 hover:bg-slate-50 disabled:opacity-50",
 
-      page:
-        "border border-slate-200 font-semibold text-slate-600 hover:bg-slate-50 disabled:opacity-50",
+      page: "border border-slate-200 font-semibold text-slate-600 hover:bg-slate-50 disabled:opacity-50",
 
       pageActive: "bg-blue-600 font-bold text-white",
 
@@ -47,7 +47,7 @@ const button = tv({
       ghost: "text-gray-500 hover:text-gray-700",
 
       profile: "text-[#0094CB]",
-      
+
       quickAction:
         "justify-between border border-slate-100 text-left normal-case hover:bg-slate-50",
     },
@@ -80,6 +80,7 @@ type ButtonBaseProps = VariantProps<typeof button> & {
   error?: boolean;
   outlined?: boolean;
   children?: ReactNode;
+  google?: boolean;
 };
 
 type NativeButtonProps = ComponentProps<"button"> &
@@ -108,6 +109,7 @@ export function Button(props: ButtonProps) {
     variant,
     className,
     children,
+    google,
     ...rest
   } = props;
 
@@ -119,6 +121,7 @@ export function Button(props: ButtonProps) {
       secondary,
       error,
       outlined,
+      google,
     }),
     className,
   );

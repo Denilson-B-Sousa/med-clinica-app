@@ -13,12 +13,14 @@ import { FormError } from "./FormError";
 type PersonalDataStepProps = {
   control: Control<RegisterSchema>;
   errors: FieldErrors<RegisterSchema>;
+  isGoogleSignup?: boolean;
   register: UseFormRegister<RegisterSchema>;
 };
 
 export function PersonalDataStep({
   control,
   errors,
+  isGoogleSignup = false,
   register,
 }: PersonalDataStepProps) {
   return (
@@ -33,6 +35,7 @@ export function PersonalDataStep({
         <Input
           id="name"
           size="md"
+          readOnly={isGoogleSignup}
           placeholder="Digite seu nome completo"
           {...register("name")}
         />
@@ -102,6 +105,7 @@ export function PersonalDataStep({
           id="email"
           size="md"
           type="email"
+          readOnly={isGoogleSignup}
           placeholder="seuemail@exemplo.com"
           {...register("email")}
         />
