@@ -18,10 +18,7 @@ export function Header() {
       </div>
 
       <div className="justify-self-end">
-        <ProfileMenu
-          name="Denilson Silva"
-          avatarUrl="https://i.pravatar.cc/150?img=16"
-        />
+        <ProfileMenu name="Denilson Silva" />
       </div>
     </header>
   );

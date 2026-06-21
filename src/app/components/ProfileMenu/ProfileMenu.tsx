@@ -1,19 +1,34 @@
-import { Avatar, DropdownMenu } from "@radix-ui/themes";
+import { DropdownMenu } from "@radix-ui/themes";
 import { Button } from "@/components/Button/Button";
+import { useLogoutUser } from "@/hooks/user/useLogoutUser";
 import { CaretDown, SignOut, User } from "phosphor-react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 interface ProfileMenuProps {
   name: string;
-  avatarUrl: string;
 }
 
-export function ProfileMenu({ name, avatarUrl }: ProfileMenuProps) {
+export function ProfileMenu({ name }: ProfileMenuProps) {
+  const navigate = useNavigate();
+  const { mutateAsync: logout, isPending } = useLogoutUser();
+
+  async function handleLogout() {
+    try {
+      await logout();
+      toast.success("Logout realizado com sucesso.");
+    } catch (error) {
+      toast.error("Sessão encerrada localmente.");
+      console.error("Logout error:", error);
+    } finally {
+      navigate("/login", { replace: true });
+    }
+  }
+
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
         <Button type="button" size="profile" variant="profile">
-          <Avatar src={avatarUrl} fallback={name[0]} radius="full" size="3" />
-
           <span className="font-medium text-[#0094CB]">{name}</span>
 
           <CaretDown size={14} className="text-[#0094CB]" />
@@ -25,16 +40,24 @@ export function ProfileMenu({ name, avatarUrl }: ProfileMenuProps) {
 
         <DropdownMenu.Separator />
 
-        <DropdownMenu.Item className="cursor-pointer!">
+        <DropdownMenu.Item
+          className="cursor-pointer!"
+          onSelect={() => navigate("/meu-perfil")}
+        >
           <User size={16} />
           Meu Perfil
         </DropdownMenu.Item>
 
         <DropdownMenu.Separator />
 
-        <DropdownMenu.Item className="cursor-pointer!" color="red">
+        <DropdownMenu.Item
+          className="cursor-pointer!"
+          color="red"
+          disabled={isPending}
+          onSelect={handleLogout}
+        >
           <SignOut size={16} />
-          Sair
+          {isPending ? "Saindo..." : "Sair"}
         </DropdownMenu.Item>
       </DropdownMenu.Content>
     </DropdownMenu.Root>

@@ -7,6 +7,8 @@ import { useScheduleAppointment } from "@/hooks/appointment/useScheduleAppointme
 import { useDoctors } from "@/hooks/doctor/useDoctors";
 import { usePatients } from "@/hooks/patient/usePatients";
 import { useMe } from "@/hooks/useMe";
+import type { MedicalSpeciality } from "@/types/Doctor";
+import { AxiosError } from "axios";
 import { AppointmentSummary, ScheduleAppointmentForm } from "./components";
 
 type AuthenticatedPatient = {
@@ -14,14 +16,39 @@ type AuthenticatedPatient = {
   patientId?: string;
 };
 
+type ApiErrorResponse = {
+  message?: string;
+  error?: string;
+};
+
+function getScheduleErrorMessage(error?: string) {
+  const normalizedError = error
+    ?.normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+
+  if (
+    normalizedError?.includes("data") &&
+    normalizedError.includes("futura")
+  ) {
+    return "Escolha uma data futura para agendar a consulta.";
+  }
+
+  return error ?? "Nao foi possivel agendar a consulta. Verifique os dados e tente novamente.";
+}
+
 export function ScheduleAppointment() {
-  const [selectedSpeciality, setSelectedSpeciality] = useState("");
+  const [selectedSpeciality, setSelectedSpeciality] = useState<
+    MedicalSpeciality | ""
+  >("");
   const [selectedDoctorId, setSelectedDoctorId] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const navigate = useNavigate();
 
-  const { data: doctors = [], isLoading: isLoadingDoctors } = useDoctors();
+  const { data: doctors = [], isLoading: isLoadingDoctors } = useDoctors(
+    selectedSpeciality || undefined,
+  );
   const { data: patients = [] } = usePatients();
   const { data: me } = useMe();
   const scheduleAppointment = useScheduleAppointment();
@@ -32,7 +59,7 @@ export function ScheduleAppointment() {
   );
 
   function handleSpecialityChange(speciality: string) {
-    setSelectedSpeciality(speciality);
+    setSelectedSpeciality(speciality as MedicalSpeciality | "");
     setSelectedDoctorId("");
   }
 
@@ -69,10 +96,12 @@ export function ScheduleAppointment() {
       resetForm();
       toast.success("Consulta agendada com sucesso.");
       navigate("/home");
-    } catch {
-      toast.error(
-        "Nao foi possivel agendar a consulta. Verifique os dados e tente novamente.",
-      );
+    } catch (error) {
+      const apiError = error as AxiosError<ApiErrorResponse>;
+      const errorMessage =
+        apiError.response?.data?.message ?? apiError.response?.data?.error;
+
+      toast.error(getScheduleErrorMessage(errorMessage));
     }
   }
 

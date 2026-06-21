@@ -1,4 +1,5 @@
-import { Bell, CaretDown, MagnifyingGlass } from "phosphor-react";
+import { Link } from "react-router-dom";
+import { MagnifyingGlass, UserCircle } from "phosphor-react";
 
 export function AdminHeader() {
   return (
@@ -26,34 +27,18 @@ export function AdminHeader() {
           />
         </label>
 
-        <div className="hidden h-10 w-px bg-slate-200 sm:block" />
-
-        <button
-          type="button"
-          className="relative flex h-11 w-11 cursor-pointer items-center justify-center rounded-lg text-slate-600 transition hover:bg-slate-100"
-          aria-label="Notificacoes"
+        <Link
+          to="/administracao/perfil"
+          className="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-left transition hover:bg-slate-100"
         >
-          <Bell size={24} />
-          <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-blue-600" />
-        </button>
-
-        <button
-          type="button"
-          className="flex cursor-pointer items-center gap-3 rounded-lg px-2 py-1 text-left transition hover:bg-slate-100"
-        >
-          <img
-            src="https://i.pravatar.cc/80?img=47"
-            alt="Administrador"
-            className="h-11 w-11 rounded-full object-cover"
-          />
+          <UserCircle className="text-[#20375F]" size={32} weight="bold" />
           <span className="hidden min-w-40 md:block">
             <strong className="block text-sm text-[#0B1F4D]">
               Administrador
             </strong>
             <small className="text-slate-600">admin@medclinica.com.br</small>
           </span>
-          <CaretDown className="text-slate-600" size={18} />
-        </button>
+        </Link>
       </div>
     </div>
   );

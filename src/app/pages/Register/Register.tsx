@@ -103,7 +103,10 @@ export function Register() {
       });
 
       toast.success("Cadastro realizado com sucesso.");
-      navigate("/home");
+
+      setTimeout(() => {
+        navigate("/home");
+      }, 2000);
       return;
     }
 

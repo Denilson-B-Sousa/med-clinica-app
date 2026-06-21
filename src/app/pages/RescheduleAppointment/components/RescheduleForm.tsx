@@ -28,8 +28,6 @@ export function RescheduleForm({
     onSubmit();
   }
 
-  const isSubmitDisabled = isSubmitting || !date || !time;
-
   return (
     <form
       onSubmit={handleSubmit}
@@ -79,7 +77,7 @@ export function RescheduleForm({
 
         <Button
           type="submit"
-          disabled={isSubmitDisabled}
+          disabled={isSubmitting}
           size="full"
           variant="primary"
         >

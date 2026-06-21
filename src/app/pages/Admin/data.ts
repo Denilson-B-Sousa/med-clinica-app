@@ -1,5 +1,6 @@
 import type {
   AdminAppointmentRow,
+  AdminAuditLogRow,
   AdminAvailableTimes,
   AdminDoctorOption,
   AdminMetric,
@@ -276,5 +277,53 @@ export const adminDoctors: AdminUserRow[] = [
     email: "marina.nogueira@medclinica.com.br",
     phone: "(62) 99333-4040",
     status: "INACTIVE",
+  },
+];
+
+export const adminAuditLogs: AdminAuditLogRow[] = [
+  {
+    id: "audit-1",
+    action: "LOGIN",
+    userName: "Administrador",
+    userRole: "ADMIN",
+    target: "Area administrativa",
+    date: "26/05/2026",
+    time: "07:58",
+  },
+  {
+    id: "audit-2",
+    action: "SCHEDULE_APPOINTMENT",
+    userName: "Joao Pedro Silva",
+    userRole: "PATIENT",
+    target: "Consulta com Dra. Ana Carolina Souza",
+    date: "26/05/2026",
+    time: "08:12",
+  },
+  {
+    id: "audit-3",
+    action: "CANCEL_APPOINTMENT",
+    userName: "Administrador",
+    userRole: "ADMIN",
+    target: "Consulta appointment-3",
+    date: "26/05/2026",
+    time: "10:04",
+  },
+  {
+    id: "audit-4",
+    action: "UPDATE_USER_STATUS",
+    userName: "Administrador",
+    userRole: "ADMIN",
+    target: "Paciente Antonio Carlos Souza desativado",
+    date: "26/05/2026",
+    time: "11:20",
+  },
+  {
+    id: "audit-5",
+    action: "CREATE_DOCTOR",
+    userName: "Administrador",
+    userRole: "ADMIN",
+    target: "Dra. Marina Nogueira",
+    date: "26/05/2026",
+    time: "14:35",
   },
 ];

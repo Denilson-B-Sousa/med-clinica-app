@@ -67,3 +67,21 @@ export type AdminUserRow = {
 };
 
 export type AdminUserKind = "patients" | "doctors";
+
+export type AdminAuditAction =
+  | "LOGIN"
+  | "SCHEDULE_APPOINTMENT"
+  | "RESCHEDULE_APPOINTMENT"
+  | "CANCEL_APPOINTMENT"
+  | "CREATE_DOCTOR"
+  | "UPDATE_USER_STATUS";
+
+export type AdminAuditLogRow = {
+  id: string;
+  action: AdminAuditAction;
+  userName: string;
+  userRole: "ADMIN" | "PATIENT" | "DOCTOR";
+  target: string;
+  date: string;
+  time: string;
+};

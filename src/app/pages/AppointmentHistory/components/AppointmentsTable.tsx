@@ -75,22 +75,15 @@ export function AppointmentsTable({
                 </td>
 
                 <td className="px-5 py-4 align-middle">
-                  <div className="flex items-center gap-3">
-                    <img
-                      src="https://i.pravatar.cc/40?img=12"
-                      alt={doctor.name ?? "Medico"}
-                      className="h-10 w-10 rounded-full object-cover"
-                    />
-                    <div>
-                      <p className="font-semibold">
+                  <div className="max-w-56">
+                    <p className="font-semibold leading-snug">
                         {doctor.name ?? "Medico nao encontrado"}
-                      </p>
-                      {doctor.crm && (
-                        <span className="rounded bg-blue-100 px-2 py-1 text-xs font-bold text-blue-600">
-                          CRM {doctor.crm}
-                        </span>
-                      )}
-                    </div>
+                    </p>
+                    {doctor.crm && (
+                      <span className="mt-2 inline-block max-w-full break-words rounded bg-blue-100 px-2 py-1 text-xs font-bold leading-snug text-blue-600">
+                        CRM {doctor.crm}
+                      </span>
+                    )}
                   </div>
                 </td>
 

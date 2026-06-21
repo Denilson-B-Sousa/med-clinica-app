@@ -46,7 +46,7 @@ export function AdminFullSchedule() {
 
         <div className="mt-6">
           <Link
-            to="/admin"
+            to="/administracao"
             className="inline-flex cursor-pointer items-center gap-2 rounded-md px-1 py-2 text-sm font-bold text-blue-600 transition hover:bg-blue-50"
           >
             <ArrowLeft size={18} weight="bold" />

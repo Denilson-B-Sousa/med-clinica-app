@@ -4,6 +4,8 @@ import { Button } from "@/components/Button/Button";
 import { Input } from "@/components/Input/Input";
 import { useLoginUser } from "@/hooks/user/useLoginUser";
 import { loginSchema, type LoginSchema } from "@/schemas/loginSchema";
+import { Eye, EyeSlash } from "phosphor-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
@@ -14,6 +16,7 @@ export function LoginForm() {
   const [searchParams] = useSearchParams();
   const error = searchParams.get("error");
   const { mutateAsync } = useLoginUser();
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -21,6 +24,10 @@ export function LoginForm() {
     formState: { errors, isSubmitting },
   } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
   });
 
   async function handleGoogleLogin() {
@@ -71,13 +78,27 @@ export function LoginForm() {
 
         <div>
           <label>Senha</label>
-          <Input
-            variant="outlined"
-            size="md"
-            placeholder="Digite sua senha"
-            type="password"
-            {...register("password")}
-          />
+          <div className="relative">
+            <Input
+              variant="outlined"
+              size="md"
+              placeholder="Digite sua senha"
+              type={showPassword ? "text" : "password"}
+              autoComplete="new-password"
+              className="pr-12"
+              {...register("password")}
+            />
+
+            <button
+              type="button"
+              className="absolute top-1/2 right-4 flex -translate-y-1/2 cursor-pointer items-center text-[#0094CB] transition-colors hover:text-blue-700"
+              onClick={() => setShowPassword((current) => !current)}
+              aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
+              aria-pressed={showPassword}
+            >
+              {showPassword ? <EyeSlash size={22} /> : <Eye size={22} />}
+            </button>
+          </div>
 
           {errors.password && (
             <p className="mt-1 text-sm text-red-500">

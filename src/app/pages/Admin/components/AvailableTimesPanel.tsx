@@ -45,7 +45,7 @@ export function AvailableTimesPanel({
         </div>
 
         <Link
-          to="/admin/agenda"
+          to="/administracao/agenda"
           className="flex h-10 cursor-pointer items-center justify-center gap-2 rounded-md border border-blue-300 px-4 text-sm font-bold text-blue-600 transition hover:bg-blue-50"
         >
           <CalendarBlank size={18} weight="bold" />

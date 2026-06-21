@@ -24,14 +24,8 @@ export function DoctorCard({ appointment }: DoctorCardProps) {
 
   return (
     <div className="flex flex-col justify-between space-y-6 rounded-xl bg-white p-8">
-      <div className="flex items-start gap-5">
-        <img
-          src="https://miro.medium.com/1*XpwkAEH2JiVWqDB_0MhWwQ.png"
-          alt={doctor.name}
-          className="h-24 w-24 rounded-full"
-        />
-
-        <div className="flex flex-col">
+      <div className="flex items-start">
+        <div className="flex min-w-0 flex-col">
           <h2 className="text-3xl font-semibold text-slate-900">
             {doctor.name}
           </h2>

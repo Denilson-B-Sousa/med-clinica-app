@@ -62,10 +62,6 @@ export function ScheduleAppointmentForm({
   onDateChange,
   onTimeChange,
 }: ScheduleAppointmentFormProps) {
-  const filteredDoctors = selectedSpeciality
-    ? doctors.filter((doctor) => doctor.speciality === selectedSpeciality)
-    : doctors;
-
   const today = new Date().toISOString().split("T")[0];
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -96,7 +92,6 @@ export function ScheduleAppointmentForm({
             onChange={(event) =>
               onSpecialityChange(event.target.value as MedicalSpeciality)
             }
-            disabled={isLoadingDoctors}
             required
             className="h-14 w-full rounded-lg border border-slate-300 px-4 text-slate-500 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100 disabled:cursor-not-allowed disabled:bg-slate-100"
           >
@@ -115,14 +110,13 @@ export function ScheduleAppointmentForm({
           <select
             value={selectedDoctorId}
             onChange={(event) => onDoctorChange(event.target.value)}
-            disabled={isLoadingDoctors || !selectedSpeciality}
             required
             className="h-14 w-full rounded-lg border border-slate-300 px-4 text-slate-500 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100 disabled:cursor-not-allowed disabled:bg-slate-100"
           >
             <option value="">
               {isLoadingDoctors ? "Carregando medicos" : "Selecione o medico"}
             </option>
-            {filteredDoctors.map((doctor) => (
+            {doctors.map((doctor) => (
               <option key={doctor.id} value={doctor.id}>
                 {doctor.name}
               </option>

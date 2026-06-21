@@ -3,25 +3,30 @@ import {
   AdminHeader,
   AdminNotice,
   AppointmentsManagementTable,
+  AuditLogTable,
   AvailableTimesPanel,
-  MetricCard,
   UserManagementTable,
 } from "./components";
 import {
   adminAppointments,
+  adminAuditLogs,
   adminDoctorOptions,
   adminDoctors,
-  adminMetrics,
   adminPatients,
   availableTimes,
 } from "./data";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import type { AdminUserKind } from "./types";
 
 function handlePendingAction() {
   return undefined;
 }
 
 export function AdminArea() {
-  const activeUserKind = "patients";
+  const [activeUserKind, setActiveUserKind] =
+    useState<AdminUserKind>("patients");
+  const navigate = useNavigate();
   const users = activeUserKind === "patients" ? adminPatients : adminDoctors;
 
   return (
@@ -29,13 +34,7 @@ export function AdminArea() {
       <div className="mx-auto max-w-[1560px]">
         <AdminHeader />
 
-        <div className="mt-6 grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
-          {adminMetrics.map((metric) => (
-            <MetricCard key={metric.id} metric={metric} />
-          ))}
-        </div>
-
-        <section className="mt-5 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="mt-6 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
           <h2 className="text-xl font-bold text-[#0B1F4D]">
             1. Gerenciar agenda da clinica
           </h2>
@@ -79,12 +78,22 @@ export function AdminArea() {
             <UserManagementTable
               activeKind={activeUserKind}
               users={users}
-              onChangeUserKind={handlePendingAction}
-              onCreateUser={handlePendingAction}
+              onChangeUserKind={setActiveUserKind}
+              onCreateUser={() => navigate("/administracao/medicos/novo")}
               onDeleteUser={handlePendingAction}
               onEditUser={handlePendingAction}
               onToggleUserStatus={handlePendingAction}
             />
+          </div>
+        </section>
+
+        <section className="mt-3 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+          <h2 className="text-xl font-bold text-[#0B1F4D]">
+            3. Controle de auditoria
+          </h2>
+
+          <div className="mt-4">
+            <AuditLogTable logs={adminAuditLogs} />
           </div>
         </section>
       </div>

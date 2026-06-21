@@ -2,6 +2,7 @@ export * from "./AdminFilters";
 export * from "./AdminHeader";
 export * from "./AdminNotice";
 export * from "./AdminStatusBadge";
+export * from "./AuditLogTable";
 export * from "./AppointmentsManagementTable";
 export * from "./AvailableTimesPanel";
 export * from "./MetricCard";

@@ -7,10 +7,17 @@ import {
 
 type DoctorApiItem = Partial<Doctor> & {
   doctorId?: string;
+  idDoctor?: string;
+  idMedico?: string;
+  nome?: string;
+  telefone?: string;
+  especialidade?: string;
   specialty?: MedicalSpeciality;
   medicalSpeciality?: MedicalSpeciality;
   user?: {
+    id?: string;
     name?: string;
+    nome?: string;
     email?: string;
   };
 };
@@ -24,8 +31,13 @@ type DoctorApiResponse =
     };
 
 function normalizeSpeciality(value?: string): MedicalSpeciality {
+  const normalizedValue = value
+    ?.normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toUpperCase();
+
   const speciality = MEDICAL_SPECIALITIES.find(
-    (item) => item === value?.toUpperCase(),
+    (item) => item === normalizedValue,
   );
 
   return speciality ?? "CARDIOLOGIA";
@@ -33,14 +45,17 @@ function normalizeSpeciality(value?: string): MedicalSpeciality {
 
 function normalizeDoctor(doctor: DoctorApiItem): Doctor {
   return {
-    id: doctor.id ?? doctor.doctorId ?? "",
-    name: doctor.name ?? doctor.user?.name ?? "Medico",
+    id: doctor.doctorId ?? doctor.idDoctor ?? doctor.idMedico ?? doctor.id ?? doctor.user?.id ?? "",
+    name: doctor.name ?? doctor.nome ?? doctor.user?.name ?? doctor.user?.nome ?? "Medico",
     cpf: doctor.cpf,
     email: doctor.email ?? doctor.user?.email,
-    phone: doctor.phone,
+    phone: doctor.phone ?? doctor.telefone,
     crm: doctor.crm ?? "",
     speciality: normalizeSpeciality(
-      doctor.speciality ?? doctor.specialty ?? doctor.medicalSpeciality,
+      doctor.speciality ??
+        doctor.specialty ??
+        doctor.medicalSpeciality ??
+        doctor.especialidade,
     ),
     address: doctor.address,
   };
@@ -55,8 +70,13 @@ function normalizeDoctorsResponse(data: DoctorApiResponse): Doctor[] {
 }
 
 export const doctorService = {
-  async findAll(): Promise<Doctor[]> {
-    const { data } = await api.get<DoctorApiResponse>("/medicos");
+  async findAll(speciality?: MedicalSpeciality): Promise<Doctor[]> {
+    const { data } = await api.get<DoctorApiResponse>("/medicos", {
+      params: {
+        speciality,
+      },
+    });
+
     return normalizeDoctorsResponse(data);
   },
 

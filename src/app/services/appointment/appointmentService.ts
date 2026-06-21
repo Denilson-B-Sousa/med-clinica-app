@@ -100,11 +100,7 @@ export const appointmentService = {
     return data;
   },
 
-  async cancel(id: string): Promise<Appointment> {
-    const { data } = await api.put(`/consultas/${id}`, {
-      status: "CANCELED",
-    });
-
-    return data;
+  async cancel(id: string): Promise<void> {
+    await api.delete(`/consultas/${id}`);
   },
 };

@@ -1,7 +1,12 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import { AppLayout } from "@/layouts/AppLayout";
-import { AdminArea, AdminFullSchedule } from "@/pages/Admin";
+import {
+  AdminArea,
+  AdminDoctorRegister,
+  AdminFullSchedule,
+  AdminProfile,
+} from "@/pages/Admin";
 import { AuthLayout } from "@/layouts/AuthLayout";
 import { AppointmentHistory } from "@/pages/AppointmentHistory";
 import { PatientArea } from "@/pages/Home";
@@ -9,16 +14,41 @@ import { Login } from "@/pages/Login";
 import { Register } from "@/pages/Register";
 import { RescheduleAppointment } from "@/pages/RescheduleAppointment";
 import { ScheduleAppointment } from "@/pages/ScheduleAppointment";
+import { ProfileSettings } from "@/pages/ProfileSettings";
 import { OAuthSuccess } from "./pages/OauthSuccess/OauthSuccess";
 
 export const router = createBrowserRouter([
   {
-    path: "/admin",
+    path: "/administracao",
     element: <AdminArea />,
   },
   {
-    path: "/admin/agenda",
+    path: "/administracao/agenda",
     element: <AdminFullSchedule />,
+  },
+  {
+    path: "/administracao/perfil",
+    element: <AdminProfile />,
+  },
+  {
+    path: "/administracao/medicos/novo",
+    element: <AdminDoctorRegister />,
+  },
+  {
+    path: "/admin",
+    element: <Navigate to="/administracao" replace />,
+  },
+  {
+    path: "/admin/agenda",
+    element: <Navigate to="/administracao/agenda" replace />,
+  },
+  {
+    path: "/admin/perfil",
+    element: <Navigate to="/administracao/perfil" replace />,
+  },
+  {
+    path: "/admin/medicos/novo",
+    element: <Navigate to="/administracao/medicos/novo" replace />,
   },
   {
     element: <AuthLayout />,
@@ -64,6 +94,10 @@ export const router = createBrowserRouter([
       {
         path: "/reagendar-consulta/:id",
         element: <RescheduleAppointment />,
+      },
+      {
+        path: "/meu-perfil",
+        element: <ProfileSettings />,
       },
       {
         path: "historico-consulta",

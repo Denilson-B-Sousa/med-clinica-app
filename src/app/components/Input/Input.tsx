@@ -1,5 +1,6 @@
 import { tv, type VariantProps } from "tailwind-variants";
 import type { ComponentProps } from "react";
+import { twMerge } from "tailwind-merge";
 
 const input = tv({
   base: "form-field-focus w-full cursor-pointer border box-border font-inter outline-none transition-all duration-200",
@@ -44,11 +45,12 @@ export function Input({
   size,
   state,
   disabled,
+  className,
   ...props
 }: InputProps) {
   return (
     <input
-      className={input({ variant, size, state, disabled })}
+      className={twMerge(input({ variant, size, state, disabled }), className)}
       disabled={disabled}
       {...props}
     />
