@@ -1,22 +1,31 @@
 import { Button } from "@/components/Button/Button";
+import type { ClinicUnit } from "@/types/ClinicUnit";
 import type { FormEvent } from "react";
 import { Info } from "phosphor-react";
 
 const AVAILABLE_TIMES = ["08:00", "09:30", "14:00", "16:30"];
 
 type RescheduleFormProps = {
+  clinicUnits: ClinicUnit[];
   date: string;
   time: string;
+  clinicUnitId: string;
+  isLoadingClinicUnits: boolean;
   isSubmitting: boolean;
+  onClinicUnitChange: (clinicUnitId: string) => void;
   onDateChange: (date: string) => void;
   onTimeChange: (time: string) => void;
   onSubmit: () => void;
 };
 
 export function RescheduleForm({
+  clinicUnits,
   date,
   time,
+  clinicUnitId,
+  isLoadingClinicUnits,
   isSubmitting,
+  onClinicUnitChange,
   onDateChange,
   onTimeChange,
   onSubmit,
@@ -36,6 +45,30 @@ export function RescheduleForm({
       <h2 className="mb-8 text-lg font-bold">2. Nova data e horário</h2>
 
       <div className="space-y-6">
+        <div>
+          <label className="mb-2 block text-sm font-semibold">
+            Unidade da clinica
+          </label>
+
+          <select
+            value={clinicUnitId}
+            onChange={(event) => onClinicUnitChange(event.target.value)}
+            required
+            className="h-14 w-full rounded-lg border border-slate-300 px-4 text-slate-500 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100 disabled:cursor-not-allowed disabled:bg-slate-100"
+          >
+            <option value="">
+              {isLoadingClinicUnits
+                ? "Carregando unidades"
+                : "Selecione a unidade"}
+            </option>
+            {clinicUnits.map((clinicUnit) => (
+              <option key={clinicUnit.id} value={clinicUnit.id}>
+                {clinicUnit.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <div>
           <label className="mb-2 block text-sm font-semibold">Nova data</label>
 

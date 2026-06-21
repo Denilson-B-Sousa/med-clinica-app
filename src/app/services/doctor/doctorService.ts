@@ -1,8 +1,10 @@
 import { api } from "@/lib/api";
 import {
   MEDICAL_SPECIALITIES,
+  type CreateDoctorPayload,
   type Doctor,
   type MedicalSpeciality,
+  type UpdateDoctorPayload,
 } from "@/types/Doctor";
 
 type DoctorApiItem = Partial<Doctor> & {
@@ -14,6 +16,9 @@ type DoctorApiItem = Partial<Doctor> & {
   especialidade?: string;
   specialty?: MedicalSpeciality;
   medicalSpeciality?: MedicalSpeciality;
+  clinicUnitId?: string;
+  unidadeClinicaId?: string;
+  unitId?: string;
   user?: {
     id?: string;
     name?: string;
@@ -51,6 +56,7 @@ function normalizeDoctor(doctor: DoctorApiItem): Doctor {
     email: doctor.email ?? doctor.user?.email,
     phone: doctor.phone ?? doctor.telefone,
     crm: doctor.crm ?? "",
+    clinicUnitId: doctor.clinicUnitId ?? doctor.unidadeClinicaId ?? doctor.unitId,
     speciality: normalizeSpeciality(
       doctor.speciality ??
         doctor.specialty ??
@@ -82,6 +88,16 @@ export const doctorService = {
 
   async findById(id: string): Promise<Doctor> {
     const { data } = await api.get<DoctorApiItem>(`/medicos/${id}`);
+    return normalizeDoctor(data);
+  },
+
+  async create(payload: CreateDoctorPayload): Promise<Doctor> {
+    const { data } = await api.post<DoctorApiItem>("/medicos", payload);
+    return normalizeDoctor(data);
+  },
+
+  async update(id: string, payload: UpdateDoctorPayload): Promise<Doctor> {
+    const { data } = await api.put<DoctorApiItem>(`/medicos/${id}`, payload);
     return normalizeDoctor(data);
   },
 };

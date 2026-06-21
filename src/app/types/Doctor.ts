@@ -30,6 +30,20 @@ export type Doctor = {
   email?: string;
   phone?: string;
   crm: string;
+  clinicUnitId?: string;
   speciality: MedicalSpeciality;
   address?: Address;
 }
+
+export type CreateDoctorPayload = {
+  name: string;
+  cpf: string;
+  email: string;
+  password: string;
+  phone: string;
+  crm: string;
+  clinicUnitId: string;
+  speciality: MedicalSpeciality;
+};
+
+export type UpdateDoctorPayload = Partial<CreateDoctorPayload>;

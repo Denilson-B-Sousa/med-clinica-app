@@ -10,7 +10,8 @@ type DoctorCardProps = {
 
 export function DoctorCard({ appointment }: DoctorCardProps) {
   const { doctor } = appointment;
-  const address = doctor.address;
+  const clinicUnit = appointment.clinicUnit;
+  const address = clinicUnit?.address ?? doctor.address;
   const cancelAppointment = useCancelAppointment();
 
   async function handleCancel() {
@@ -45,7 +46,7 @@ export function DoctorCard({ appointment }: DoctorCardProps) {
 
         <div>
           <h4 className="text-lg font-semibold text-slate-900">
-            {address?.city ?? "-"}
+            {clinicUnit?.name ?? address?.city ?? "-"}
           </h4>
 
           <p>

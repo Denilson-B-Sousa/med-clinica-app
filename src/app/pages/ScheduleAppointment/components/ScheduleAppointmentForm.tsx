@@ -1,4 +1,5 @@
 import { Button } from "@/components/Button/Button";
+import type { ClinicUnit } from "@/types/ClinicUnit";
 import {
   MEDICAL_SPECIALITIES,
   type Doctor,
@@ -30,18 +31,23 @@ const SPECIALITY_LABELS: Record<MedicalSpeciality, string> = {
 };
 
 type ScheduleAppointmentFormProps = {
+  clinicUnits: ClinicUnit[];
   doctors: Doctor[];
+  isLoadingClinicUnits: boolean;
   isLoadingDoctors: boolean;
   isSubmitting: boolean;
   onSubmit: (data: {
+    clinicUnitId: string;
     doctorId: string;
     date: string;
     time: string;
   }) => void;
+  selectedClinicUnitId: string;
   selectedSpeciality: string;
   selectedDoctorId: string;
   selectedDate: string;
   selectedTime: string;
+  onClinicUnitChange: (clinicUnitId: string) => void;
   onSpecialityChange: (speciality: string) => void;
   onDoctorChange: (doctorId: string) => void;
   onDateChange: (date: string) => void;
@@ -49,14 +55,18 @@ type ScheduleAppointmentFormProps = {
 };
 
 export function ScheduleAppointmentForm({
+  clinicUnits,
   doctors,
+  isLoadingClinicUnits,
   isLoadingDoctors,
   isSubmitting,
   onSubmit,
+  selectedClinicUnitId,
   selectedSpeciality,
   selectedDoctorId,
   selectedDate,
   selectedTime,
+  onClinicUnitChange,
   onSpecialityChange,
   onDoctorChange,
   onDateChange,
@@ -68,6 +78,7 @@ export function ScheduleAppointmentForm({
     event.preventDefault();
 
     onSubmit({
+      clinicUnitId: selectedClinicUnitId,
       doctorId: selectedDoctorId,
       date: selectedDate,
       time: selectedTime,
@@ -82,6 +93,30 @@ export function ScheduleAppointmentForm({
       <h2 className="mb-8 text-lg font-bold">1. Detalhes da consulta</h2>
 
       <div className="space-y-6">
+        <div>
+          <label className="mb-2 block text-sm font-semibold">
+            Unidade da clinica
+          </label>
+
+          <select
+            value={selectedClinicUnitId}
+            onChange={(event) => onClinicUnitChange(event.target.value)}
+            required
+            className="h-14 w-full rounded-lg border border-slate-300 px-4 text-slate-500 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100 disabled:cursor-not-allowed disabled:bg-slate-100"
+          >
+            <option value="">
+              {isLoadingClinicUnits
+                ? "Carregando unidades"
+                : "Selecione a unidade"}
+            </option>
+            {clinicUnits.map((clinicUnit) => (
+              <option key={clinicUnit.id} value={clinicUnit.id}>
+                {clinicUnit.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
         <div>
           <label className="mb-2 block text-sm font-semibold">
             Especialidade

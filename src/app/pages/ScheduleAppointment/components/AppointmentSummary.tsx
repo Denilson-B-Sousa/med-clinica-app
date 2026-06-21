@@ -1,7 +1,9 @@
+import type { ClinicUnit } from "@/types/ClinicUnit";
 import type { Doctor } from "@/types/Doctor";
 import { Info } from "phosphor-react";
 
 type AppointmentSummaryProps = {
+  clinicUnit?: ClinicUnit;
   doctor?: Doctor;
   date?: string;
   time?: string;
@@ -21,24 +23,19 @@ function formatDate(date?: string) {
 }
 
 export function AppointmentSummary({
+  clinicUnit,
   doctor,
   date,
   time,
   speciality,
 }: AppointmentSummaryProps) {
-  const address = doctor?.address;
+  const address = clinicUnit?.address ?? doctor?.address;
 
   return (
     <aside className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
       <h2 className="mb-8 text-lg font-bold">2. Resumo da consulta</h2>
 
-      <div className="mb-8 flex items-center gap-4">
-        <img
-          src="https://i.pravatar.cc/72?img=12"
-          alt="Medico"
-          className="h-16 w-16 rounded-full object-cover"
-        />
-
+      <div className="mb-8">
         <div>
           <h3 className="text-xl font-bold">
             {doctor?.name ?? "Selecione um medico"}
@@ -72,11 +69,13 @@ export function AppointmentSummary({
 
         <div>
           <p className="text-sm font-bold">Local de atendimento</p>
-          <p className="font-semibold">{address?.city ?? "-"}</p>
+          <p className="font-semibold">
+            {clinicUnit?.name ?? address?.city ?? "-"}
+          </p>
           <p className="text-sm text-slate-600">
             {address
               ? `${address.street}, ${address.number}`
-              : "Selecione um medico"}
+              : "Selecione a unidade"}
           </p>
         </div>
       </div>

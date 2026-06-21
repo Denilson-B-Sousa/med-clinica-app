@@ -1,8 +1,13 @@
 import { Link } from "react-router-dom";
+import { useMe } from "@/hooks/useMe";
+import { getAuthenticatedFirstName } from "@/utils/user/getAuthenticatedFirstName";
 import { Navbar } from "../Navbar/Navbar";
 import { ProfileMenu } from "../ProfileMenu/ProfileMenu";
 
 export function Header() {
+  const { data: me } = useMe();
+  const firstName = getAuthenticatedFirstName(me, "Perfil");
+
   return (
     <header className="bg-transparent text-[#0094CB] py-4 px-6 grid grid-cols-3 items-center">
       <div className="justify-self-start">
@@ -18,7 +23,7 @@ export function Header() {
       </div>
 
       <div className="justify-self-end">
-        <ProfileMenu name="Denilson Silva" />
+        <ProfileMenu name={firstName} />
       </div>
     </header>
   );

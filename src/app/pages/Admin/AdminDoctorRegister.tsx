@@ -2,15 +2,17 @@ import type { FormEvent, ReactNode } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   ArrowLeft,
+  Buildings,
   FloppyDisk,
   IdentificationCard,
   LockKey,
-  MapPinLine,
   UserPlus,
 } from "phosphor-react";
 import { toast } from "sonner";
 import { MEDICAL_SPECIALITIES, type MedicalSpeciality } from "@/types/Doctor";
-import { BRAZILIAN_STATES } from "@/pages/Register/constants/states";
+import { clinicUnitService } from "@/services/clinicUnit/clinicUnitService";
+import { doctorService } from "@/services/doctor/doctorService";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { AdminHeader } from "./components";
 
 const SPECIALITY_LABELS: Record<MedicalSpeciality, string> = {
@@ -57,10 +59,35 @@ function FormField({
 
 export function AdminDoctorRegister() {
   const navigate = useNavigate();
+  const { data: clinicUnits = [], isLoading: isLoadingClinicUnits } = useQuery({
+    queryKey: ["clinic-units"],
+    queryFn: clinicUnitService.findAll,
+  });
+  const createDoctor = useMutation({
+    mutationFn: doctorService.create,
+    onSuccess: () => {
+      toast.success("Medico cadastrado com sucesso.");
+      navigate("/administracao");
+    },
+    onError: () => {
+      toast.error("Nao foi possivel cadastrar o medico.");
+    },
+  });
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    toast.success("Interface de cadastro do medico preenchida.");
+    const formData = new FormData(event.currentTarget);
+
+    createDoctor.mutate({
+      name: String(formData.get("name") ?? ""),
+      cpf: String(formData.get("cpf") ?? ""),
+      email: String(formData.get("email") ?? ""),
+      password: String(formData.get("password") ?? ""),
+      phone: String(formData.get("phone") ?? ""),
+      crm: String(formData.get("crm") ?? ""),
+      clinicUnitId: String(formData.get("clinicUnitId") ?? ""),
+      speciality: String(formData.get("speciality") ?? "") as MedicalSpeciality,
+    });
   }
 
   return (
@@ -87,7 +114,7 @@ export function AdminDoctorRegister() {
                   Cadastrar medico
                 </h1>
                 <p className="mt-1 text-sm text-slate-600">
-                  Informe os dados de acesso, registro profissional e endereco.
+                  Informe os dados de acesso, registro profissional e unidade.
                 </p>
               </div>
             </div>
@@ -192,62 +219,23 @@ export function AdminDoctorRegister() {
 
           <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
             <div className="flex items-center gap-3">
-              <MapPinLine className="text-[#20375F]" size={24} weight="bold" />
-              <h2 className="text-xl font-bold text-[#0B1F4D]">Endereco</h2>
+              <Buildings className="text-[#20375F]" size={24} weight="bold" />
+              <h2 className="text-xl font-bold text-[#0B1F4D]">
+                Unidade de atendimento
+              </h2>
             </div>
 
             <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-              <FormField label="CEP">
-                <input
-                  name="address.zipcode"
-                  required
-                  className={fieldClassName}
-                  placeholder="00000-000"
-                />
-              </FormField>
-
-              <FormField label="Logradouro">
-                <input
-                  name="address.street"
-                  required
-                  className={fieldClassName}
-                  placeholder="Rua, avenida ou alameda"
-                />
-              </FormField>
-
-              <FormField label="Numero">
-                <input
-                  name="address.number"
-                  required
-                  className={fieldClassName}
-                  placeholder="Numero"
-                />
-              </FormField>
-
-              <FormField label="Bairro">
-                <input
-                  name="address.district"
-                  required
-                  className={fieldClassName}
-                  placeholder="Bairro"
-                />
-              </FormField>
-
-              <FormField label="Cidade">
-                <input
-                  name="address.city"
-                  required
-                  className={fieldClassName}
-                  placeholder="Cidade"
-                />
-              </FormField>
-
-              <FormField label="Estado">
-                <select name="address.state" required className={selectClassName}>
-                  <option value="">Selecione o estado</option>
-                  {BRAZILIAN_STATES.map((state) => (
-                    <option key={state.value} value={state.value}>
-                      {state.label}
+              <FormField label="Unidade">
+                <select name="clinicUnitId" required className={selectClassName}>
+                  <option value="">
+                    {isLoadingClinicUnits
+                      ? "Carregando unidades"
+                      : "Selecione a unidade"}
+                  </option>
+                  {clinicUnits.map((clinicUnit) => (
+                    <option key={clinicUnit.id} value={clinicUnit.id}>
+                      {clinicUnit.name}
                     </option>
                   ))}
                 </select>
@@ -266,10 +254,11 @@ export function AdminDoctorRegister() {
 
             <button
               type="submit"
+              disabled={createDoctor.isPending}
               className="flex h-11 cursor-pointer items-center justify-center gap-2 rounded-md bg-blue-600 px-6 text-sm font-bold text-white transition hover:bg-blue-700"
             >
               <FloppyDisk size={18} weight="bold" />
-              Cadastrar medico
+              {createDoctor.isPending ? "Cadastrando..." : "Cadastrar medico"}
             </button>
           </div>
         </form>

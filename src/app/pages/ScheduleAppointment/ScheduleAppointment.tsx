@@ -7,8 +7,10 @@ import { useScheduleAppointment } from "@/hooks/appointment/useScheduleAppointme
 import { useDoctors } from "@/hooks/doctor/useDoctors";
 import { usePatients } from "@/hooks/patient/usePatients";
 import { useMe } from "@/hooks/useMe";
+import { clinicUnitService } from "@/services/clinicUnit/clinicUnitService";
 import type { MedicalSpeciality } from "@/types/Doctor";
 import { AxiosError } from "axios";
+import { useQuery } from "@tanstack/react-query";
 import { AppointmentSummary, ScheduleAppointmentForm } from "./components";
 
 type AuthenticatedPatient = {
@@ -38,6 +40,7 @@ function getScheduleErrorMessage(error?: string) {
 }
 
 export function ScheduleAppointment() {
+  const [selectedClinicUnitId, setSelectedClinicUnitId] = useState("");
   const [selectedSpeciality, setSelectedSpeciality] = useState<
     MedicalSpeciality | ""
   >("");
@@ -49,14 +52,39 @@ export function ScheduleAppointment() {
   const { data: doctors = [], isLoading: isLoadingDoctors } = useDoctors(
     selectedSpeciality || undefined,
   );
+  const { data: clinicUnits = [], isLoading: isLoadingClinicUnits } = useQuery({
+    queryKey: ["clinic-units"],
+    queryFn: clinicUnitService.findAll,
+  });
   const { data: patients = [] } = usePatients();
   const { data: me } = useMe();
   const scheduleAppointment = useScheduleAppointment();
 
+  const filteredDoctors = useMemo(() => {
+    if (!selectedClinicUnitId) {
+      return doctors;
+    }
+
+    return doctors.filter(
+      (doctor) =>
+        !doctor.clinicUnitId || doctor.clinicUnitId === selectedClinicUnitId,
+    );
+  }, [doctors, selectedClinicUnitId]);
+
   const selectedDoctor = useMemo(
-    () => doctors.find((doctor) => doctor.id === selectedDoctorId),
-    [doctors, selectedDoctorId],
+    () => filteredDoctors.find((doctor) => doctor.id === selectedDoctorId),
+    [filteredDoctors, selectedDoctorId],
   );
+
+  const selectedClinicUnit = useMemo(
+    () => clinicUnits.find((clinicUnit) => clinicUnit.id === selectedClinicUnitId),
+    [clinicUnits, selectedClinicUnitId],
+  );
+
+  function handleClinicUnitChange(clinicUnitId: string) {
+    setSelectedClinicUnitId(clinicUnitId);
+    setSelectedDoctorId("");
+  }
 
   function handleSpecialityChange(speciality: string) {
     setSelectedSpeciality(speciality as MedicalSpeciality | "");
@@ -64,6 +92,7 @@ export function ScheduleAppointment() {
   }
 
   function resetForm() {
+    setSelectedClinicUnitId("");
     setSelectedSpeciality("");
     setSelectedDoctorId("");
     setSelectedDate("");
@@ -71,6 +100,7 @@ export function ScheduleAppointment() {
   }
 
   async function handleSubmit(data: {
+    clinicUnitId: string;
     doctorId: string;
     date: string;
     time: string;
@@ -88,6 +118,7 @@ export function ScheduleAppointment() {
       await scheduleAppointment.mutateAsync({
         patientId,
         doctorId: data.doctorId,
+        clinicUnitId: data.clinicUnitId,
         scheduleAt: `${data.date}T${data.time}:00`,
         status: "SCHEDULED",
         durationInMinutes: 30,
@@ -125,14 +156,18 @@ export function ScheduleAppointment() {
 
       <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
         <ScheduleAppointmentForm
-          doctors={doctors}
+          clinicUnits={clinicUnits}
+          doctors={filteredDoctors}
+          isLoadingClinicUnits={isLoadingClinicUnits}
           isLoadingDoctors={isLoadingDoctors}
           isSubmitting={scheduleAppointment.isPending}
           onSubmit={handleSubmit}
+          selectedClinicUnitId={selectedClinicUnitId}
           selectedSpeciality={selectedSpeciality}
           selectedDoctorId={selectedDoctorId}
           selectedDate={selectedDate}
           selectedTime={selectedTime}
+          onClinicUnitChange={handleClinicUnitChange}
           onSpecialityChange={handleSpecialityChange}
           onDoctorChange={setSelectedDoctorId}
           onDateChange={setSelectedDate}
@@ -140,6 +175,7 @@ export function ScheduleAppointment() {
         />
 
         <AppointmentSummary
+          clinicUnit={selectedClinicUnit}
           doctor={selectedDoctor}
           date={selectedDate}
           time={selectedTime}

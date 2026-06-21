@@ -17,7 +17,8 @@ export function CurrentAppointmentCard({
   onCancel,
 }: CurrentAppointmentCardProps) {
   const { doctor } = appointment;
-  const address = doctor.address;
+  const clinicUnit = appointment.clinicUnit;
+  const address = clinicUnit?.address ?? doctor.address;
   const date = format(new Date(appointment.scheduleAt), "dd 'de' MMMM 'de' yyyy", {
     locale: ptBR,
   });
@@ -49,7 +50,9 @@ export function CurrentAppointmentCard({
 
         <div>
           <p className="text-sm font-bold">Local</p>
-          <p className="font-semibold">{address?.city ?? "-"}</p>
+          <p className="font-semibold">
+            {clinicUnit?.name ?? address?.city ?? "-"}
+          </p>
           <p className="text-sm text-slate-600">
             {address ? `${address.street}, ${address.number}` : "-"}
           </p>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BackLink } from "@/components/BackLink";
 import { Button } from "@/components/Button/Button";
 import { EmptyState } from "@/components/EmptyState/EmptyState";
@@ -7,6 +7,7 @@ import { useCancelAppointment } from "@/hooks/appointment/useCancelAppointment";
 import { useNextAppointment } from "@/hooks/appointment/useNextAppointment";
 import { useUpdateAppointment } from "@/hooks/appointment/useUpdateAppointment";
 import { appointmentService } from "@/services/appointment/appointmentService";
+import { clinicUnitService } from "@/services/clinicUnit/clinicUnitService";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
@@ -15,6 +16,7 @@ import { CurrentAppointmentCard, RescheduleForm } from "./components";
 export function RescheduleAppointment() {
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
+  const [clinicUnitId, setClinicUnitId] = useState("");
   const { id: appointmentId } = useParams();
 
   const { data: nextAppointment, isLoading: isNextAppointmentLoading } =
@@ -40,18 +42,26 @@ export function RescheduleAppointment() {
   });
   const updateAppointment = useUpdateAppointment();
   const cancelAppointment = useCancelAppointment();
+  const { data: clinicUnits = [], isLoading: isLoadingClinicUnits } = useQuery({
+    queryKey: ["clinic-units"],
+    queryFn: clinicUnitService.findAll,
+  });
   const isLoading = appointmentId
     ? isSelectedAppointmentLoading
     : isNextAppointmentLoading;
   const appointment = appointmentId ? selectedAppointment : nextAppointment;
+
+  useEffect(() => {
+    setClinicUnitId(appointment?.clinicUnitId ?? appointment?.clinicUnit?.id ?? "");
+  }, [appointment]);
 
   async function handleReschedule() {
     if (!appointment) {
       return;
     }
 
-    if (!date || !time) {
-      toast.error("Informe a nova data e horario da consulta.");
+    if (!date || !time || !clinicUnitId) {
+      toast.error("Informe a unidade, nova data e horario da consulta.");
       return;
     }
 
@@ -60,6 +70,7 @@ export function RescheduleAppointment() {
         id: appointment.id,
         data: {
           scheduleAt: `${date}T${time}:00`,
+          clinicUnitId,
         },
       });
 
@@ -121,9 +132,13 @@ export function RescheduleAppointment() {
             onCancel={handleCancel}
           />
           <RescheduleForm
+            clinicUnits={clinicUnits}
             date={date}
             time={time}
+            clinicUnitId={clinicUnitId}
+            isLoadingClinicUnits={isLoadingClinicUnits}
             isSubmitting={updateAppointment.isPending}
+            onClinicUnitChange={setClinicUnitId}
             onDateChange={setDate}
             onTimeChange={setTime}
             onSubmit={handleReschedule}

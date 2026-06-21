@@ -7,6 +7,7 @@ export interface Appointment {
   id: string;
   patientId: string;
   doctorId: string;
+  clinicUnitId?: string;
   scheduleAt: string;
   status: AppointmentStatus;
   durationInMinutes: number;
@@ -27,11 +28,23 @@ export type AppointmentDoctor = {
   address: AppointmentDoctorAddress;
 };
 
+export type AppointmentClinicUnit = {
+  id: string;
+  name: string;
+  phone?: string;
+  address?: AppointmentDoctorAddress & {
+    district?: string;
+    state?: string;
+    zipcode?: string;
+  };
+};
+
 export type AppointmentHistoryItem = Pick<
   Appointment,
-  "id" | "scheduleAt" | "status" | "durationInMinutes"
+  "id" | "clinicUnitId" | "scheduleAt" | "status" | "durationInMinutes"
 > & {
   doctor: AppointmentDoctor;
+  clinicUnit?: AppointmentClinicUnit;
 };
 
 export type AppointmentHistoryParams = {
@@ -51,13 +64,19 @@ export type AppointmentHistoryPage = {
 
 export type CreateAppointmentPayload = Pick<
   Appointment,
-  "patientId" | "doctorId" | "scheduleAt" | "status" | "durationInMinutes"
+  | "patientId"
+  | "doctorId"
+  | "clinicUnitId"
+  | "scheduleAt"
+  | "status"
+  | "durationInMinutes"
 >;
 
 export type RescheduleAppointmentPayload = {
   scheduleAt: string;
+  clinicUnitId?: string;
 };
 
 export type UpdateAppointmentPayload = Partial<
-  Pick<Appointment, "scheduleAt" | "status">
+  Pick<Appointment, "scheduleAt" | "clinicUnitId" | "status">
 >;
