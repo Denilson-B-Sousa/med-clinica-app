@@ -105,7 +105,7 @@ export function AdminDoctorRegister() {
           </Link>
         </div>
 
-        <section className="mt-4 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="mt-4 rounded-lg border border-slate-200 bg-white p-5 shadow-lg shadow-slate-200/70">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div className="flex items-center gap-3">
               <UserPlus className="text-[#20375F]" size={28} weight="bold" />
@@ -122,7 +122,7 @@ export function AdminDoctorRegister() {
         </section>
 
         <form onSubmit={handleSubmit} className="mt-3 grid gap-3">
-          <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+          <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-lg shadow-slate-200/70">
             <div className="flex items-center gap-3">
               <IdentificationCard
                 className="text-[#20375F]"
@@ -186,7 +186,7 @@ export function AdminDoctorRegister() {
             </div>
           </section>
 
-          <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+          <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-lg shadow-slate-200/70">
             <div className="flex items-center gap-3">
               <LockKey className="text-[#20375F]" size={24} weight="bold" />
               <h2 className="text-xl font-bold text-[#0B1F4D]">
@@ -217,7 +217,7 @@ export function AdminDoctorRegister() {
             </div>
           </section>
 
-          <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+          <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-lg shadow-slate-200/70">
             <div className="flex items-center gap-3">
               <Buildings className="text-[#20375F]" size={24} weight="bold" />
               <h2 className="text-xl font-bold text-[#0B1F4D]">
@@ -243,7 +243,7 @@ export function AdminDoctorRegister() {
             </div>
           </section>
 
-          <div className="flex flex-col-reverse gap-3 rounded-lg border border-slate-200 bg-white p-5 shadow-sm sm:flex-row sm:justify-end">
+          <div className="flex flex-col-reverse gap-3 rounded-lg border border-slate-200 bg-white p-5 shadow-lg shadow-slate-200/70 sm:flex-row sm:justify-end">
             <button
               type="button"
               onClick={() => navigate("/administracao")}

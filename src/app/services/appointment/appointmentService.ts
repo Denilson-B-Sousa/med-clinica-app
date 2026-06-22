@@ -103,4 +103,11 @@ export const appointmentService = {
   async cancel(id: string): Promise<void> {
     await api.delete(`/consultas/${id}`);
   },
+
+  async confirmAttendance(id: string): Promise<Appointment> {
+    const { data } = await api.patch(
+      `/consultas/${id}/confirm-attendance`,
+    );
+    return data;
+  },
 };

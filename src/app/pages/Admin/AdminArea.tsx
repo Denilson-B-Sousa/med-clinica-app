@@ -198,7 +198,7 @@ export function AdminArea() {
       <div className="mx-auto max-w-[1560px]">
         <AdminHeader />
 
-        <section className="mt-6 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="mt-6 rounded-lg border border-slate-200 bg-white p-5 shadow-lg shadow-slate-200/70">
           <h2 className="text-xl font-bold text-[#0B1F4D]">
             1. Gerenciar agenda da clinica
           </h2>
@@ -235,7 +235,7 @@ export function AdminArea() {
           </div>
         </section>
 
-        <section className="mt-3 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="mt-3 rounded-lg border border-slate-200 bg-white p-5 shadow-lg shadow-slate-200/70">
           <AvailableTimesPanel
             schedule={availableTimes}
             clinicUnits={adminClinicUnits}
@@ -248,7 +248,7 @@ export function AdminArea() {
           />
         </section>
 
-        <section className="mt-3 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="mt-3 rounded-lg border border-slate-200 bg-white p-5 shadow-lg shadow-slate-200/70">
           <h2 className="text-xl font-bold text-[#0B1F4D]">
             2. Gerenciar usuarios da clinica
           </h2>
@@ -269,7 +269,7 @@ export function AdminArea() {
           </div>
         </section>
 
-        <section className="mt-3 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="mt-3 rounded-lg border border-slate-200 bg-white p-5 shadow-lg shadow-slate-200/70">
           <h2 className="text-xl font-bold text-[#0B1F4D]">
             3. Controle de auditoria
           </h2>

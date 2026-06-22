@@ -31,7 +31,7 @@ export function AdminProfile() {
           </Link>
         </div>
 
-        <section className="mt-4 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="mt-4 rounded-lg border border-slate-200 bg-white p-5 shadow-lg shadow-slate-200/70">
           <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
             <div className="flex items-center gap-4">
               <UserCircle className="text-[#20375F]" size={56} weight="bold" />
@@ -53,7 +53,7 @@ export function AdminProfile() {
         </section>
 
         <div className="mt-3 grid gap-3 xl:grid-cols-[1.1fr_0.9fr]">
-          <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+          <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-lg shadow-slate-200/70">
             <div className="flex items-center gap-3">
               <IdentificationCard
                 className="text-[#20375F]"
@@ -112,7 +112,7 @@ export function AdminProfile() {
             </div>
           </section>
 
-          <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+          <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-lg shadow-slate-200/70">
             <div className="flex items-center gap-3">
               <Key className="text-[#20375F]" size={24} weight="bold" />
               <h2 className="text-xl font-bold text-[#0B1F4D]">

@@ -107,12 +107,6 @@ export function LoginForm() {
           )}
         </div>
 
-        <div>
-          <a href="#" className="text-sm text-[#0094CB] hover:underline">
-            Esqueceu a senha?
-          </a>
-        </div>
-
         <Button primary size="md" type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Entrando ..." : "Entrar"}
         </Button>

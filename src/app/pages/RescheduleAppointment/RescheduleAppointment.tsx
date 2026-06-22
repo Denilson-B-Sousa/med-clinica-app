@@ -107,7 +107,7 @@ export function RescheduleAppointment() {
       />
 
       {isLoading && (
-        <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+        <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-lg shadow-slate-200/70">
           Carregando consulta...
         </div>
       )}

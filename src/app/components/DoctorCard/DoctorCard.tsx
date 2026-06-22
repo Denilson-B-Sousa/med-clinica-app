@@ -1,6 +1,8 @@
+import { useConfirmAttendance } from "@/hooks/appointment/useConfirmAttendance";
 import { useCancelAppointment } from "@/hooks/appointment/useCancelAppointment";
 import type { AppointmentHistoryItem } from "@/types/Appointment";
-import { CheckCircle, MapPin, Trash } from "phosphor-react";
+import { CheckCircle, MapPin, Trash, X } from "phosphor-react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "../Button/Button";
 
@@ -9,17 +11,31 @@ type DoctorCardProps = {
 };
 
 export function DoctorCard({ appointment }: DoctorCardProps) {
+  const [isConfirmationModalOpen, setIsConfirmationModalOpen] =
+    useState(false);
   const { doctor } = appointment;
   const clinicUnit = appointment.clinicUnit;
   const address = clinicUnit?.address ?? doctor.address;
+  const isConfirmed = appointment.attendanceConfirmed === true;
   const cancelAppointment = useCancelAppointment();
+  const confirmAttendance = useConfirmAttendance();
+
+  async function handleConfirmAttendance() {
+    try {
+      await confirmAttendance.mutateAsync(appointment.id);
+      setIsConfirmationModalOpen(false);
+      toast.success("Presenca confirmada com sucesso.");
+    } catch {
+      toast.error("Nao foi possivel confirmar a presenca.");
+    }
+  }
 
   async function handleCancel() {
     try {
       await cancelAppointment.mutateAsync(appointment.id);
-      toast.success("Consulta cancelada com sucesso.");
+      toast.success("Consulta excluida com sucesso.");
     } catch {
-      toast.error("Não foi possível cancelar a consulta.");
+      toast.error("Nao foi possivel excluir a consulta.");
     }
   }
 
@@ -49,29 +65,94 @@ export function DoctorCard({ appointment }: DoctorCardProps) {
             {clinicUnit?.name ?? address?.city ?? "-"}
           </h4>
 
-          <p>
-            {address ? `${address.street}, ${address.number}` : "-"}
-          </p>
+          <p>{address ? `${address.street}, ${address.number}` : "-"}</p>
         </div>
       </div>
 
       <div className="flex flex-col gap-4">
-        <Button primary size="lg">
-          <CheckCircle size={24} />
-          Confirmar presença
-        </Button>
-
         <Button
           type="button"
-          error
           size="lg"
-          disabled={cancelAppointment.isPending}
-          onClick={handleCancel}
+          disabled={isConfirmed || confirmAttendance.isPending}
+          onClick={() => setIsConfirmationModalOpen(true)}
+          primary={!isConfirmed}
+          className={
+            isConfirmed
+              ? "bg-emerald-600 text-white hover:bg-emerald-600 disabled:bg-emerald-600"
+              : undefined
+          }
         >
-          <Trash size={24} />
-          {cancelAppointment.isPending ? "Cancelando..." : "Cancelar"}
+          <CheckCircle size={24} />
+          {isConfirmed
+            ? "Presenca confirmada"
+            : confirmAttendance.isPending
+              ? "Confirmando..."
+              : "Confirmar presenca"}
         </Button>
+
+        {!isConfirmed && (
+          <Button
+            type="button"
+            error
+            size="lg"
+            disabled={cancelAppointment.isPending}
+            onClick={handleCancel}
+          >
+            <Trash size={24} />
+            {cancelAppointment.isPending ? "Excluindo..." : "Excluir consulta"}
+          </Button>
+        )}
       </div>
+
+      {isConfirmationModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 px-4">
+          <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <h3 className="text-lg font-bold text-slate-900">
+                  Confirmar presenca?
+                </h3>
+                <p className="mt-2 text-sm text-slate-600">
+                  Voce confirma que deseja manter sua consulta com{" "}
+                  <strong>{doctor.name}</strong>? Depois disso, ela nao podera
+                  ser cancelada nem reagendada.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setIsConfirmationModalOpen(false)}
+                className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-md text-slate-500 transition hover:bg-slate-100"
+                aria-label="Fechar modal"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+              <button
+                type="button"
+                onClick={() => setIsConfirmationModalOpen(false)}
+                className="h-11 cursor-pointer rounded-md px-5 text-sm font-bold text-blue-600 transition hover:bg-blue-50"
+              >
+                Voltar
+              </button>
+
+              <button
+                type="button"
+                onClick={handleConfirmAttendance}
+                disabled={confirmAttendance.isPending}
+                className="flex h-11 cursor-pointer items-center justify-center gap-2 rounded-md bg-emerald-600 px-5 text-sm font-bold text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:bg-slate-400"
+              >
+                <CheckCircle size={16} />
+                {confirmAttendance.isPending
+                  ? "Confirmando..."
+                  : "Sim, confirmar"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

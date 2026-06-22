@@ -12,6 +12,8 @@ export interface Appointment {
   status: AppointmentStatus;
   durationInMinutes: number;
   notes?: string;
+  attendanceConfirmed?: boolean;
+  attendanceConfirmedAt?: string;
 }
 
 export type AppointmentDoctorAddress = {
@@ -41,7 +43,13 @@ export type AppointmentClinicUnit = {
 
 export type AppointmentHistoryItem = Pick<
   Appointment,
-  "id" | "clinicUnitId" | "scheduleAt" | "status" | "durationInMinutes"
+  | "id"
+  | "clinicUnitId"
+  | "scheduleAt"
+  | "status"
+  | "durationInMinutes"
+  | "attendanceConfirmed"
+  | "attendanceConfirmedAt"
 > & {
   doctor: AppointmentDoctor;
   clinicUnit?: AppointmentClinicUnit;

@@ -12,10 +12,18 @@ type AppointmentsTableProps = {
 };
 
 function canCancel(appointment: AppointmentHistoryItem) {
+  if (appointment.attendanceConfirmed) {
+    return false;
+  }
+
   return appointment.status === "SCHEDULED" || appointment.status === "CONFIRMED";
 }
 
 function canReschedule(appointment: AppointmentHistoryItem) {
+  if (appointment.attendanceConfirmed) {
+    return false;
+  }
+
   return appointment.status === "SCHEDULED" || appointment.status === "CONFIRMED";
 }
 
@@ -30,6 +38,17 @@ function getDoctorInfo(appointment: AppointmentHistoryItem) {
     city: address?.city,
     street: address?.street,
     number: address?.number,
+  };
+}
+
+function getAppointmentLocation(appointment: AppointmentHistoryItem) {
+  const clinicUnit = appointment.clinicUnit;
+  const fallbackAddress = appointment.doctor?.address;
+  const address = clinicUnit?.address ?? fallbackAddress;
+
+  return {
+    name: clinicUnit?.name ?? address?.city ?? "-",
+    address: [address?.street, address?.number].filter(Boolean).join(", "),
   };
 }
 
@@ -56,10 +75,8 @@ export function AppointmentsTable({
         <tbody className="divide-y divide-slate-200 text-sm">
           {appointments.map((appointment) => {
             const doctor = getDoctorInfo(appointment);
+            const location = getAppointmentLocation(appointment);
             const appointmentDate = new Date(appointment.scheduleAt);
-            const address = [doctor.street, doctor.number]
-              .filter(Boolean)
-              .join(", ");
 
             return (
               <tr key={appointment.id}>
@@ -92,8 +109,8 @@ export function AppointmentsTable({
                 </td>
 
                 <td className="px-5 py-4 align-middle">
-                  <strong>{doctor.city ?? "-"}</strong>
-                  <p className="text-slate-500">{address || "-"}</p>
+                  <strong>{location.name}</strong>
+                  <p className="text-slate-500">{location.address || "-"}</p>
                 </td>
 
                 <td className="px-5 py-4 align-middle">

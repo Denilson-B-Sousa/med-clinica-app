@@ -40,7 +40,7 @@ export function RescheduleForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm"
+      className="rounded-3xl border border-slate-200 bg-white p-8 shadow-lg shadow-slate-200/70"
     >
       <h2 className="mb-8 text-lg font-bold">2. Nova data e horário</h2>
 

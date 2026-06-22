@@ -108,7 +108,7 @@ export function AdminClinicUnits() {
           </Link>
         </div>
 
-        <section className="mt-4 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="mt-4 rounded-lg border border-slate-200 bg-white p-5 shadow-lg shadow-slate-200/70">
           <div className="flex items-center gap-3">
             <Buildings className="text-[#20375F]" size={28} weight="bold" />
             <div>
@@ -125,7 +125,7 @@ export function AdminClinicUnits() {
         <div className="mt-3 grid gap-3 xl:grid-cols-[1fr_1.15fr]">
           <form
             onSubmit={handleSubmit}
-            className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm"
+            className="rounded-lg border border-slate-200 bg-white p-5 shadow-lg shadow-slate-200/70"
           >
             <div className="flex items-center gap-3">
               <MapPinLine className="text-[#20375F]" size={24} weight="bold" />
@@ -224,7 +224,7 @@ export function AdminClinicUnits() {
             </div>
           </form>
 
-          <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+          <section className="rounded-lg border border-slate-200 bg-white p-5 shadow-lg shadow-slate-200/70">
             <div className="flex items-center gap-3">
               <Phone className="text-[#20375F]" size={24} weight="bold" />
               <h2 className="text-xl font-bold text-[#0B1F4D]">

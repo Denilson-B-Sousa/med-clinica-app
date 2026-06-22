@@ -71,7 +71,7 @@ export function AppointmentHistory() {
         description="Veja aqui todas as suas consultas realizadas e agendadas."
       />
 
-      <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+      <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-lg shadow-slate-200/70">
         <AppointmentFilters
           activeFilter={activeFilter}
           search={search}

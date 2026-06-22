@@ -26,7 +26,7 @@ export function MetricCard({ metric }: MetricCardProps) {
   const trendPrefix = metric.trend?.tone === "negative" ? "^" : "^";
 
   return (
-    <article className="grid min-h-28 grid-cols-[64px_1fr] items-center gap-4 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+    <article className="grid min-h-28 grid-cols-[64px_1fr] items-center gap-4 rounded-lg border border-slate-200 bg-white p-5 shadow-lg shadow-slate-200/70">
       <div
         className={`flex h-14 w-14 items-center justify-center rounded-full ${toneClasses[metric.tone]}`}
       >

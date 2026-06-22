@@ -59,7 +59,7 @@ export function AdminFullSchedule() {
           </Link>
         </div>
 
-        <section className="mt-4 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="mt-4 rounded-lg border border-slate-200 bg-white p-5 shadow-lg shadow-slate-200/70">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div className="flex items-center gap-3">
               <CalendarBlank
@@ -170,7 +170,7 @@ export function AdminFullSchedule() {
           </div>
         </section>
 
-        <section className="mt-3 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="mt-3 rounded-lg border border-slate-200 bg-white p-5 shadow-lg shadow-slate-200/70">
           <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <h2 className="text-xl font-bold text-[#0B1F4D]">
@@ -219,7 +219,7 @@ export function AdminFullSchedule() {
           </div>
         </section>
 
-        <section className="mt-3 rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+        <section className="mt-3 rounded-lg border border-slate-200 bg-white p-5 shadow-lg shadow-slate-200/70">
           <h2 className="text-xl font-bold text-[#0B1F4D]">
             Consultas do medico selecionado
           </h2>

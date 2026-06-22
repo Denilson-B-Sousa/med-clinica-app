@@ -11,7 +11,7 @@ export function QuickActions({ nextAppointmentId }: QuickActionsProps) {
     : "/reagendar-consulta";
 
   return (
-    <div className="rounded-3xl bg-white p-6 shadow-sm">
+    <div className="rounded-3xl bg-white p-6 shadow-lg shadow-slate-200/70">
       <h3 className="text-2xl font-semibold text-slate-900">Acoes rapidas</h3>
 
       <div className="mt-6 flex flex-col gap-4">
