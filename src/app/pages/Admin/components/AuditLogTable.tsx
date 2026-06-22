@@ -11,11 +11,14 @@ type AuditActionFilter = "ALL" | AdminAuditAction;
 
 const actionLabels: Record<AdminAuditAction, string> = {
   LOGIN: "Login",
+  LOGOUT: "Logout",
   SCHEDULE_APPOINTMENT: "Agendamento",
   RESCHEDULE_APPOINTMENT: "Reagendamento",
   CANCEL_APPOINTMENT: "Cancelamento",
   CREATE_DOCTOR: "Cadastro de medico",
+  UPDATE_DOCTOR: "Alteracao de medico",
   UPDATE_USER_STATUS: "Alteracao de status",
+  DELETE_USER: "Exclusao de usuario",
 };
 
 const roleLabels: Record<AdminAuditLogRow["userRole"], string> = {

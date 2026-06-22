@@ -30,7 +30,7 @@ function BenefitItem({ icon, title, description }: BenefitItemProps) {
     <div className="flex items-start gap-4">
       {icon}
       <div>
-        <h3 className="text-lg font-bold">{title}</h3>
+        <h3 className="text-base font-bold sm:text-lg">{title}</h3>
         <p className="text-sm text-white/90">{description}</p>
       </div>
     </div>
@@ -39,10 +39,10 @@ function BenefitItem({ icon, title, description }: BenefitItemProps) {
 
 export function LoginBenefitsPanel() {
   return (
-    <aside className="relative flex items-center justify-center bg-[url('/bg-login.png')] bg-cover bg-center bg-no-repeat">
+    <aside className="relative flex min-h-80 items-center justify-center bg-[url('/bg-login.png')] bg-cover bg-center bg-no-repeat px-5 py-10 lg:min-h-screen lg:px-0 lg:py-0">
       <div className="absolute inset-0 bg-[#0094CB]/60" />
 
-      <div className="relative z-10 flex max-w-md flex-col gap-8 px-10 text-white">
+      <div className="relative z-10 flex w-full max-w-md flex-col gap-6 text-white sm:gap-8 sm:px-10">
         {BENEFITS.map((benefit) => (
           <BenefitItem key={benefit.title} {...benefit} />
         ))}

@@ -116,11 +116,14 @@ export type AdminUserKind = "patients" | "doctors";
 
 export type AdminAuditAction =
   | "LOGIN"
+  | "LOGOUT"
   | "SCHEDULE_APPOINTMENT"
   | "RESCHEDULE_APPOINTMENT"
   | "CANCEL_APPOINTMENT"
   | "CREATE_DOCTOR"
-  | "UPDATE_USER_STATUS";
+  | "UPDATE_DOCTOR"
+  | "UPDATE_USER_STATUS"
+  | "DELETE_USER";
 
 export type AdminAuditLogRow = {
   id: string;
@@ -130,4 +133,12 @@ export type AdminAuditLogRow = {
   target: string;
   date: string;
   time: string;
+};
+
+export type AdminAuditLogsPage = {
+  content: AdminAuditLogRow[];
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
 };

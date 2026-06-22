@@ -4,14 +4,12 @@ import {
   AdminNotice,
   AppointmentsManagementTable,
   AuditLogTable,
-  AvailableTimesPanel,
   UserManagementTable,
 } from "./components";
 import {
   adminAuditLogs,
   adminClinicUnits,
   adminDoctorOptions,
-  availableTimes,
 } from "./data";
 import { adminService } from "@/services/admin/adminService";
 import { clinicUnitService } from "@/services/clinicUnit/clinicUnitService";
@@ -233,19 +231,6 @@ export function AdminArea() {
               para novos agendamentos.
             </AdminNotice>
           </div>
-        </section>
-
-        <section className="mt-3 rounded-lg border border-slate-200 bg-white p-5 shadow-lg shadow-slate-200/70">
-          <AvailableTimesPanel
-            schedule={availableTimes}
-            clinicUnits={adminClinicUnits}
-            doctors={adminDoctorOptions}
-            onClinicUnitChange={handlePendingAction}
-            onDateChange={handlePendingAction}
-            onDoctorChange={handlePendingAction}
-            onPeriodChange={handlePendingAction}
-            onSpecialityChange={handlePendingAction}
-          />
         </section>
 
         <section className="mt-3 rounded-lg border border-slate-200 bg-white p-5 shadow-lg shadow-slate-200/70">

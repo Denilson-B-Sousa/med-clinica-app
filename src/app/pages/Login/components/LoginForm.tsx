@@ -50,9 +50,9 @@ export function LoginForm() {
   }
 
   return (
-    <div className="m-auto flex w-lg flex-col px-8 py-4">
-      <h1 className="py-4 text-3xl font-bold">Bem-vindo de volta!</h1>
-      <span className="pb-4">Por favor entre em sua conta.</span>
+    <div className="mx-auto flex w-full max-w-lg flex-col justify-center px-5 py-8 sm:px-8 lg:min-h-screen lg:py-4">
+      <h1 className="py-4 text-2xl font-bold sm:text-3xl">Bem-vindo de volta!</h1>
+      <span className="pb-4 text-slate-600">Por favor entre em sua conta.</span>
       {error === "google_user_not_registered" && (
         <p>Este e-mail do Google ainda não está cadastrado no sistema.</p>
       )}
@@ -107,19 +107,25 @@ export function LoginForm() {
           )}
         </div>
 
-        <Button primary size="md" type="submit" disabled={isSubmitting}>
+        <Button
+          primary
+          size="md"
+          type="submit"
+          disabled={isSubmitting}
+          className="w-full"
+        >
           {isSubmitting ? "Entrando ..." : "Entrar"}
         </Button>
       </form>
 
       <span className="flex justify-center py-2">——— OU ———</span>
 
-      <Button google size="md" onClick={handleGoogleLogin}>
+      <Button google size="md" onClick={handleGoogleLogin} className="w-full">
         <img src={googleIcon} alt="Google" />
         <span>Continue com Google</span>
       </Button>
 
-      <div className="flex justify-end pt-2">
+      <div className="flex justify-center pt-3 sm:justify-end">
         <Link to="/cadastro" className="text-sm text-[#0094CB] hover:underline">
           Não tem uma conta?
         </Link>
