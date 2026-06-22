@@ -94,11 +94,22 @@ export type AdminUserRow = {
   id: string;
   initials: string;
   name: string;
+  crm?: string;
+  speciality?: string;
+  clinicUnitId?: string;
   clinicUnitName?: string;
   cpf: string;
   email: string;
   phone: string;
   status: AdminUserStatus;
+};
+
+export type AdminUsersPage = {
+  content: AdminUserRow[];
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
 };
 
 export type AdminUserKind = "patients" | "doctors";

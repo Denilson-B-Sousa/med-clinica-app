@@ -4,7 +4,10 @@ import type {
   AdminAppointmentsPage,
   AdminAppointmentsParams,
   AdminDoctorOption,
+  AdminUserKind,
+  AdminUserRow,
   AdminUserStatus,
+  AdminUsersPage,
 } from "@/pages/Admin/types";
 
 type AdminAppointmentApiItem = Partial<AdminAppointmentRow> & {
@@ -62,6 +65,32 @@ type AdminDoctorsApiResponse =
       content?: AdminDoctorApiItem[];
       data?: AdminDoctorApiItem[];
       items?: AdminDoctorApiItem[];
+    };
+
+type AdminUserApiItem = Partial<AdminUserRow> & {
+  patientId?: string;
+  doctorId?: string;
+  userId?: string;
+  nome?: string;
+  telefone?: string;
+  active?: boolean;
+  clinicUnit?: {
+    id?: string;
+    name?: string;
+  };
+};
+
+type AdminUsersApiResponse =
+  | AdminUserApiItem[]
+  | {
+      content?: AdminUserApiItem[];
+      data?: AdminUserApiItem[];
+      items?: AdminUserApiItem[];
+      page?: number;
+      number?: number;
+      size?: number;
+      totalElements?: number;
+      totalPages?: number;
     };
 
 function formatDateTime(scheduleAt?: string) {
@@ -179,6 +208,66 @@ function cleanParams(params: AdminAppointmentsParams) {
   );
 }
 
+function getInitials(name: string) {
+  return name
+    .trim()
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join("")
+    .toUpperCase();
+}
+
+function normalizeUser(user: AdminUserApiItem): AdminUserRow {
+  const name = user.name ?? user.nome ?? "Usuario";
+  const status =
+    user.status ?? (typeof user.active === "boolean" && !user.active
+      ? "INACTIVE"
+      : "ACTIVE");
+
+  return {
+    id: user.id ?? user.userId ?? user.patientId ?? user.doctorId ?? "",
+    initials: user.initials ?? getInitials(name),
+    name,
+    crm: user.crm,
+    speciality: user.speciality,
+    clinicUnitId: user.clinicUnitId ?? user.clinicUnit?.id,
+    clinicUnitName: user.clinicUnitName ?? user.clinicUnit?.name,
+    cpf: user.cpf ?? "",
+    email: user.email ?? "",
+    phone: user.phone ?? user.telefone ?? "",
+    status: status as AdminUserStatus,
+  };
+}
+
+function normalizeUsersResponse(
+  data: AdminUsersApiResponse,
+  params: { page?: number; size?: number },
+): AdminUsersPage {
+  if (Array.isArray(data)) {
+    return {
+      content: data.map(normalizeUser).filter((user) => user.id),
+      page: params.page ?? 0,
+      size: params.size ?? data.length,
+      totalElements: data.length,
+      totalPages: data.length > 0 ? 1 : 0,
+    };
+  }
+
+  const content = data.content ?? data.data ?? data.items ?? [];
+  const size = data.size ?? params.size ?? content.length;
+  const totalElements = data.totalElements ?? content.length;
+
+  return {
+    content: content.map(normalizeUser).filter((user) => user.id),
+    page: data.number ?? data.page ?? params.page ?? 0,
+    size,
+    totalElements,
+    totalPages:
+      data.totalPages ?? (size > 0 ? Math.ceil(totalElements / size) : 0),
+  };
+}
+
 export const adminService = {
   async findAppointments(
     params: AdminAppointmentsParams,
@@ -206,5 +295,37 @@ export const adminService = {
     const doctors = Array.isArray(data) ? data : data.content ?? data.data ?? data.items ?? [];
 
     return doctors.map(normalizeDoctor).filter((doctor) => doctor.id);
+  },
+
+  async findUsers(
+    kind: AdminUserKind,
+    params: { page?: number; size?: number } = {},
+  ): Promise<AdminUsersPage> {
+    const endpoint =
+      kind === "patients" ? "/admin/patients" : "/admin/doctors/users";
+    const { data } = await api.get<AdminUsersApiResponse>(endpoint, {
+      params,
+    });
+
+    return normalizeUsersResponse(data, params);
+  },
+
+  async updateUserStatus(
+    userId: string,
+    status: AdminUserStatus,
+  ): Promise<void> {
+    await api.patch(`/admin/users/${userId}/status`, {
+      status,
+      active: status === "ACTIVE",
+    });
+  },
+
+  async deleteUser(kind: AdminUserKind, userId: string): Promise<void> {
+    const endpoint =
+      kind === "patients"
+        ? `/admin/patients/${userId}`
+        : `/admin/doctors/${userId}`;
+
+    await api.delete(endpoint);
   },
 };

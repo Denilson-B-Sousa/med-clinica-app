@@ -2,10 +2,14 @@ import { PencilSimple, Plus, Power, Trash } from "phosphor-react";
 import { AdminNotice } from "./AdminNotice";
 import { AdminStatusBadge } from "./AdminStatusBadge";
 import type { AdminUserKind, AdminUserRow } from "../types";
+import { useState } from "react";
 
 type UserManagementTableProps = {
   activeKind: AdminUserKind;
   users: AdminUserRow[];
+  isLoading?: boolean;
+  updatingUserId?: string;
+  deletingUserId?: string;
   onChangeUserKind?: (kind: AdminUserKind) => void;
   onEditUser?: (userId: string) => void;
   onToggleUserStatus?: (userId: string) => void;
@@ -28,12 +32,26 @@ const avatarColors = [
 export function UserManagementTable({
   activeKind,
   users,
+  isLoading,
+  updatingUserId,
+  deletingUserId,
   onChangeUserKind,
   onEditUser,
   onToggleUserStatus,
   onDeleteUser,
   onCreateUser,
 }: UserManagementTableProps) {
+  const [userToDelete, setUserToDelete] = useState<AdminUserRow | null>(null);
+
+  function handleConfirmDelete() {
+    if (!userToDelete) {
+      return;
+    }
+
+    onDeleteUser?.(userToDelete.id);
+    setUserToDelete(null);
+  }
+
   return (
     <div className="rounded-lg border border-slate-200 bg-white">
       <div className="flex flex-col gap-4 border-b border-slate-200 px-4 py-4 lg:flex-row lg:items-center lg:justify-between">
@@ -91,6 +109,28 @@ export function UserManagementTable({
           </thead>
 
           <tbody className="divide-y divide-slate-200 text-sm text-[#20375F]">
+            {isLoading && (
+              <tr>
+                <td
+                  className="px-4 py-8 text-center text-slate-500"
+                  colSpan={activeKind === "doctors" ? 7 : 6}
+                >
+                  Carregando usuarios...
+                </td>
+              </tr>
+            )}
+
+            {!isLoading && users.length === 0 && (
+              <tr>
+                <td
+                  className="px-4 py-8 text-center text-slate-500"
+                  colSpan={activeKind === "doctors" ? 7 : 6}
+                >
+                  Nenhum usuario encontrado.
+                </td>
+              </tr>
+            )}
+
             {users.map((user, index) => (
               <tr key={user.id} className="hover:bg-slate-50">
                 <td className="px-4 py-3">
@@ -128,19 +168,25 @@ export function UserManagementTable({
                     <button
                       type="button"
                       onClick={() => onToggleUserStatus?.(user.id)}
+                      disabled={updatingUserId === user.id}
                       className="flex h-9 cursor-pointer items-center gap-2 rounded-md border border-blue-300 px-4 text-xs font-bold text-blue-600 transition hover:bg-blue-50"
                     >
                       <Power size={15} />
-                      {user.status === "ACTIVE" ? "Desativar" : "Ativar"}
+                      {updatingUserId === user.id
+                        ? "Salvando..."
+                        : user.status === "ACTIVE"
+                          ? "Desativar"
+                          : "Ativar"}
                     </button>
 
                     <button
                       type="button"
-                      onClick={() => onDeleteUser?.(user.id)}
+                      onClick={() => setUserToDelete(user)}
+                      disabled={deletingUserId === user.id}
                       className="flex h-9 cursor-pointer items-center gap-2 rounded-md border border-red-300 px-4 text-xs font-bold text-red-600 transition hover:bg-red-50"
                     >
                       <Trash size={15} />
-                      Excluir Perfil
+                      {deletingUserId === user.id ? "Excluindo..." : "Excluir Perfil"}
                     </button>
                   </div>
                 </td>
@@ -156,6 +202,39 @@ export function UserManagementTable({
           listas operacionais.
         </AdminNotice>
       </div>
+
+      {userToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/50 px-4">
+          <div className="w-full max-w-md rounded-lg bg-white p-6 shadow-xl">
+            <h3 className="text-lg font-bold text-[#0B1F4D]">
+              Excluir perfil?
+            </h3>
+            <p className="mt-2 text-sm text-slate-600">
+              Esta acao removera o perfil de{" "}
+              <strong>{userToDelete.name}</strong>.
+            </p>
+
+            <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+              <button
+                type="button"
+                onClick={() => setUserToDelete(null)}
+                className="h-11 cursor-pointer rounded-md px-5 text-sm font-bold text-blue-600 transition hover:bg-blue-50"
+              >
+                Voltar
+              </button>
+
+              <button
+                type="button"
+                onClick={handleConfirmDelete}
+                className="flex h-11 cursor-pointer items-center justify-center gap-2 rounded-md bg-red-600 px-5 text-sm font-bold text-white transition hover:bg-red-700"
+              >
+                <Trash size={16} />
+                Sim, excluir
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -11,8 +11,6 @@ import {
   adminAuditLogs,
   adminClinicUnits,
   adminDoctorOptions,
-  adminDoctors,
-  adminPatients,
   availableTimes,
 } from "./data";
 import { adminService } from "@/services/admin/adminService";
@@ -33,6 +31,7 @@ function handlePendingAction() {
 }
 
 const APPOINTMENTS_PAGE_SIZE = 5;
+const USERS_PAGE_SIZE = 10;
 
 const emptyAppointmentFilters: AdminAppointmentsFilterValues = {
   clinicUnitId: "",
@@ -51,9 +50,9 @@ export function AdminArea() {
   const [appliedAppointmentFilters, setAppliedAppointmentFilters] =
     useState<AdminAppointmentsFilterValues>(emptyAppointmentFilters);
   const [appointmentsPage, setAppointmentsPage] = useState(1);
+  const [usersPage, setUsersPage] = useState(1);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const users = activeUserKind === "patients" ? adminPatients : adminDoctors;
   const appointmentParams: AdminAppointmentsParams = {
     ...appliedAppointmentFilters,
     page: appointmentsPage - 1,
@@ -119,6 +118,51 @@ export function AdminArea() {
       toast.error(message);
     },
   });
+  const { data: usersPageData, isLoading: isLoadingUsers } = useQuery({
+    queryKey: ["admin-users", activeUserKind, usersPage],
+    queryFn: () =>
+      adminService.findUsers(activeUserKind, {
+        page: usersPage - 1,
+        size: USERS_PAGE_SIZE,
+      }),
+  });
+  const updateUserStatus = useMutation({
+    mutationFn: ({
+      userId,
+      status,
+    }: {
+      userId: string;
+      status: "ACTIVE" | "INACTIVE";
+    }) => adminService.updateUserStatus(userId, status),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["admin-users"] });
+      toast.success("Status atualizado com sucesso.");
+    },
+    onError: (error) => {
+      const apiError = error as AxiosError<{ message?: string; error?: string }>;
+      toast.error(
+        apiError.response?.data?.message ??
+          apiError.response?.data?.error ??
+          "Nao foi possivel atualizar o status.",
+      );
+    },
+  });
+  const deleteUser = useMutation({
+    mutationFn: ({ userId }: { userId: string }) =>
+      adminService.deleteUser(activeUserKind, userId),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["admin-users"] });
+      toast.success("Perfil excluido com sucesso.");
+    },
+    onError: (error) => {
+      const apiError = error as AxiosError<{ message?: string; error?: string }>;
+      toast.error(
+        apiError.response?.data?.message ??
+          apiError.response?.data?.error ??
+          "Nao foi possivel excluir o perfil.",
+      );
+    },
+  });
 
   function handleFilterAppointments() {
     setAppliedAppointmentFilters(appointmentFilters);
@@ -129,6 +173,24 @@ export function AdminArea() {
     setAppointmentFilters(emptyAppointmentFilters);
     setAppliedAppointmentFilters(emptyAppointmentFilters);
     setAppointmentsPage(1);
+  }
+
+  function handleChangeUserKind(kind: AdminUserKind) {
+    setActiveUserKind(kind);
+    setUsersPage(1);
+  }
+
+  function handleToggleUserStatus(userId: string) {
+    const user = usersPageData?.content.find((item) => item.id === userId);
+
+    if (!user) {
+      return;
+    }
+
+    updateUserStatus.mutate({
+      userId,
+      status: user.status === "ACTIVE" ? "INACTIVE" : "ACTIVE",
+    });
   }
 
   return (
@@ -194,12 +256,15 @@ export function AdminArea() {
           <div className="mt-4">
             <UserManagementTable
               activeKind={activeUserKind}
-              users={users}
-              onChangeUserKind={setActiveUserKind}
+              users={usersPageData?.content ?? []}
+              isLoading={isLoadingUsers}
+              updatingUserId={updateUserStatus.variables?.userId}
+              deletingUserId={deleteUser.variables?.userId}
+              onChangeUserKind={handleChangeUserKind}
               onCreateUser={() => navigate("/administracao/medicos/novo")}
-              onDeleteUser={handlePendingAction}
+              onDeleteUser={(userId) => deleteUser.mutate({ userId })}
               onEditUser={handlePendingAction}
-              onToggleUserStatus={handlePendingAction}
+              onToggleUserStatus={handleToggleUserStatus}
             />
           </div>
         </section>

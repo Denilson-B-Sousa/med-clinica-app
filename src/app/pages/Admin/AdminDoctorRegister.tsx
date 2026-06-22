@@ -92,7 +92,7 @@ export function AdminDoctorRegister() {
 
   return (
     <section className="min-h-screen bg-slate-50 px-4 py-6 sm:px-6 lg:px-8">
-      <div className="mx-auto max-w-[1560px]">
+      <div className="mx-auto max-w-390">
         <AdminHeader />
 
         <div className="mt-6">

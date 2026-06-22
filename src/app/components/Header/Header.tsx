@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { useMe } from "@/hooks/useMe";
 import { getAuthenticatedFirstName } from "@/utils/user/getAuthenticatedFirstName";
-import { Navbar } from "../Navbar/Navbar";
 import { ProfileMenu } from "../ProfileMenu/ProfileMenu";
 
 export function Header() {
@@ -9,8 +8,8 @@ export function Header() {
   const firstName = getAuthenticatedFirstName(me, "Perfil");
 
   return (
-    <header className="bg-transparent text-[#0094CB] py-4 px-6 grid grid-cols-3 items-center">
-      <div className="justify-self-start">
+    <header className="flex items-center justify-between bg-transparent px-6 py-4 text-[#0094CB]">
+      <div>
         <Link to="/" className="flex items-center gap-2 pl-8 py-4">
           <h1 className="text-[28px] font-semibold">
             <span className="text-black">Med</span>Clínica
@@ -18,11 +17,7 @@ export function Header() {
         </Link>
       </div>
 
-      <div className="justify-self-center">
-        <Navbar />
-      </div>
-
-      <div className="justify-self-end">
+      <div className="ml-auto">
         <ProfileMenu name={firstName} />
       </div>
     </header>
