@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { MagnifyingGlass, UserCircle } from "phosphor-react";
+import { Buildings, MagnifyingGlass, UserCircle } from "phosphor-react";
 
 export function AdminHeader() {
   return (
@@ -18,7 +18,7 @@ export function AdminHeader() {
           <span className="sr-only">Busca administrativa</span>
           <input
             type="search"
-            placeholder="Buscar pacientes, consultas, medicos..."
+            placeholder="Buscar pacientes, consultas, medicos, unidades..."
             className="h-12 w-full rounded-lg border border-slate-300 bg-white px-5 pr-12 text-sm text-slate-700 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
           />
           <MagnifyingGlass
@@ -26,6 +26,14 @@ export function AdminHeader() {
             size={22}
           />
         </label>
+
+        <Link
+          to="/administracao/unidades"
+          className="flex h-12 cursor-pointer items-center justify-center gap-2 rounded-lg border border-blue-300 bg-white px-4 text-sm font-bold text-blue-600 transition hover:bg-blue-50"
+        >
+          <Buildings size={18} weight="bold" />
+          Unidades
+        </Link>
 
         <Link
           to="/administracao/perfil"

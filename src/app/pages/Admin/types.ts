@@ -4,11 +4,36 @@ export type AdminAppointmentRow = {
   id: string;
   date: string;
   time: string;
+  clinicUnitId: string;
+  clinicUnitName: string;
+  clinicUnitAddress: string;
   doctorName: string;
   patientName: string;
   speciality: string;
   status: AppointmentStatus;
   canCancel: boolean;
+};
+
+export type AdminAppointmentsFilterValues = {
+  clinicUnitId: string;
+  doctorId: string;
+  patientName: string;
+  status: "" | AppointmentStatus;
+  date: string;
+  period: "" | "DAY" | "MORNING" | "AFTERNOON" | "EVENING";
+};
+
+export type AdminAppointmentsParams = Partial<AdminAppointmentsFilterValues> & {
+  page?: number;
+  size?: number;
+};
+
+export type AdminAppointmentsPage = {
+  content: AdminAppointmentRow[];
+  page: number;
+  size: number;
+  totalElements: number;
+  totalPages: number;
 };
 
 export type AdminMetric = {
@@ -24,6 +49,8 @@ export type AdminMetric = {
 };
 
 export type AdminAvailableTimes = {
+  clinicUnitId: string;
+  clinicUnitName: string;
   doctorId: string;
   doctorName: string;
   selectedDate: string;
@@ -35,8 +62,15 @@ export type AdminAvailableTimes = {
 export type AdminDoctorOption = {
   id: string;
   name: string;
+  clinicUnitId: string;
+  clinicUnitName: string;
   speciality: string;
   status: AdminUserStatus;
+};
+
+export type AdminClinicUnitOption = {
+  id: string;
+  name: string;
 };
 
 export type AdminScheduleSlotStatus =
@@ -60,6 +94,7 @@ export type AdminUserRow = {
   id: string;
   initials: string;
   name: string;
+  clinicUnitName?: string;
   cpf: string;
   email: string;
   phone: string;

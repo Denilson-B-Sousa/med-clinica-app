@@ -1,11 +1,18 @@
 import { CalendarBlank } from "phosphor-react";
 import { Link } from "react-router-dom";
-import type { AdminAvailableTimes, AdminDoctorOption } from "../types";
+import type {
+  AdminAvailableTimes,
+  AdminClinicUnitOption,
+  AdminDoctorOption,
+} from "../types";
 
 type AvailableTimesPanelProps = {
   schedule: AdminAvailableTimes;
+  clinicUnits: AdminClinicUnitOption[];
   doctors: AdminDoctorOption[];
+  selectedClinicUnitId?: string;
   selectedSpeciality?: string;
+  onClinicUnitChange?: (clinicUnitId: string) => void;
   onSpecialityChange?: (speciality: string) => void;
   onDoctorChange?: (doctorId: string) => void;
   onDateChange?: (date: string) => void;
@@ -14,18 +21,24 @@ type AvailableTimesPanelProps = {
 
 export function AvailableTimesPanel({
   schedule,
+  clinicUnits,
   doctors,
+  selectedClinicUnitId = schedule.clinicUnitId,
   selectedSpeciality = "Cardiologia",
+  onClinicUnitChange,
   onSpecialityChange,
   onDoctorChange,
   onDateChange,
   onPeriodChange,
 }: AvailableTimesPanelProps) {
   const activeDoctors = doctors.filter((doctor) => doctor.status === "ACTIVE");
-  const specialities = Array.from(
-    new Set(activeDoctors.map((doctor) => doctor.speciality)),
+  const doctorsByUnit = activeDoctors.filter(
+    (doctor) => doctor.clinicUnitId === selectedClinicUnitId,
   );
-  const doctorsBySpeciality = activeDoctors.filter(
+  const specialities = Array.from(
+    new Set(doctorsByUnit.map((doctor) => doctor.speciality)),
+  );
+  const doctorsBySpeciality = doctorsByUnit.filter(
     (doctor) => doctor.speciality === selectedSpeciality,
   );
 
@@ -53,7 +66,22 @@ export function AvailableTimesPanel({
         </Link>
       </div>
 
-      <div className="mt-5 grid gap-4 md:grid-cols-[240px_1fr_220px_180px]">
+      <div className="mt-5 grid gap-4 md:grid-cols-[240px_240px_1fr_220px_180px]">
+        <label className="grid gap-2 text-sm font-semibold text-[#20375F]">
+          Unidade
+          <select
+            value={selectedClinicUnitId}
+            onChange={(event) => onClinicUnitChange?.(event.target.value)}
+            className="h-11 cursor-pointer rounded-md border border-slate-300 bg-white px-4 text-sm font-medium text-slate-600 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+          >
+            {clinicUnits.map((clinicUnit) => (
+              <option key={clinicUnit.id} value={clinicUnit.id}>
+                {clinicUnit.name}
+              </option>
+            ))}
+          </select>
+        </label>
+
         <label className="grid gap-2 text-sm font-semibold text-[#20375F]">
           Especialidade
           <select
@@ -117,7 +145,9 @@ export function AvailableTimesPanel({
         <strong className="block text-sm text-[#20375F]">
           {schedule.doctorName}
         </strong>
-        <p className="mt-2 text-sm text-slate-600">{schedule.dateLabel}</p>
+        <p className="mt-2 text-sm text-slate-600">
+          {schedule.clinicUnitName} - {schedule.dateLabel}
+        </p>
       </div>
 
       <div className="mt-4 grid min-w-0 grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5 xl:grid-cols-10">

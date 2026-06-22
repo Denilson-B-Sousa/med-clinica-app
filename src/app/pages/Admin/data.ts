@@ -2,11 +2,27 @@ import type {
   AdminAppointmentRow,
   AdminAuditLogRow,
   AdminAvailableTimes,
+  AdminClinicUnitOption,
   AdminDoctorOption,
   AdminMetric,
   AdminScheduleSlot,
   AdminUserRow,
 } from "./types";
+
+export const adminClinicUnits: AdminClinicUnitOption[] = [
+  {
+    id: "unit-centro",
+    name: "Unidade Centro",
+  },
+  {
+    id: "unit-universitario",
+    name: "Unidade Setor Universitario",
+  },
+  {
+    id: "unit-aparecida",
+    name: "Unidade Aparecida",
+  },
+];
 
 export const adminMetrics: AdminMetric[] = [
   {
@@ -56,6 +72,9 @@ export const adminAppointments: AdminAppointmentRow[] = [
     id: "appointment-1",
     date: "26/05/2026",
     time: "08:30",
+    clinicUnitId: "unit-centro",
+    clinicUnitName: "Unidade Centro",
+    clinicUnitAddress: "Rua 1, 100 - Centro",
     doctorName: "Dra. Ana Carolina Souza",
     patientName: "Joao Pedro Silva",
     speciality: "Cardiologia",
@@ -66,6 +85,9 @@ export const adminAppointments: AdminAppointmentRow[] = [
     id: "appointment-2",
     date: "26/05/2026",
     time: "09:15",
+    clinicUnitId: "unit-universitario",
+    clinicUnitName: "Unidade Setor Universitario",
+    clinicUnitAddress: "Avenida Goias, 121 - Setor Universitario",
     doctorName: "Dr. Ricardo Almeida",
     patientName: "Maria Fernanda Lima",
     speciality: "Ortopedia",
@@ -76,6 +98,9 @@ export const adminAppointments: AdminAppointmentRow[] = [
     id: "appointment-3",
     date: "26/05/2026",
     time: "10:00",
+    clinicUnitId: "unit-centro",
+    clinicUnitName: "Unidade Centro",
+    clinicUnitAddress: "Rua 1, 100 - Centro",
     doctorName: "Dra. Ana Carolina Souza",
     patientName: "Carlos Eduardo M.",
     speciality: "Cardiologia",
@@ -86,6 +111,9 @@ export const adminAppointments: AdminAppointmentRow[] = [
     id: "appointment-4",
     date: "26/05/2026",
     time: "10:45",
+    clinicUnitId: "unit-universitario",
+    clinicUnitName: "Unidade Setor Universitario",
+    clinicUnitAddress: "Avenida Goias, 121 - Setor Universitario",
     doctorName: "Dr. Ricardo Almeida",
     patientName: "Juliana Costa",
     speciality: "Ortopedia",
@@ -96,6 +124,9 @@ export const adminAppointments: AdminAppointmentRow[] = [
     id: "appointment-5",
     date: "26/05/2026",
     time: "11:30",
+    clinicUnitId: "unit-aparecida",
+    clinicUnitName: "Unidade Aparecida",
+    clinicUnitAddress: "Avenida Independencia, 890 - Jardim Luz",
     doctorName: "Dra. Marina Nogueira",
     patientName: "Paulo Henrique Dias",
     speciality: "Dermatologia",
@@ -105,6 +136,8 @@ export const adminAppointments: AdminAppointmentRow[] = [
 ];
 
 export const availableTimes: AdminAvailableTimes = {
+  clinicUnitId: "unit-centro",
+  clinicUnitName: "Unidade Centro",
   doctorId: "doctor-1",
   doctorName: "Dra. Ana Carolina Souza",
   selectedDate: "2026-05-26",
@@ -128,18 +161,24 @@ export const adminDoctorOptions: AdminDoctorOption[] = [
   {
     id: "doctor-1",
     name: "Dra. Ana Carolina Souza",
+    clinicUnitId: "unit-centro",
+    clinicUnitName: "Unidade Centro",
     speciality: "Cardiologia",
     status: "ACTIVE",
   },
   {
     id: "doctor-2",
     name: "Dr. Ricardo Almeida",
+    clinicUnitId: "unit-universitario",
+    clinicUnitName: "Unidade Setor Universitario",
     speciality: "Ortopedia",
     status: "ACTIVE",
   },
   {
     id: "doctor-3",
     name: "Dra. Marina Nogueira",
+    clinicUnitId: "unit-aparecida",
+    clinicUnitName: "Unidade Aparecida",
     speciality: "Dermatologia",
     status: "INACTIVE",
   },
@@ -255,6 +294,7 @@ export const adminDoctors: AdminUserRow[] = [
     id: "doctor-1",
     initials: "AS",
     name: "Dra. Ana Carolina Souza",
+    clinicUnitName: "Unidade Centro",
     cpf: "234.567.891-10",
     email: "ana.souza@medclinica.com.br",
     phone: "(62) 99111-2020",
@@ -264,6 +304,7 @@ export const adminDoctors: AdminUserRow[] = [
     id: "doctor-2",
     initials: "RA",
     name: "Dr. Ricardo Almeida",
+    clinicUnitName: "Unidade Setor Universitario",
     cpf: "345.678.912-20",
     email: "ricardo.almeida@medclinica.com.br",
     phone: "(62) 99222-3030",
@@ -273,6 +314,7 @@ export const adminDoctors: AdminUserRow[] = [
     id: "doctor-3",
     initials: "MN",
     name: "Dra. Marina Nogueira",
+    clinicUnitName: "Unidade Aparecida",
     cpf: "456.789.123-30",
     email: "marina.nogueira@medclinica.com.br",
     phone: "(62) 99333-4040",

@@ -80,6 +80,9 @@ export function UserManagementTable({
             <tr>
               <th className="px-4 py-3">Nome</th>
               <th className="px-4 py-3">CPF</th>
+              {activeKind === "doctors" && (
+                <th className="px-4 py-3">Unidade</th>
+              )}
               <th className="px-4 py-3">E-mail</th>
               <th className="px-4 py-3">Telefone</th>
               <th className="px-4 py-3">Status</th>
@@ -103,6 +106,9 @@ export function UserManagementTable({
                   </div>
                 </td>
                 <td className="px-4 py-3">{user.cpf}</td>
+                {activeKind === "doctors" && (
+                  <td className="px-4 py-3">{user.clinicUnitName ?? "-"}</td>
+                )}
                 <td className="px-4 py-3">{user.email}</td>
                 <td className="px-4 py-3">{user.phone}</td>
                 <td className="px-4 py-3">

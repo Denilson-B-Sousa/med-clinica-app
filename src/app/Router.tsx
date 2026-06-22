@@ -3,6 +3,7 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import { AppLayout } from "@/layouts/AppLayout";
 import {
   AdminArea,
+  AdminClinicUnits,
   AdminDoctorRegister,
   AdminFullSchedule,
   AdminProfile,
@@ -27,6 +28,10 @@ export const router = createBrowserRouter([
     element: <AdminFullSchedule />,
   },
   {
+    path: "/administracao/unidades",
+    element: <AdminClinicUnits />,
+  },
+  {
     path: "/administracao/perfil",
     element: <AdminProfile />,
   },
@@ -41,6 +46,10 @@ export const router = createBrowserRouter([
   {
     path: "/admin/agenda",
     element: <Navigate to="/administracao/agenda" replace />,
+  },
+  {
+    path: "/admin/unidades",
+    element: <Navigate to="/administracao/unidades" replace />,
   },
   {
     path: "/admin/perfil",

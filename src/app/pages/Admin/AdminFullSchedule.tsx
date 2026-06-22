@@ -3,6 +3,7 @@ import { ArrowLeft, CalendarBlank, Funnel, X } from "phosphor-react";
 import { AdminHeader, AppointmentsManagementTable } from "./components";
 import {
   adminAppointments,
+  adminClinicUnits,
   adminDoctorOptions,
   adminScheduleSlots,
   availableTimes,
@@ -31,11 +32,15 @@ export function AdminFullSchedule() {
   const activeDoctors = adminDoctorOptions.filter(
     (doctor) => doctor.status === "ACTIVE",
   );
+  const selectedClinicUnitId = availableTimes.clinicUnitId;
+  const doctorsByUnit = activeDoctors.filter(
+    (doctor) => doctor.clinicUnitId === selectedClinicUnitId,
+  );
   const specialities = Array.from(
-    new Set(activeDoctors.map((doctor) => doctor.speciality)),
+    new Set(doctorsByUnit.map((doctor) => doctor.speciality)),
   );
   const selectedSpeciality = "Cardiologia";
-  const doctorsBySpeciality = activeDoctors.filter(
+  const doctorsBySpeciality = doctorsByUnit.filter(
     (doctor) => doctor.speciality === selectedSpeciality,
   );
 
@@ -74,7 +79,21 @@ export function AdminFullSchedule() {
             </div>
           </div>
 
-          <div className="mt-6 grid gap-4 lg:grid-cols-[220px_1fr_220px_180px_180px_auto_auto] lg:items-end">
+          <div className="mt-6 grid gap-4 lg:grid-cols-[220px_220px_1fr_220px_180px_180px_auto_auto] lg:items-end">
+            <label className="grid gap-2 text-sm font-semibold text-[#20375F]">
+              Unidade
+              <select
+                defaultValue={selectedClinicUnitId}
+                className="h-12 cursor-pointer rounded-md border border-slate-300 bg-white px-4 text-sm font-medium text-slate-600 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+              >
+                {adminClinicUnits.map((clinicUnit) => (
+                  <option key={clinicUnit.id} value={clinicUnit.id}>
+                    {clinicUnit.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+
             <label className="grid gap-2 text-sm font-semibold text-[#20375F]">
               Especialidade
               <select
@@ -158,7 +177,7 @@ export function AdminFullSchedule() {
                 {availableTimes.doctorName}
               </h2>
               <p className="mt-1 text-sm text-slate-600">
-                {availableTimes.dateLabel}
+                {availableTimes.clinicUnitName} - {availableTimes.dateLabel}
               </p>
             </div>
 
@@ -195,16 +214,6 @@ export function AdminFullSchedule() {
                   {slot.patientName ?? "Horario disponivel"}
                 </p>
 
-                {slot.status === "SCHEDULED" && (
-                  <button
-                    type="button"
-                    disabled={!slot.canCancel}
-                    onClick={handlePendingAction}
-                    className="mt-3 h-9 cursor-pointer rounded-md border border-red-300 bg-white px-4 text-xs font-bold text-red-600 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:border-slate-200 disabled:text-slate-400"
-                  >
-                    Cancelar
-                  </button>
-                )}
               </article>
             ))}
           </div>
@@ -218,7 +227,10 @@ export function AdminFullSchedule() {
           <div className="mt-5">
             <AppointmentsManagementTable
               appointments={adminAppointments}
-              onCancelAppointment={handlePendingAction}
+              currentPage={1}
+              pageSize={adminAppointments.length}
+              total={adminAppointments.length}
+              onDeleteAppointment={handlePendingAction}
             />
           </div>
         </section>
