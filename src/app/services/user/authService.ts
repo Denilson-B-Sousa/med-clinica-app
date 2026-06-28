@@ -6,6 +6,11 @@ export async function loginUser(payload: UserLoginPayload): Promise<LoginRespons
   return response.data;
 }
 
+export async function getAuthenticatedUser() {
+  const { data } = await api.get("/auth/me");
+  return data;
+}
+
 export async function logoutUser(): Promise<void> {
   await api.post("/auth/logout");
 }

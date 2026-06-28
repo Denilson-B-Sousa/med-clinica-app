@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { api } from "@/lib/api";
+import { getAuthenticatedUser } from "@/services/user/authService";
 
 
 export function useMe() {
@@ -8,8 +8,7 @@ export function useMe() {
     queryKey: ["me"],
 
     queryFn: async () => {
-      const { data } = await api.get("/auth/me");
-      return data;
+      return getAuthenticatedUser();
     },
     
     retry: false,

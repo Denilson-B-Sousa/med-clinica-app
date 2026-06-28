@@ -41,7 +41,7 @@ export const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: <Navigate to="/administracao" replace />,
+    element: <AdminArea />,
   },
   {
     path: "/admin/agenda",

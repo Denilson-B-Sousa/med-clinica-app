@@ -4,6 +4,8 @@ import { Button } from "@/components/Button/Button";
 import { Input } from "@/components/Input/Input";
 import { useLoginUser } from "@/hooks/user/useLoginUser";
 import { loginSchema, type LoginSchema } from "@/schemas/loginSchema";
+import { getAuthenticatedUser } from "@/services/user/authService";
+import { getRouteForRole } from "@/utils/user/getRouteForRole";
 import { Eye, EyeSlash } from "phosphor-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -37,11 +39,12 @@ export function LoginForm() {
 
   async function handleLogin(data: LoginSchema) {
     try {
-      await mutateAsync(data);
+      const user = await mutateAsync(data);
+      const authenticatedUser = await getAuthenticatedUser().catch(() => user);
       toast.success("Login realizado com sucesso.");
 
       setTimeout(() => {
-        navigate("/home");
+        navigate(getRouteForRole(authenticatedUser), { replace: true });
       }, 1500);
     } catch (error) {
       toast.error("Erro ao realizar login. Verifique suas credenciais e tente novamente.");

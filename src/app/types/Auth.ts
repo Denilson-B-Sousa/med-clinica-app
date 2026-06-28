@@ -5,4 +5,5 @@ export type UserLoginPayload = {
 
 export type LoginResponse = {
   token: string;
+  role?: string;
 };
