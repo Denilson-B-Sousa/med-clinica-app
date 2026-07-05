@@ -8,9 +8,14 @@ import { useNextAppointment } from "@/hooks/appointment/useNextAppointment";
 import { useUpdateAppointment } from "@/hooks/appointment/useUpdateAppointment";
 import { appointmentService } from "@/services/appointment/appointmentService";
 import { clinicUnitService } from "@/services/clinicUnit/clinicUnitService";
+import {
+  getAppointmentApiErrorMessage,
+  type ApiErrorResponse,
+} from "@/utils/appointmentApiError";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 import { toast } from "sonner";
+import { AxiosError } from "axios";
 import { CurrentAppointmentCard, RescheduleForm } from "./components";
 
 export function RescheduleAppointment() {
@@ -52,6 +57,7 @@ export function RescheduleAppointment() {
   const appointment = appointmentId ? selectedAppointment : nextAppointment;
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setClinicUnitId(appointment?.clinicUnitId ?? appointment?.clinicUnit?.id ?? "");
   }, [appointment]);
 
@@ -66,7 +72,7 @@ export function RescheduleAppointment() {
     }
 
     try {
-      await updateAppointment.mutateAsync({
+      const updatedAppointment = await updateAppointment.mutateAsync({
         id: appointment.id,
         data: {
           scheduleAt: `${date}T${time}:00`,
@@ -77,8 +83,14 @@ export function RescheduleAppointment() {
       setDate("");
       setTime("");
       toast.success("Consulta reagendada com sucesso.");
-    } catch {
-      toast.error("Não foi possível reagendar a consulta.");
+      updatedAppointment.warnings?.forEach((warning) => toast.warning(warning));
+    } catch (error) {
+      const apiError = error as AxiosError<ApiErrorResponse>;
+
+      toast.error(getAppointmentApiErrorMessage(
+        apiError.response?.data,
+        "Não foi possível reagendar a consulta.",
+      ));
     }
   }
 

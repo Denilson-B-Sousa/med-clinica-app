@@ -5,13 +5,27 @@ export function useNextAppointment() {
   return useQuery({
     queryKey: ["next-appointment"],
     queryFn: async () => {
-      const appointments = await appointmentService.findHistory({
-        page: 0,
-        size: 1,
-        status: "SCHEDULED",
-      });
+      const [scheduledAppointments, confirmedAppointments] = await Promise.all([
+        appointmentService.findHistory({
+          page: 0,
+          size: 1,
+          status: "SCHEDULED",
+        }),
+        appointmentService.findHistory({
+          page: 0,
+          size: 1,
+          status: "CONFIRMED",
+        }),
+      ]);
 
-      return appointments.content[0] ?? null;
+      return (
+        [...scheduledAppointments.content, ...confirmedAppointments.content]
+          .sort(
+            (first, second) =>
+              new Date(first.scheduleAt).getTime() -
+              new Date(second.scheduleAt).getTime(),
+          )[0] ?? null
+      );
     },
   });
 }

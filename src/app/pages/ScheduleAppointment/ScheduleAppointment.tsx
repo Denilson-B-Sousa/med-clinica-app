@@ -9,6 +9,10 @@ import { usePatients } from "@/hooks/patient/usePatients";
 import { useMe } from "@/hooks/useMe";
 import { clinicUnitService } from "@/services/clinicUnit/clinicUnitService";
 import type { MedicalSpeciality } from "@/types/Doctor";
+import {
+  getAppointmentApiErrorMessage,
+  type ApiErrorResponse,
+} from "@/utils/appointmentApiError";
 import { AxiosError } from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { AppointmentSummary, ScheduleAppointmentForm } from "./components";
@@ -18,10 +22,9 @@ type AuthenticatedPatient = {
   patientId?: string;
 };
 
-type ApiErrorResponse = {
-  message?: string;
-  error?: string;
-};
+function showAppointmentWarnings(warnings?: string[]) {
+  warnings?.forEach((warning) => toast.warning(warning));
+}
 
 function getScheduleErrorMessage(error?: string) {
   const normalizedError = error
@@ -115,7 +118,7 @@ export function ScheduleAppointment() {
     }
 
     try {
-      await scheduleAppointment.mutateAsync({
+      const appointment = await scheduleAppointment.mutateAsync({
         patientId,
         doctorId: data.doctorId,
         clinicUnitId: data.clinicUnitId,
@@ -126,13 +129,16 @@ export function ScheduleAppointment() {
 
       resetForm();
       toast.success("Consulta agendada com sucesso.");
+      showAppointmentWarnings(appointment.warnings);
       navigate("/home");
     } catch (error) {
       const apiError = error as AxiosError<ApiErrorResponse>;
-      const errorMessage =
-        apiError.response?.data?.message ?? apiError.response?.data?.error;
+      const response = apiError.response?.data;
 
-      toast.error(getScheduleErrorMessage(errorMessage));
+      toast.error(getAppointmentApiErrorMessage(
+        response,
+        getScheduleErrorMessage(response?.message ?? response?.error),
+      ));
     }
   }
 

@@ -16,13 +16,8 @@ export function NoAppointmentState() {
         title="Nenhuma consulta agendada"
         description="Parece que você ainda não tem consultas agendadas. Explore nossos médicos e marque sua próxima consulta!"
         primaryAction={
-          <Button to="/agendar-consulta" size="md" primary>
+          <Button to="/agendar-consulta" size="md" primary className="h-14">
             Agendar Consulta
-          </Button>
-        }
-        secondaryAction={
-          <Button to="/agendar-consulta" size="md" secondary>
-            Ver Médicos
           </Button>
         }
       />

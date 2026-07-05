@@ -14,6 +14,7 @@ export interface Appointment {
   notes?: string;
   attendanceConfirmed?: boolean;
   attendanceConfirmedAt?: string;
+  warnings?: string[];
 }
 
 export type AppointmentDoctorAddress = {
@@ -59,7 +60,7 @@ export type AppointmentHistoryItem = Pick<
 export type AppointmentHistoryParams = {
   page?: number;
   size?: number;
-  status?: Extract<AppointmentStatus, "SCHEDULED" | "COMPLETED" | "CANCELED">;
+  status?: AppointmentStatus;
   search?: string;
 };
 
@@ -84,6 +85,10 @@ export type CreateAppointmentPayload = Pick<
 export type RescheduleAppointmentPayload = {
   scheduleAt: string;
   clinicUnitId?: string;
+};
+
+export type AuthorizedAppointmentExceptionPayload = CreateAppointmentPayload & {
+  reason: string;
 };
 
 export type UpdateAppointmentPayload = Partial<

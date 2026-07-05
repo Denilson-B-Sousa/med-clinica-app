@@ -22,7 +22,7 @@ export function NextAppointmentCard({ appointment }: NextAppointmentCardProps) {
   return (
     <div className="rounded-xl rounded-r-none bg-blue-500 p-8 text-white">
       <span className="inline-block px-4 py-2 text-sm font-medium">
-        PROXIMA CONSULTA
+        PRÓXIMA CONSULTA
       </span>
 
       <div className="mt-8 flex items-center gap-3">
@@ -36,7 +36,7 @@ export function NextAppointmentCard({ appointment }: NextAppointmentCardProps) {
       </div>
 
       <div className="mt-6 flex items-center justify-center gap-2">
-        <span className="text-3xl font-semibold">as {time}</span>
+        <span className="text-3xl font-semibold">às {time}</span>
       </div>
 
       <div className="my-4 flex items-center gap-4">

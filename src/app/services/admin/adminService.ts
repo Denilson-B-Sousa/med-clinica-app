@@ -1,5 +1,9 @@
 import { api } from "@/lib/api";
 import type {
+  Appointment,
+  AuthorizedAppointmentExceptionPayload,
+} from "@/types/Appointment";
+import type {
   AdminAppointmentRow,
   AdminAppointmentsPage,
   AdminAppointmentsParams,
@@ -269,6 +273,16 @@ function normalizeUsersResponse(
 }
 
 export const adminService = {
+  async createAuthorizedAppointmentException(
+    payload: AuthorizedAppointmentExceptionPayload,
+  ): Promise<Appointment> {
+    const { data } = await api.post<Appointment>(
+      "/admin/appointments/authorized-exceptions",
+      payload,
+    );
+    return data;
+  },
+
   async findAppointments(
     params: AdminAppointmentsParams,
   ): Promise<AdminAppointmentsPage> {
