@@ -7,6 +7,8 @@ import { useAppointments } from "@/hooks/appointment/useAppoinments";
 import { useCancelAppointment } from "@/hooks/appointment/useCancelAppointment";
 import { useDeleteAppointmentHistory } from "@/hooks/appointment/useDeleteAppointmentHistory";
 import { toast } from "sonner";
+import { AxiosError } from "axios";
+import { getAppointmentApiErrorMessage, type ApiErrorResponse } from "@/utils/appointmentApiError";
 import {
   AppointmentFilters,
   AppointmentPagination,
@@ -56,10 +58,11 @@ export function AppointmentHistory() {
     setCancellingAppointmentId(appointmentId);
 
     try {
-      await cancelAppointment.mutateAsync(appointmentId);
+      await cancelAppointment.mutateAsync({ id: appointmentId });
       toast.success("Consulta cancelada com sucesso.");
-    } catch {
-      toast.error("Não foi possível cancelar a consulta.");
+    } catch (error) {
+      const response = (error as AxiosError<ApiErrorResponse>).response?.data;
+      toast.error(getAppointmentApiErrorMessage(response, "Não foi possível cancelar a consulta."));
     } finally {
       setCancellingAppointmentId("");
     }

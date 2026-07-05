@@ -4,9 +4,8 @@ import { toast } from "sonner";
 import { BackLink } from "@/components/BackLink";
 import { PageHeader } from "@/components/PageHeader";
 import { useScheduleAppointment } from "@/hooks/appointment/useScheduleAppointment";
+import { useAppointmentAvailability } from "@/hooks/appointment/useAppointmentAvailability";
 import { useDoctors } from "@/hooks/doctor/useDoctors";
-import { usePatients } from "@/hooks/patient/usePatients";
-import { useMe } from "@/hooks/useMe";
 import { clinicUnitService } from "@/services/clinicUnit/clinicUnitService";
 import type { MedicalSpeciality } from "@/types/Doctor";
 import {
@@ -16,11 +15,6 @@ import {
 import { AxiosError } from "axios";
 import { useQuery } from "@tanstack/react-query";
 import { AppointmentSummary, ScheduleAppointmentForm } from "./components";
-
-type AuthenticatedPatient = {
-  id?: string;
-  patientId?: string;
-};
 
 function showAppointmentWarnings(warnings?: string[]) {
   warnings?.forEach((warning) => toast.warning(warning));
@@ -59,9 +53,12 @@ export function ScheduleAppointment() {
     queryKey: ["clinic-units"],
     queryFn: clinicUnitService.findAll,
   });
-  const { data: patients = [] } = usePatients();
-  const { data: me } = useMe();
   const scheduleAppointment = useScheduleAppointment();
+  const availability = useAppointmentAvailability({
+    doctorId: selectedDoctorId,
+    clinicUnitId: selectedClinicUnitId,
+    date: selectedDate,
+  });
 
   const filteredDoctors = useMemo(() => {
     if (!selectedClinicUnitId) {
@@ -87,11 +84,13 @@ export function ScheduleAppointment() {
   function handleClinicUnitChange(clinicUnitId: string) {
     setSelectedClinicUnitId(clinicUnitId);
     setSelectedDoctorId("");
+    setSelectedTime("");
   }
 
   function handleSpecialityChange(speciality: string) {
     setSelectedSpeciality(speciality as MedicalSpeciality | "");
     setSelectedDoctorId("");
+    setSelectedTime("");
   }
 
   function resetForm() {
@@ -108,22 +107,11 @@ export function ScheduleAppointment() {
     date: string;
     time: string;
   }) {
-    const authenticatedPatient = me as AuthenticatedPatient | undefined;
-    const patientId =
-      authenticatedPatient?.patientId ?? authenticatedPatient?.id ?? patients[0]?.id;
-
-    if (!patientId) {
-      toast.error("Não foi possível identificar o paciente da consulta.");
-      return;
-    }
-
     try {
       const appointment = await scheduleAppointment.mutateAsync({
-        patientId,
         doctorId: data.doctorId,
         clinicUnitId: data.clinicUnitId,
         scheduleAt: `${data.date}T${data.time}:00`,
-        status: "SCHEDULED",
         durationInMinutes: 30,
       });
 
@@ -134,6 +122,11 @@ export function ScheduleAppointment() {
     } catch (error) {
       const apiError = error as AxiosError<ApiErrorResponse>;
       const response = apiError.response?.data;
+
+      if (response?.code === "APPOINTMENT_TIME_UNAVAILABLE") {
+        setSelectedTime("");
+        void availability.refetch();
+      }
 
       toast.error(getAppointmentApiErrorMessage(
         response,
@@ -167,6 +160,8 @@ export function ScheduleAppointment() {
           isLoadingClinicUnits={isLoadingClinicUnits}
           isLoadingDoctors={isLoadingDoctors}
           isSubmitting={scheduleAppointment.isPending}
+          availableTimes={availability.data?.availableTimes ?? []}
+          isLoadingAvailability={availability.isFetching}
           onSubmit={handleSubmit}
           selectedClinicUnitId={selectedClinicUnitId}
           selectedSpeciality={selectedSpeciality}
@@ -175,8 +170,14 @@ export function ScheduleAppointment() {
           selectedTime={selectedTime}
           onClinicUnitChange={handleClinicUnitChange}
           onSpecialityChange={handleSpecialityChange}
-          onDoctorChange={setSelectedDoctorId}
-          onDateChange={setSelectedDate}
+          onDoctorChange={(doctorId) => {
+            setSelectedDoctorId(doctorId);
+            setSelectedTime("");
+          }}
+          onDateChange={(date) => {
+            setSelectedDate(date);
+            setSelectedTime("");
+          }}
           onTimeChange={setSelectedTime}
         />
 

@@ -74,18 +74,32 @@ export type AppointmentHistoryPage = {
 
 export type CreateAppointmentPayload = Pick<
   Appointment,
-  | "patientId"
   | "doctorId"
   | "clinicUnitId"
   | "scheduleAt"
-  | "status"
   | "durationInMinutes"
 >;
 
 export type RescheduleAppointmentPayload = {
   scheduleAt: string;
-  clinicUnitId?: string;
+  clinicUnitId: string;
+  reason: string;
 };
+
+export type AppointmentAvailability = {
+  date: string;
+  durationInMinutes: number;
+  availableTimes: string[];
+};
+
+export type AppointmentAvailabilityParams = {
+  doctorId: string;
+  clinicUnitId: string;
+  date: string;
+  appointmentId?: string;
+};
+
+export type CancelAppointmentPayload = { id: string; reason?: string };
 
 export type AuthorizedAppointmentExceptionPayload = CreateAppointmentPayload & {
   reason: string;

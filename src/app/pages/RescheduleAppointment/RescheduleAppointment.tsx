@@ -6,6 +6,7 @@ import { PageHeader } from "@/components/PageHeader";
 import { useCancelAppointment } from "@/hooks/appointment/useCancelAppointment";
 import { useNextAppointment } from "@/hooks/appointment/useNextAppointment";
 import { useUpdateAppointment } from "@/hooks/appointment/useUpdateAppointment";
+import { useAppointmentAvailability } from "@/hooks/appointment/useAppointmentAvailability";
 import { appointmentService } from "@/services/appointment/appointmentService";
 import { clinicUnitService } from "@/services/clinicUnit/clinicUnitService";
 import {
@@ -13,7 +14,7 @@ import {
   type ApiErrorResponse,
 } from "@/utils/appointmentApiError";
 import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 import { AxiosError } from "axios";
 import { CurrentAppointmentCard, RescheduleForm } from "./components";
@@ -23,6 +24,7 @@ export function RescheduleAppointment() {
   const [time, setTime] = useState("");
   const [clinicUnitId, setClinicUnitId] = useState("");
   const { id: appointmentId } = useParams();
+  const navigate = useNavigate();
 
   const { data: nextAppointment, isLoading: isNextAppointmentLoading } =
     useNextAppointment();
@@ -55,6 +57,12 @@ export function RescheduleAppointment() {
     ? isSelectedAppointmentLoading
     : isNextAppointmentLoading;
   const appointment = appointmentId ? selectedAppointment : nextAppointment;
+  const availability = useAppointmentAvailability({
+    doctorId: appointment?.doctor.id ?? "",
+    clinicUnitId,
+    date,
+    appointmentId: appointment?.id,
+  });
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -77,6 +85,7 @@ export function RescheduleAppointment() {
         data: {
           scheduleAt: `${date}T${time}:00`,
           clinicUnitId,
+          reason: "Solicitação do paciente",
         },
       });
 
@@ -86,9 +95,19 @@ export function RescheduleAppointment() {
       updatedAppointment.warnings?.forEach((warning) => toast.warning(warning));
     } catch (error) {
       const apiError = error as AxiosError<ApiErrorResponse>;
+      const response = apiError.response?.data;
+
+      if (response?.code === "APPOINTMENT_TIME_UNAVAILABLE") {
+        setTime("");
+        void availability.refetch();
+      }
+
+      if (response?.code === "APPOINTMENT_NOT_OWNED_BY_PATIENT") {
+        navigate("/historico-consultas", { replace: true });
+      }
 
       toast.error(getAppointmentApiErrorMessage(
-        apiError.response?.data,
+        response,
         "Não foi possível reagendar a consulta.",
       ));
     }
@@ -100,10 +119,17 @@ export function RescheduleAppointment() {
     }
 
     try {
-      await cancelAppointment.mutateAsync(appointment.id);
-      toast.success("Consulta cancelada com sucesso.");
-    } catch {
-      toast.error("Não foi possível cancelar a consulta.");
+      await cancelAppointment.mutateAsync({ id: appointment.id });
+      setDate("");
+      setTime("");
+      setClinicUnitId("");
+      toast.success(
+        "Consulta cancelada. Você já pode reagendar sua próxima consulta.",
+      );
+      navigate("/reagendar-consulta", { replace: true });
+    } catch (error) {
+      const response = (error as AxiosError<ApiErrorResponse>).response?.data;
+      toast.error(getAppointmentApiErrorMessage(response, "Não foi possível cancelar a consulta."));
     }
   }
 
@@ -150,8 +176,16 @@ export function RescheduleAppointment() {
             clinicUnitId={clinicUnitId}
             isLoadingClinicUnits={isLoadingClinicUnits}
             isSubmitting={updateAppointment.isPending}
-            onClinicUnitChange={setClinicUnitId}
-            onDateChange={setDate}
+            availableTimes={availability.data?.availableTimes ?? []}
+            isLoadingAvailability={availability.isFetching}
+            onClinicUnitChange={(value) => {
+              setClinicUnitId(value);
+              setTime("");
+            }}
+            onDateChange={(value) => {
+              setDate(value);
+              setTime("");
+            }}
             onTimeChange={setTime}
             onSubmit={handleReschedule}
           />

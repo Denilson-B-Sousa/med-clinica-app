@@ -3,8 +3,6 @@ import type { ClinicUnit } from "@/types/ClinicUnit";
 import type { FormEvent } from "react";
 import { Info } from "phosphor-react";
 
-const AVAILABLE_TIMES = ["08:00", "09:30", "14:00", "16:30"];
-
 type RescheduleFormProps = {
   clinicUnits: ClinicUnit[];
   date: string;
@@ -12,6 +10,8 @@ type RescheduleFormProps = {
   clinicUnitId: string;
   isLoadingClinicUnits: boolean;
   isSubmitting: boolean;
+  availableTimes: string[];
+  isLoadingAvailability: boolean;
   onClinicUnitChange: (clinicUnitId: string) => void;
   onDateChange: (date: string) => void;
   onTimeChange: (time: string) => void;
@@ -25,12 +25,16 @@ export function RescheduleForm({
   clinicUnitId,
   isLoadingClinicUnits,
   isSubmitting,
+  availableTimes,
+  isLoadingAvailability,
   onClinicUnitChange,
   onDateChange,
   onTimeChange,
   onSubmit,
 }: RescheduleFormProps) {
-  const today = new Date().toISOString().split("T")[0];
+  const today = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Sao_Paulo",
+  }).format(new Date());
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -91,10 +95,17 @@ export function RescheduleForm({
             value={time}
             onChange={(event) => onTimeChange(event.target.value)}
             required
+            disabled={!clinicUnitId || !date || isLoadingAvailability}
             className="h-14 w-full rounded-lg border border-slate-300 px-4 text-slate-500 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
           >
-            <option value="">Selecione o novo horário</option>
-            {AVAILABLE_TIMES.map((availableTime) => (
+            <option value="">
+              {isLoadingAvailability
+                ? "Consultando horários..."
+                : availableTimes.length
+                  ? "Selecione o novo horário"
+                  : "Nenhum horário disponível"}
+            </option>
+            {availableTimes.map((availableTime) => (
               <option key={availableTime} value={availableTime}>
                 {availableTime}
               </option>

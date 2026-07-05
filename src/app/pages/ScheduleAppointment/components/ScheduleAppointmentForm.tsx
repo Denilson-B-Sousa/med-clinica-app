@@ -7,8 +7,6 @@ import {
 } from "@/types/Doctor";
 import type { FormEvent } from "react";
 
-const AVAILABLE_TIMES = ["08:00", "09:00", "10:30", "14:00", "15:30", "16:30"];
-
 const SPECIALITY_LABELS: Record<MedicalSpeciality, string> = {
   ORTOPEDIA: "Ortopedia",
   CARDIOLOGIA: "Cardiologia",
@@ -36,6 +34,8 @@ type ScheduleAppointmentFormProps = {
   isLoadingClinicUnits: boolean;
   isLoadingDoctors: boolean;
   isSubmitting: boolean;
+  availableTimes: string[];
+  isLoadingAvailability: boolean;
   onSubmit: (data: {
     clinicUnitId: string;
     doctorId: string;
@@ -60,6 +60,8 @@ export function ScheduleAppointmentForm({
   isLoadingClinicUnits,
   isLoadingDoctors,
   isSubmitting,
+  availableTimes,
+  isLoadingAvailability,
   onSubmit,
   selectedClinicUnitId,
   selectedSpeciality,
@@ -72,7 +74,9 @@ export function ScheduleAppointmentForm({
   onDateChange,
   onTimeChange,
 }: ScheduleAppointmentFormProps) {
-  const today = new Date().toISOString().split("T")[0];
+  const today = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Sao_Paulo",
+  }).format(new Date());
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -182,10 +186,17 @@ export function ScheduleAppointmentForm({
               value={selectedTime}
               onChange={(event) => onTimeChange(event.target.value)}
               required
+              disabled={!selectedDoctorId || !selectedClinicUnitId || !selectedDate || isLoadingAvailability}
               className="h-14 w-full rounded-lg border border-slate-300 px-4 text-slate-500 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
             >
-              <option value="">Selecione o horario</option>
-              {AVAILABLE_TIMES.map((time) => (
+              <option value="">
+                {isLoadingAvailability
+                  ? "Consultando horários..."
+                  : availableTimes.length
+                    ? "Selecione o horário"
+                    : "Nenhum horário disponível"}
+              </option>
+              {availableTimes.map((time) => (
                 <option key={time} value={time}>
                   {time}
                 </option>

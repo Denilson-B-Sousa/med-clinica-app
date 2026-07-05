@@ -4,6 +4,9 @@ import type {
   AppointmentHistoryItem,
   AppointmentHistoryPage,
   AppointmentHistoryParams,
+  AppointmentAvailability,
+  AppointmentAvailabilityParams,
+  CancelAppointmentPayload,
   CreateAppointmentPayload,
   RescheduleAppointmentPayload,
   UpdateAppointmentPayload,
@@ -84,6 +87,14 @@ export const appointmentService = {
     return data;
   },
 
+  async findAvailability(params: AppointmentAvailabilityParams): Promise<AppointmentAvailability> {
+    const { data } = await api.get<AppointmentAvailability>(
+      "/consultas/disponibilidade",
+      { params },
+    );
+    return data;
+  },
+
   async update(
     id: string,
     payload: UpdateAppointmentPayload,
@@ -100,8 +111,12 @@ export const appointmentService = {
     return data;
   },
 
-  async cancel(id: string): Promise<void> {
-    await api.delete(`/consultas/${id}`);
+  async cancel({ id, reason }: CancelAppointmentPayload): Promise<Appointment> {
+    const { data } = await api.patch(
+      `/consultas/${id}/cancel`,
+      reason ? { reason } : undefined,
+    );
+    return data;
   },
 
   async deleteFromHistory(id: string): Promise<void> {

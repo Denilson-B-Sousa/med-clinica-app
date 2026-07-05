@@ -9,6 +9,7 @@ export function useCancelAppointment() {
     onSuccess: async () => {
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ["appointments"] }),
+        queryClient.invalidateQueries({ queryKey: ["appointment-to-reschedule"] }),
         queryClient.invalidateQueries({ queryKey: ["next-appointment"] }),
       ]);
     },

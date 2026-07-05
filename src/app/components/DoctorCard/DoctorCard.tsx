@@ -5,6 +5,8 @@ import { CheckCircle, MapPin, Trash, X } from "phosphor-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Button } from "../Button/Button";
+import { AxiosError } from "axios";
+import { getAppointmentApiErrorMessage, type ApiErrorResponse } from "@/utils/appointmentApiError";
 
 type DoctorCardProps = {
   appointment: AppointmentHistoryItem;
@@ -32,10 +34,11 @@ export function DoctorCard({ appointment }: DoctorCardProps) {
 
   async function handleCancel() {
     try {
-      await cancelAppointment.mutateAsync(appointment.id);
+      await cancelAppointment.mutateAsync({ id: appointment.id });
       toast.success("Consulta excluída com sucesso.");
-    } catch {
-      toast.error("Não foi possível excluir a consulta.");
+    } catch (error) {
+      const response = (error as AxiosError<ApiErrorResponse>).response?.data;
+      toast.error(getAppointmentApiErrorMessage(response, "Não foi possível cancelar a consulta."));
     }
   }
 
