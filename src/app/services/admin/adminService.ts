@@ -8,11 +8,30 @@ import type {
   AdminAppointmentsPage,
   AdminAppointmentsParams,
   AdminDoctorOption,
+  AdminAuditAction,
+  AdminAuditLogsPage,
+  AdminAuditLogsParams,
+  AdminAuditLogRow,
   AdminUserKind,
   AdminUserRow,
   AdminUserStatus,
   AdminUsersPage,
 } from "@/pages/Admin/types";
+
+type AdminAuditApiItem = Partial<AdminAuditLogRow>;
+
+type AdminAuditApiResponse =
+  | AdminAuditApiItem[]
+  | {
+      content?: AdminAuditApiItem[];
+      data?: AdminAuditApiItem[];
+      items?: AdminAuditApiItem[];
+      page?: number;
+      number?: number;
+      size?: number;
+      totalElements?: number;
+      totalPages?: number;
+    };
 
 type AdminAppointmentApiItem = Partial<AdminAppointmentRow> & {
   scheduleAt?: string;
@@ -272,7 +291,53 @@ function normalizeUsersResponse(
   };
 }
 
+function normalizeAuditLog(item: AdminAuditApiItem): AdminAuditLogRow {
+  return {
+    id: item.id ?? "",
+    action: item.action as AdminAuditAction,
+    username: item.username ?? "Usuário desconhecido",
+    executedAt: item.executedAt ?? "",
+    appointmentId: item.appointmentId,
+    patientId: item.patientId,
+    doctorId: item.doctorId,
+    clinicUnitId: item.clinicUnitId,
+    previousScheduleAt: item.previousScheduleAt,
+    newScheduleAt: item.newScheduleAt,
+    reason: item.reason,
+    requestId: item.requestId,
+  };
+}
+
+function normalizeAuditResponse(
+  data: AdminAuditApiResponse,
+  params: AdminAuditLogsParams,
+): AdminAuditLogsPage {
+  const content = Array.isArray(data)
+    ? data
+    : data.content ?? data.data ?? data.items ?? [];
+  const size = Array.isArray(data) ? params.size ?? content.length : data.size ?? params.size ?? content.length;
+  const totalElements = Array.isArray(data) ? content.length : data.totalElements ?? content.length;
+
+  return {
+    content: content.map(normalizeAuditLog).filter((log) => log.id),
+    page: Array.isArray(data) ? params.page ?? 0 : data.number ?? data.page ?? params.page ?? 0,
+    size,
+    totalElements,
+    totalPages: Array.isArray(data)
+      ? content.length > 0 ? 1 : 0
+      : data.totalPages ?? (size > 0 ? Math.ceil(totalElements / size) : 0),
+  };
+}
+
 export const adminService = {
+  async findAuditLogs(params: AdminAuditLogsParams): Promise<AdminAuditLogsPage> {
+    const { data } = await api.get<AdminAuditApiResponse>("/admin/audit-logs", {
+      params: cleanParams(params),
+    });
+
+    return normalizeAuditResponse(data, params);
+  },
+
   async createAuthorizedAppointmentException(
     payload: AuthorizedAppointmentExceptionPayload,
   ): Promise<Appointment> {

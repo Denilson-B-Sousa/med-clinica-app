@@ -7,7 +7,6 @@ import {
   UserManagementTable,
 } from "./components";
 import {
-  adminAuditLogs,
   adminClinicUnits,
   adminDoctorOptions,
 } from "./data";
@@ -21,11 +20,13 @@ import { AxiosError } from "axios";
 import type {
   AdminAppointmentsFilterValues,
   AdminAppointmentsParams,
+  AdminAuditAction,
   AdminUserKind,
 } from "./types";
 
 const APPOINTMENTS_PAGE_SIZE = 5;
 const USERS_PAGE_SIZE = 10;
+const AUDIT_PAGE_SIZE = 20;
 
 const emptyAppointmentFilters: AdminAppointmentsFilterValues = {
   clinicUnitId: "",
@@ -45,6 +46,9 @@ export function AdminArea() {
     useState<AdminAppointmentsFilterValues>(emptyAppointmentFilters);
   const [appointmentsPage, setAppointmentsPage] = useState(1);
   const [usersPage, setUsersPage] = useState(1);
+  const [auditPage, setAuditPage] = useState(1);
+  const [auditSearch, setAuditSearch] = useState("");
+  const [auditAction, setAuditAction] = useState<AdminAuditAction>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const appointmentParams: AdminAppointmentsParams = {
@@ -97,7 +101,10 @@ export function AdminArea() {
   const deleteAppointment = useMutation({
     mutationFn: adminService.deleteAppointment,
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["admin-appointments"] });
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["admin-appointments"] }),
+        queryClient.invalidateQueries({ queryKey: ["admin-audit-logs"] }),
+      ]);
       toast.success("Consulta excluída com sucesso.");
     },
     onError: (error) => {
@@ -120,6 +127,23 @@ export function AdminArea() {
         size: USERS_PAGE_SIZE,
       }),
   });
+  const {
+    data: auditLogsPage,
+    isLoading: isLoadingAuditLogs,
+    isError: isAuditLogsError,
+  } = useQuery({
+    queryKey: ["admin-audit-logs", auditSearch, auditAction, auditPage],
+    queryFn: () =>
+      adminService.findAuditLogs({
+        search: auditSearch || undefined,
+        action: auditAction,
+        page: auditPage - 1,
+        size: AUDIT_PAGE_SIZE,
+        sort: "executedAt,desc",
+      }),
+    placeholderData: (previousData) => previousData,
+  });
+
   const updateUserStatus = useMutation({
     mutationFn: ({
       userId,
@@ -172,6 +196,12 @@ export function AdminArea() {
   function handleChangeUserKind(kind: AdminUserKind) {
     setActiveUserKind(kind);
     setUsersPage(1);
+  }
+
+  function handleClearAuditFilters() {
+    setAuditSearch("");
+    setAuditAction(undefined);
+    setAuditPage(1);
   }
 
   function handleToggleUserStatus(userId: string) {
@@ -255,7 +285,27 @@ export function AdminArea() {
           </h2>
 
           <div className="mt-4">
-            <AuditLogTable logs={adminAuditLogs} />
+            <AuditLogTable
+              logs={auditLogsPage?.content ?? []}
+              search={auditSearch}
+              action={auditAction}
+              currentPage={auditPage}
+              pageSize={AUDIT_PAGE_SIZE}
+              total={auditLogsPage?.totalElements ?? 0}
+              totalPages={auditLogsPage?.totalPages ?? 0}
+              isLoading={isLoadingAuditLogs}
+              isError={isAuditLogsError}
+              onSearchChange={(search) => {
+                setAuditSearch(search);
+                setAuditPage(1);
+              }}
+              onActionChange={(action) => {
+                setAuditAction(action);
+                setAuditPage(1);
+              }}
+              onPageChange={setAuditPage}
+              onClearFilters={handleClearAuditFilters}
+            />
           </div>
         </section>
       </div>

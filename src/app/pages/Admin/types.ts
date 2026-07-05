@@ -123,16 +123,32 @@ export type AdminAuditAction =
   | "CREATE_DOCTOR"
   | "UPDATE_DOCTOR"
   | "UPDATE_USER_STATUS"
-  | "DELETE_USER";
+  | "DELETE_USER"
+  | "ADMIN_ACCESS_DENIED";
+
+export type AdminAuditLogsParams = {
+  search?: string;
+  action?: AdminAuditAction;
+  startDate?: string;
+  endDate?: string;
+  page?: number;
+  size?: number;
+  sort?: string;
+};
 
 export type AdminAuditLogRow = {
   id: string;
   action: AdminAuditAction;
-  userName: string;
-  userRole: "ADMIN" | "PATIENT" | "DOCTOR";
-  target: string;
-  date: string;
-  time: string;
+  username: string;
+  executedAt: string;
+  appointmentId?: string;
+  patientId?: string;
+  doctorId?: string;
+  clinicUnitId?: string;
+  previousScheduleAt?: string;
+  newScheduleAt?: string;
+  reason?: string;
+  requestId?: string;
 };
 
 export type AdminAuditLogsPage = {
