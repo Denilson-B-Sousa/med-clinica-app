@@ -49,7 +49,7 @@ export function AvailableTimesPanel({
           <CalendarBlank className="text-[#20375F]" size={20} weight="bold" />
           <div>
             <h3 className="text-base font-bold text-[#0B1F4D]">
-              Horarios disponiveis
+              Horários disponíveis
             </h3>
             <p className="mt-1 text-sm text-slate-600">
               Consulte por medico, data e periodo.
@@ -98,7 +98,7 @@ export function AvailableTimesPanel({
         </label>
 
         <label className="grid gap-2 text-sm font-semibold text-[#20375F]">
-          Medico
+          Médico
           <select
             value={schedule.doctorId}
             onChange={(event) => onDoctorChange?.(event.target.value)}
@@ -123,7 +123,7 @@ export function AvailableTimesPanel({
         </label>
 
         <label className="grid gap-2 text-sm font-semibold text-[#20375F]">
-          Periodo
+          Período
           <select
             value={schedule.selectedPeriod}
             onChange={(event) =>

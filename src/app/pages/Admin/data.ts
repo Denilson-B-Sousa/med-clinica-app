@@ -328,7 +328,7 @@ export const adminAuditLogs: AdminAuditLogRow[] = [
     action: "LOGIN",
     userName: "Administrador",
     userRole: "ADMIN",
-    target: "Area administrativa",
+    target: "Área administrativa",
     date: "26/05/2026",
     time: "07:58",
   },

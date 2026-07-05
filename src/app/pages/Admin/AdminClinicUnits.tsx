@@ -65,7 +65,7 @@ export function AdminClinicUnits() {
       toast.success("Unidade cadastrada com sucesso.");
     },
     onError: () => {
-      toast.error("Nao foi possivel cadastrar a unidade.");
+      toast.error("Não foi possível cadastrar a unidade.");
     },
   });
 
@@ -171,7 +171,7 @@ export function AdminClinicUnits() {
                 />
               </FormField>
 
-              <FormField label="Numero">
+              <FormField label="Número">
                 <input
                   name="number"
                   required
@@ -238,7 +238,7 @@ export function AdminClinicUnits() {
                   <tr>
                     <th className="px-4 py-3">Unidade</th>
                     <th className="px-4 py-3">Telefone</th>
-                    <th className="px-4 py-3">Endereco</th>
+                    <th className="px-4 py-3">Endereço</th>
                   </tr>
                 </thead>
 

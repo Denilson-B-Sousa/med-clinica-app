@@ -52,13 +52,13 @@ export function AppointmentsManagementTable({
           <thead className="bg-slate-50 text-xs font-bold text-[#20375F]">
             <tr>
               <th className="px-4 py-3">Data</th>
-              <th className="px-4 py-3">Horario</th>
+              <th className="px-4 py-3">Horário</th>
               <th className="px-4 py-3">Unidade</th>
-              <th className="px-4 py-3">Medico</th>
+              <th className="px-4 py-3">Médico</th>
               <th className="px-4 py-3">Paciente</th>
               <th className="px-4 py-3">Especialidade</th>
               <th className="px-4 py-3">Status</th>
-              <th className="px-4 py-3">Acoes</th>
+              <th className="px-4 py-3">Ações</th>
             </tr>
           </thead>
 
@@ -119,7 +119,7 @@ export function AppointmentsManagementTable({
                     <button
                       type="button"
                       className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-md text-[#20375F] transition hover:bg-slate-100"
-                      aria-label="Mais opcoes"
+                      aria-label="Mais opções"
                     >
                       <DotsThreeVertical size={22} weight="bold" />
                     </button>
@@ -162,7 +162,7 @@ export function AppointmentsManagementTable({
                   Excluir consulta?
                 </h3>
                 <p className="mt-2 text-sm text-slate-600">
-                  Esta acao removera a consulta de{" "}
+                  Esta ação removerá a consulta de{" "}
                   <strong>{appointmentToDelete.patientName}</strong> com{" "}
                   <strong>{appointmentToDelete.doctorName}</strong>.
                 </p>

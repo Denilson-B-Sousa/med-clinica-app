@@ -63,7 +63,7 @@ export function AppointmentSummary({
         </div>
 
         <div>
-          <p className="text-sm font-bold">Horario</p>
+          <p className="text-sm font-bold">Horário</p>
           <p className="text-slate-500">{time || "-"}</p>
         </div>
 

@@ -51,7 +51,7 @@ function normalizeSpeciality(value?: string): MedicalSpeciality {
 function normalizeDoctor(doctor: DoctorApiItem): Doctor {
   return {
     id: doctor.doctorId ?? doctor.idDoctor ?? doctor.idMedico ?? doctor.id ?? doctor.user?.id ?? "",
-    name: doctor.name ?? doctor.nome ?? doctor.user?.name ?? doctor.user?.nome ?? "Medico",
+    name: doctor.name ?? doctor.nome ?? doctor.user?.name ?? doctor.user?.nome ?? "Médico",
     cpf: doctor.cpf,
     email: doctor.email ?? doctor.user?.email,
     phone: doctor.phone ?? doctor.telefone,

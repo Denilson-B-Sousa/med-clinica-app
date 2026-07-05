@@ -140,7 +140,7 @@ export function ScheduleAppointmentForm({
         </div>
 
         <div>
-          <label className="mb-2 block text-sm font-semibold">Medico</label>
+          <label className="mb-2 block text-sm font-semibold">Médico</label>
 
           <select
             value={selectedDoctorId}
@@ -175,7 +175,7 @@ export function ScheduleAppointmentForm({
 
           <div>
             <label className="mb-2 block text-sm font-semibold">
-              Horario disponivel
+              Horário disponível
             </label>
 
             <select

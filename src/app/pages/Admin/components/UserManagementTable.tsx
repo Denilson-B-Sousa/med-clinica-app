@@ -1,4 +1,4 @@
-import { PencilSimple, Plus, Power, Trash } from "phosphor-react";
+import { Plus, Power, Trash } from "phosphor-react";
 import { AdminNotice } from "./AdminNotice";
 import { AdminStatusBadge } from "./AdminStatusBadge";
 import type { AdminUserKind, AdminUserRow } from "../types";
@@ -11,7 +11,6 @@ type UserManagementTableProps = {
   updatingUserId?: string;
   deletingUserId?: string;
   onChangeUserKind?: (kind: AdminUserKind) => void;
-  onEditUser?: (userId: string) => void;
   onToggleUserStatus?: (userId: string) => void;
   onDeleteUser?: (userId: string) => void;
   onCreateUser?: () => void;
@@ -36,7 +35,6 @@ export function UserManagementTable({
   updatingUserId,
   deletingUserId,
   onChangeUserKind,
-  onEditUser,
   onToggleUserStatus,
   onDeleteUser,
   onCreateUser,
@@ -104,7 +102,7 @@ export function UserManagementTable({
               <th className="px-4 py-3">E-mail</th>
               <th className="px-4 py-3">Telefone</th>
               <th className="px-4 py-3">Status</th>
-              <th className="px-4 py-3">Acoes</th>
+              <th className="px-4 py-3">Ações</th>
             </tr>
           </thead>
 
@@ -158,15 +156,6 @@ export function UserManagementTable({
                   <div className="flex flex-wrap items-center gap-3">
                     <button
                       type="button"
-                      onClick={() => onEditUser?.(user.id)}
-                      className="flex h-9 cursor-pointer items-center gap-2 rounded-md border border-blue-300 px-4 text-xs font-bold text-blue-600 transition hover:bg-blue-50"
-                    >
-                      <PencilSimple size={15} />
-                      Editar
-                    </button>
-
-                    <button
-                      type="button"
                       onClick={() => onToggleUserStatus?.(user.id)}
                       disabled={updatingUserId === user.id}
                       className="flex h-9 cursor-pointer items-center gap-2 rounded-md border border-blue-300 px-4 text-xs font-bold text-blue-600 transition hover:bg-blue-50"
@@ -198,7 +187,7 @@ export function UserManagementTable({
 
       <div className="px-4 py-3">
         <AdminNotice>
-          Usuarios desativados nao podem acessar o sistema e ficam ocultos nas
+          Usuários desativados não podem acessar o sistema e ficam ocultos nas
           listas operacionais.
         </AdminNotice>
       </div>
@@ -210,7 +199,7 @@ export function UserManagementTable({
               Excluir perfil?
             </h3>
             <p className="mt-2 text-sm text-slate-600">
-              Esta acao removera o perfil de{" "}
+              Esta ação removerá o perfil de{" "}
               <strong>{userToDelete.name}</strong>.
             </p>
 

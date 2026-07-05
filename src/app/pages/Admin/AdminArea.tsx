@@ -24,10 +24,6 @@ import type {
   AdminUserKind,
 } from "./types";
 
-function handlePendingAction() {
-  return undefined;
-}
-
 const APPOINTMENTS_PAGE_SIZE = 5;
 const USERS_PAGE_SIZE = 10;
 
@@ -102,7 +98,7 @@ export function AdminArea() {
     mutationFn: adminService.deleteAppointment,
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: ["admin-appointments"] });
-      toast.success("Consulta excluida com sucesso.");
+      toast.success("Consulta excluída com sucesso.");
     },
     onError: (error) => {
       const apiError = error as AxiosError<{ message?: string; error?: string }>;
@@ -110,8 +106,8 @@ export function AdminArea() {
         apiError.response?.status === 409
           ? (apiError.response.data?.message ??
             apiError.response.data?.error ??
-            "Esta consulta nao pode ser excluida.")
-          : "Nao foi possivel excluir a consulta.";
+            "Esta consulta não pode ser excluída.")
+          : "Não foi possível excluir a consulta.";
 
       toast.error(message);
     },
@@ -141,7 +137,7 @@ export function AdminArea() {
       toast.error(
         apiError.response?.data?.message ??
           apiError.response?.data?.error ??
-          "Nao foi possivel atualizar o status.",
+          "Não foi possível atualizar o status.",
       );
     },
   });
@@ -157,7 +153,7 @@ export function AdminArea() {
       toast.error(
         apiError.response?.data?.message ??
           apiError.response?.data?.error ??
-          "Nao foi possivel excluir o perfil.",
+          "Não foi possível excluir o perfil.",
       );
     },
   });
@@ -198,7 +194,7 @@ export function AdminArea() {
 
         <section className="mt-6 rounded-lg border border-slate-200 bg-white p-5 shadow-lg shadow-slate-200/70">
           <h2 className="text-xl font-bold text-[#0B1F4D]">
-            1. Gerenciar agenda da clinica
+            1. Gerenciar agenda da clínica
           </h2>
 
           <div className="mt-5">
@@ -227,7 +223,7 @@ export function AdminArea() {
               }
             />
             <AdminNotice>
-              Ao excluir uma consulta, o horario do medico deve ser liberado
+              Ao excluir uma consulta, o horário do médico deve ser liberado
               para novos agendamentos.
             </AdminNotice>
           </div>
@@ -235,7 +231,7 @@ export function AdminArea() {
 
         <section className="mt-3 rounded-lg border border-slate-200 bg-white p-5 shadow-lg shadow-slate-200/70">
           <h2 className="text-xl font-bold text-[#0B1F4D]">
-            2. Gerenciar usuarios da clinica
+            2. Gerenciar usuários da clínica
           </h2>
 
           <div className="mt-4">
@@ -248,7 +244,6 @@ export function AdminArea() {
               onChangeUserKind={handleChangeUserKind}
               onCreateUser={() => navigate("/administracao/medicos/novo")}
               onDeleteUser={(userId) => deleteUser.mutate({ userId })}
-              onEditUser={handlePendingAction}
               onToggleUserStatus={handleToggleUserStatus}
             />
           </div>

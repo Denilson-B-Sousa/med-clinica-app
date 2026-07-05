@@ -36,7 +36,7 @@ function getScheduleErrorMessage(error?: string) {
     return "Escolha uma data futura para agendar a consulta.";
   }
 
-  return error ?? "Nao foi possivel agendar a consulta. Verifique os dados e tente novamente.";
+  return error ?? "Não foi possível agendar a consulta. Verifique os dados e tente novamente.";
 }
 
 export function ScheduleAppointment() {
@@ -110,7 +110,7 @@ export function ScheduleAppointment() {
       authenticatedPatient?.patientId ?? authenticatedPatient?.id ?? patients[0]?.id;
 
     if (!patientId) {
-      toast.error("Nao foi possivel identificar o paciente da consulta.");
+      toast.error("Não foi possível identificar o paciente da consulta.");
       return;
     }
 
@@ -149,7 +149,7 @@ export function ScheduleAppointment() {
 
       {scheduleAppointment.isError && (
         <div className="mb-6 rounded-lg border border-red-100 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">
-          Nao foi possivel agendar a consulta. Verifique os dados e tente
+          Não foi possível agendar a consulta. Verifique os dados e tente
           novamente.
         </div>
       )}

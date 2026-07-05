@@ -4,7 +4,7 @@ import { EmptyState } from "@/components/EmptyState/EmptyState";
 
 export function NoAppointmentState() {
   return (
-    <section>
+    <section className="mx-12 my-4 rounded-3xl border border-slate-200 bg-white shadow-[0_18px_45px_-15px_rgba(15,23,42,0.35)]">
       <EmptyState
         illustration={
           <img

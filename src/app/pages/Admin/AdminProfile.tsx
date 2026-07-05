@@ -10,7 +10,7 @@ import { AdminHeader } from "./components";
 
 const adminPermissions = [
   "Gerenciar pacientes",
-  "Gerenciar medicos",
+  "Gerenciar médicos",
   "Gerenciar consultas",
   "Consultar auditoria",
 ];
@@ -27,7 +27,7 @@ export function AdminProfile() {
             className="inline-flex cursor-pointer items-center gap-2 rounded-md px-1 py-2 text-sm font-bold text-blue-600 transition hover:bg-blue-50"
           >
             <ArrowLeft size={18} weight="bold" />
-            Voltar para area administrativa
+            Voltar para área administrativa
           </Link>
         </div>
 
@@ -40,7 +40,7 @@ export function AdminProfile() {
                   Perfil do administrador
                 </h1>
                 <p className="mt-1 text-sm text-slate-600">
-                  Dados de acesso e permissoes administrativas.
+                  Dados de acesso e permissões administrativas.
                 </p>
               </div>
             </div>

@@ -6,7 +6,7 @@ export function AdminHeader() {
     <div className="flex flex-col gap-5 xl:flex-row xl:items-start xl:justify-between">
       <div>
         <h1 className="text-3xl font-bold text-[#0B1F4D]">
-          Area Administrativa
+          Área Administrativa
         </h1>
         <p className="mt-2 text-base text-slate-600">
           Gerencie a agenda, consultas e usuarios da clinica.

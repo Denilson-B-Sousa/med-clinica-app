@@ -9,7 +9,7 @@ type AuthenticatedUser = {
 
 export function getAuthenticatedFirstName(
   user?: AuthenticatedUser | null,
-  fallback = "Usuario",
+  fallback = "Usuário",
 ) {
   const fullName = user?.name ?? user?.nome ?? user?.user?.name ?? user?.user?.nome;
   const firstName = fullName?.trim().split(/\s+/)[0];

@@ -63,12 +63,12 @@ export function AppointmentsTable({
         <thead className="bg-slate-50 text-sm text-slate-600">
           <tr>
             <th className="px-5 py-4">Data</th>
-            <th className="px-5 py-4">Horario</th>
-            <th className="px-5 py-4">Medico</th>
+            <th className="px-5 py-4">Horário</th>
+            <th className="px-5 py-4">Médico</th>
             <th className="px-5 py-4">Especialidade</th>
             <th className="px-5 py-4">Local</th>
             <th className="px-5 py-4">Situacao</th>
-            <th className="w-72 px-5 py-4">Acoes</th>
+            <th className="w-72 px-5 py-4">Ações</th>
           </tr>
         </thead>
 
@@ -94,7 +94,7 @@ export function AppointmentsTable({
                 <td className="px-5 py-4 align-middle">
                   <div className="max-w-56">
                     <p className="font-semibold leading-snug">
-                        {doctor.name ?? "Medico nao encontrado"}
+                        {doctor.name ?? "Médico não encontrado"}
                     </p>
                     {doctor.crm && (
                       <span className="mt-2 inline-block max-w-full break-words rounded bg-blue-100 px-2 py-1 text-xs font-bold leading-snug text-blue-600">

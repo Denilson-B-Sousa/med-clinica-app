@@ -189,7 +189,7 @@ function normalizeAppointmentsResponse(
 function normalizeDoctor(doctor: AdminDoctorApiItem): AdminDoctorOption {
   return {
     id: doctor.id ?? doctor.doctorId ?? doctor.idDoctor ?? doctor.idMedico ?? "",
-    name: doctor.name ?? "Medico",
+    name: doctor.name ?? "Médico",
     clinicUnitId:
       doctor.clinicUnitId ??
       doctor.unitId ??
@@ -219,7 +219,7 @@ function getInitials(name: string) {
 }
 
 function normalizeUser(user: AdminUserApiItem): AdminUserRow {
-  const name = user.name ?? user.nome ?? "Usuario";
+  const name = user.name ?? user.nome ?? "Usuário";
   const status =
     user.status ?? (typeof user.active === "boolean" && !user.active
       ? "INACTIVE"

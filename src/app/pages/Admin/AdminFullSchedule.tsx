@@ -109,7 +109,7 @@ export function AdminFullSchedule() {
             </label>
 
             <label className="grid gap-2 text-sm font-semibold text-[#20375F]">
-              Medico
+              Médico
               <select
                 defaultValue={availableTimes.doctorId}
                 className="h-12 cursor-pointer rounded-md border border-slate-300 bg-white px-4 text-sm font-medium text-slate-600 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
@@ -211,7 +211,7 @@ export function AdminFullSchedule() {
                 </div>
 
                 <p className="mt-4 min-h-5 text-sm font-semibold">
-                  {slot.patientName ?? "Horario disponivel"}
+                  {slot.patientName ?? "Horário disponível"}
                 </p>
 
               </article>

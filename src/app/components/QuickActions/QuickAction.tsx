@@ -12,7 +12,7 @@ export function QuickActions({ nextAppointmentId }: QuickActionsProps) {
 
   return (
     <div className="rounded-3xl bg-white p-6 shadow-lg shadow-slate-200/70">
-      <h3 className="text-2xl font-semibold text-slate-900">Acoes rapidas</h3>
+      <h3 className="text-2xl font-semibold text-slate-900">Ações rápidas</h3>
 
       <div className="mt-6 flex flex-col gap-4">
         <Button
@@ -73,7 +73,7 @@ export function QuickActions({ nextAppointmentId }: QuickActionsProps) {
 
             <div className="text-left">
               <h4 className="font-semibold text-slate-900">
-                Historico de consultas
+                Histórico de consultas
               </h4>
 
               <p className="text-sm text-slate-500">Veja todas as consultas</p>

@@ -66,11 +66,11 @@ export function AdminDoctorRegister() {
   const createDoctor = useMutation({
     mutationFn: doctorService.create,
     onSuccess: () => {
-      toast.success("Medico cadastrado com sucesso.");
+      toast.success("Médico cadastrado com sucesso.");
       navigate("/administracao");
     },
     onError: () => {
-      toast.error("Nao foi possivel cadastrar o medico.");
+      toast.error("Não foi possível cadastrar o médico.");
     },
   });
 

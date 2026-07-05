@@ -28,10 +28,15 @@ export function ProfileMenu({ name }: ProfileMenuProps) {
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
-        <Button type="button" size="profile" variant="profile">
-          <span className="font-medium text-[#0094CB]">{name}</span>
+        <Button
+          type="button"
+          size="profile"
+          variant="profile"
+          className="rounded-lg text-white hover:bg-white/10"
+        >
+          <span className="font-medium text-white">Olá, {name}</span>
 
-          <CaretDown size={14} className="text-[#0094CB]" />
+          <CaretDown size={14} className="text-white" />
         </Button>
       </DropdownMenu.Trigger>
 

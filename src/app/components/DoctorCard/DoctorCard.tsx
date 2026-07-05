@@ -26,16 +26,16 @@ export function DoctorCard({ appointment }: DoctorCardProps) {
       setIsConfirmationModalOpen(false);
       toast.success("Presenca confirmada com sucesso.");
     } catch {
-      toast.error("Nao foi possivel confirmar a presenca.");
+      toast.error("Não foi possível confirmar a presença.");
     }
   }
 
   async function handleCancel() {
     try {
       await cancelAppointment.mutateAsync(appointment.id);
-      toast.success("Consulta excluida com sucesso.");
+      toast.success("Consulta excluída com sucesso.");
     } catch {
-      toast.error("Nao foi possivel excluir a consulta.");
+      toast.error("Não foi possível excluir a consulta.");
     }
   }
 
@@ -87,7 +87,7 @@ export function DoctorCard({ appointment }: DoctorCardProps) {
             ? "Presenca confirmada"
             : confirmAttendance.isPending
               ? "Confirmando..."
-              : "Confirmar presenca"}
+              : "Confirmar presença"}
         </Button>
 
         {!isConfirmed && (
@@ -110,11 +110,11 @@ export function DoctorCard({ appointment }: DoctorCardProps) {
             <div className="flex items-start justify-between gap-4">
               <div>
                 <h3 className="text-lg font-bold text-slate-900">
-                  Confirmar presenca?
+                  Confirmar presença?
                 </h3>
                 <p className="mt-2 text-sm text-slate-600">
-                  Voce confirma que deseja manter sua consulta com{" "}
-                  <strong>{doctor.name}</strong>? Depois disso, ela nao podera
+                  Você confirma que deseja manter sua consulta com{" "}
+                  <strong>{doctor.name}</strong>? Depois disso, ela não poderá
                   ser cancelada nem reagendada.
                 </p>
               </div>

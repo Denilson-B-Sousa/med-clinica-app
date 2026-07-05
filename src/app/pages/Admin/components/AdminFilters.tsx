@@ -63,7 +63,7 @@ export function AdminFilters({
         </label>
 
         <label className="grid min-w-0 gap-2 text-sm font-semibold text-[#20375F]">
-          Medico
+          Médico
           <select
             value={values.doctorId}
             onChange={(event) => updateFilter("doctorId", event.target.value)}
@@ -128,7 +128,7 @@ export function AdminFilters({
         </label>
 
         <label className="grid min-w-0 gap-2 text-sm font-semibold text-[#20375F]">
-          Periodo
+          Período
           <select
             value={values.period}
             onChange={(event) => updateFilter("period", event.target.value)}

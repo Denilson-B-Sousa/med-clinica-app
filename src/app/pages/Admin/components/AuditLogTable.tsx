@@ -24,7 +24,7 @@ const actionLabels: Record<AdminAuditAction, string> = {
 const roleLabels: Record<AdminAuditLogRow["userRole"], string> = {
   ADMIN: "Admin",
   PATIENT: "Paciente",
-  DOCTOR: "Medico",
+  DOCTOR: "Médico",
 };
 
 export function AuditLogTable({ logs }: AuditLogTableProps) {
@@ -77,7 +77,7 @@ export function AuditLogTable({ logs }: AuditLogTableProps) {
               type="search"
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              placeholder="Usuario ou alvo da acao"
+              placeholder="Usuário ou alvo da ação"
               className="h-12 w-full rounded-md border border-slate-300 px-4 pr-11 text-sm font-medium text-slate-700 outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
             />
             <MagnifyingGlass
@@ -99,7 +99,7 @@ export function AuditLogTable({ logs }: AuditLogTableProps) {
             <option value="ALL">Todos</option>
             <option value="ADMIN">Admin</option>
             <option value="PATIENT">Paciente</option>
-            <option value="DOCTOR">Medico</option>
+            <option value="DOCTOR">Médico</option>
           </select>
         </label>
 
@@ -141,11 +141,11 @@ export function AuditLogTable({ logs }: AuditLogTableProps) {
           <thead className="bg-slate-50 text-xs font-bold text-[#20375F]">
             <tr>
               <th className="px-4 py-3">Acao</th>
-              <th className="px-4 py-3">Usuario</th>
+              <th className="px-4 py-3">Usuário</th>
               <th className="px-4 py-3">Perfil</th>
               <th className="px-4 py-3">Alvo</th>
               <th className="px-4 py-3">Data</th>
-              <th className="px-4 py-3">Horario</th>
+              <th className="px-4 py-3">Horário</th>
             </tr>
           </thead>
 
@@ -175,7 +175,7 @@ export function AuditLogTable({ logs }: AuditLogTableProps) {
       </div>
 
       <div className="px-4 py-3 text-sm text-slate-500">
-        Registros devem armazenar a acao, o usuario executor, a data e o
+        Registros devem armazenar a ação, o usuário executor, a data e o
         horario da operacao.
       </div>
     </div>
