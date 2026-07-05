@@ -53,6 +53,7 @@ export type AppointmentHistoryItem = Pick<
 > & {
   doctor: AppointmentDoctor;
   clinicUnit?: AppointmentClinicUnit;
+  canDelete: boolean;
 };
 
 export type AppointmentHistoryParams = {

@@ -8,11 +8,11 @@ export function Header() {
   const firstName = getAuthenticatedFirstName(me, "Perfil");
 
   return (
-    <header className="flex items-center justify-between bg-[#0094CB] px-6 py-4 text-white">
+    <header className="flex items-center justify-between bg-[#0094CB]/80 px-6 py-4 text-white">
       <div>
         <Link to="/" className="flex items-center gap-2 pl-8 py-4">
-          <h1 className="text-[28px] font-semibold">
-            <span className="text-white/85">Med</span>Clínica
+          <h1 className="text-[28px] font-semibold text-white">
+            <span className="text-black/85">Med</span>Clínica
           </h1>
         </Link>
       </div>

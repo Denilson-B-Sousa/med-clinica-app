@@ -104,6 +104,10 @@ export const appointmentService = {
     await api.delete(`/consultas/${id}`);
   },
 
+  async deleteFromHistory(id: string): Promise<void> {
+    await api.delete(`/consultas/historico/${id}`);
+  },
+
   async confirmAttendance(id: string): Promise<Appointment> {
     const { data } = await api.patch(
       `/consultas/${id}/confirm-attendance`,

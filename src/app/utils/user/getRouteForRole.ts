@@ -1,6 +1,6 @@
 type RoleValue = string | { authority?: string | null; role?: string | null };
 
-type UserWithRole = {
+export type UserWithRole = {
   role?: string | null;
   roles?: RoleValue[] | null;
   authority?: string | null;
@@ -24,7 +24,7 @@ function normalizeRole(role?: RoleValue | null) {
   return (role.role ?? role.authority)?.toUpperCase();
 }
 
-function getRoles(user?: UserWithRole | null): string[] {
+export function getRoles(user?: UserWithRole | null): string[] {
   if (!user) {
     return [];
   }
@@ -40,6 +40,19 @@ function getRoles(user?: UserWithRole | null): string[] {
     ...getRoles(user.doctor),
     ...getRoles(user.admin),
   ].filter((role): role is string => Boolean(role));
+}
+
+export function hasAnyRole(
+  user: UserWithRole | null | undefined,
+  allowedRoles: string[],
+) {
+  const normalizedAllowedRoles = allowedRoles.map((role) =>
+    role.replace(/^ROLE_/i, "").toUpperCase(),
+  );
+
+  return getRoles(user)
+    .map((role) => role.replace(/^ROLE_/i, ""))
+    .some((role) => normalizedAllowedRoles.includes(role));
 }
 
 export function getRouteForRole(user?: UserWithRole | null) {
